@@ -1,0 +1,82 @@
+:root {
+  color: #d7e0d0;
+  background: #090c09;
+  font-family: "SFMono-Regular", "Cascadia Code", "Liberation Mono", Menlo, Consolas, monospace;
+  font-size: 16px;
+  line-height: 1.6;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  min-width: 320px;
+  background:
+    radial-gradient(circle at top left, rgba(74, 222, 128, 0.08), transparent 32rem),
+    #090c09;
+}
+
+a {
+  color: #8ef7a2;
+  text-decoration: none;
+}
+
+a:hover,
+a:focus-visible {
+  text-decoration: underline;
+}
+
+.terminal-page {
+  width: min(920px, calc(100% - 2rem));
+  margin: 0 auto;
+  padding: 4rem 0;
+}
+
+.hero,
+section {
+  margin-bottom: 2.5rem;
+}
+
+.prompt,
+h1,
+h2,
+h3,
+p,
+ul {
+  margin-top: 0;
+}
+
+.prompt,
+h2 {
+  color: #8ef7a2;
+}
+
+h1 {
+  margin-bottom: 0.25rem;
+  font-size: clamp(2.25rem, 8vw, 5rem);
+  line-height: 1;
+}
+
+.role {
+  color: #f4f4f0;
+  font-size: clamp(1.25rem, 4vw, 2rem);
+}
+
+.summary {
+  max-width: 62ch;
+  color: #aab4a3;
+}
+
+ul {
+  padding-left: 1.2rem;
+}
+
+li + li {
+  margin-top: 0.35rem;
+}
+
+.skill-group {
+  margin-bottom: 1.25rem;
+}
