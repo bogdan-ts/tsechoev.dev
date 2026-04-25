@@ -8,8 +8,10 @@ const escapeHtml = (value: string): string =>
     .replaceAll('"', "&quot;")
     .replaceAll("'", "&#039;");
 
-const renderList = (items: string[]): string =>
-  `<ul>${items.map((item) => `<li>${escapeHtml(item)}</li>`).join("")}</ul>`;
+const renderList = (items: string[], className?: string): string =>
+  `<ul${className ? ` class="${className}"` : ""}>${items
+    .map((item) => `<li>${escapeHtml(item)}</li>`)
+    .join("")}</ul>`;
 
 const renderExperience = (role: ExperienceRole): string => `
   <article class="experience-item">
@@ -34,16 +36,18 @@ export const renderProfile = (profile: ResumeProfile): string => `
 
     <section aria-labelledby="skills-title">
       <h2 id="skills-title">skills</h2>
-      ${profile.skills
-        .map(
-          (group) => `
-            <section class="skill-group" aria-label="${escapeHtml(group.title)} skills">
-              <h3>${escapeHtml(group.title)}</h3>
-              ${renderList(group.items)}
-            </section>
-          `
-        )
-        .join("")}
+      <div class="skills-grid">
+        ${profile.skills
+          .map(
+            (group) => `
+              <section class="skill-group" aria-label="${escapeHtml(group.title)} skills">
+                <h3>${escapeHtml(group.title)}</h3>
+                ${renderList(group.items, "skills-list")}
+              </section>
+            `
+          )
+          .join("")}
+      </div>
     </section>
 
     <section aria-labelledby="experience-title">
@@ -67,21 +71,6 @@ export const renderProfile = (profile: ResumeProfile): string => `
       </ul>
     </section>
 
-    <section aria-labelledby="projects-title">
-      <h2 id="projects-title">projects</h2>
-      <ul>
-        ${profile.projects
-          .map(
-            (project) => `
-              <li>
-                <strong>${escapeHtml(project.name)}</strong>
-                <span>${escapeHtml(project.description)}</span>
-              </li>
-            `
-          )
-          .join("")}
-      </ul>
-    </section>
 
     <section aria-labelledby="contact-title">
       <h2 id="contact-title">contact</h2>
