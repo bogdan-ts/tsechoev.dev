@@ -14,7 +14,6 @@ describe("resume website rendering", () => {
     expect(html).toContain("skills");
     expect(html).toContain("experience");
     expect(html).toContain("education");
-    expect(html).toContain("projects");
     expect(html).toContain("contact");
   });
 
@@ -45,5 +44,9 @@ describe("resume website rendering", () => {
 
   it("renders a resume link", () => {
     expect(html).toContain(">resume</a>");
+  });
+
+  it("does not render projects section", () => {
+    expect(html).not.toContain("projects-title");
   });
 });

@@ -93,12 +93,7 @@ export const profile: ResumeProfile = {
       period: "2019 — 2021"
     }
   ],
-  projects: [
-    {
-      name: "tsechoev.dev",
-      description: "Minimal terminal-inspired resume website built with TypeScript and deployed on GitHub Pages."
-    }
-  ],
+  projects: [],
   links: [
     { label: "github", href: "https://github.com/bogdan-ts" },
     { label: "linkedin", href: "https://www.linkedin.com/in/bogdan-tsechoev-b7b81b182" }
