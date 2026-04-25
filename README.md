@@ -1,6 +1,6 @@
 # tsechoev.dev
 
-❤️ Made with love and vibecode.
+Made with ❤️ and vibecode.
 
 ## Stack
 
