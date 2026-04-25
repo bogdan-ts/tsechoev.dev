@@ -1,7 +1,9 @@
+@import url("https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700&display=swap");
+
 :root {
   color: #d7e0d0;
   background: #090c09;
-  font-family: "SFMono-Regular", "Cascadia Code", "Liberation Mono", Menlo, Consolas, monospace;
+  font-family: "JetBrains Mono", "SFMono-Regular", "Cascadia Code", "Liberation Mono", Menlo, Consolas, monospace;
   font-size: 16px;
   line-height: 1.6;
 }
