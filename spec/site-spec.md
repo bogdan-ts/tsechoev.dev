@@ -2,30 +2,44 @@
 
 ## Product goal
 
-Create a minimal personal resume website for Bogdan, a full stack developer.
+Create a minimal personal resume website for Bogdan Tsechoev, a full stack engineer.
 
 The site should be simple enough to host on GitHub Pages and maintain without framework bullshit.
 
 ## Style direction
 
 - Minimalist.
-- Monospace typography.
+- Monospace typography with JetBrains Mono.
 - Terminal-inspired visual language.
 - Clean and readable, not a fake hacker toy.
 - Fast loading.
 - Works well on mobile and desktop.
+
+## Content strategy
+
+The page should be short, sharp, and recruiter-readable.
+
+- Keep the latest role as the main selling point.
+- Compress older roles heavily.
+- Avoid LinkedIn-style long responsibility dumps.
+- Prefer outcome-oriented bullets over generic responsibilities.
+- Emphasize full-stack product ownership, PostgreSQL-heavy systems, AI/LLM integration, React + TypeScript, infrastructure automation, and production delivery.
 
 ## Content requirements
 
 The page must include:
 
 1. A short hero intro.
-2. A clear role line: full stack developer.
-3. Skills grouped by category.
-4. Experience summary.
-5. Selected projects.
-6. Contact links.
-7. A resume/CV link or placeholder for it.
+2. A clear role line: software engineer / full stack developer.
+3. A compact summary based on current work.
+4. Skills grouped by category.
+5. Concise experience entries:
+   - Postgres.ai — Database Lab: current role, strongest detail.
+   - Avanti Pharma: compressed frontend/product engineering role.
+   - House: compressed junior role.
+6. Education.
+7. Contact links.
+8. A resume/CV link or placeholder for it.
 
 ## Technical requirements
 
@@ -48,5 +62,5 @@ The page must include:
 
 - `npm test` passes.
 - `npm run build` produces `dist/index.html`.
-- Rendered content includes Bogdan's name, full stack developer role, skills, projects, and contact section.
-- Visual style uses a monospace font stack.
+- Rendered content includes Bogdan's name, role, current company, compressed previous roles, skills, education, projects, and contact section.
+- Visual style uses JetBrains Mono with monospace fallback.

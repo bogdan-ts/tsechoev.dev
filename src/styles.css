@@ -66,6 +66,12 @@ h1 {
   font-size: clamp(1.25rem, 4vw, 2rem);
 }
 
+.location,
+.meta,
+.stack {
+  color: #7d8877;
+}
+
 .summary {
   max-width: 62ch;
   color: #aab4a3;
@@ -79,6 +85,16 @@ li + li {
   margin-top: 0.35rem;
 }
 
-.skill-group {
+.skill-group,
+.experience-item {
   margin-bottom: 1.25rem;
+}
+
+.experience-item h3 {
+  margin-bottom: 0.25rem;
+}
+
+.experience-item .meta,
+.experience-item .stack {
+  margin-bottom: 0.75rem;
 }
