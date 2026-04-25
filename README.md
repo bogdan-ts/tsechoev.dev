@@ -44,4 +44,4 @@ Push to `main` branch. GitHub Actions workflow builds/tests and deploys `dist/` 
 
 ## License
 
-MIT
+The Unlicense (public domain)
