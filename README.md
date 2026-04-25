@@ -1,8 +1,6 @@
 # tsechoev.dev
 
-Minimal terminal-inspired resume website for Bogdan Tsechoev.
-
-Made with love and vibecode.
+❤️ Made with love and vibecode.
 
 ## Stack
 
