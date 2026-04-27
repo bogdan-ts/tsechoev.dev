@@ -104,5 +104,5 @@ export const profile: ResumeProfile = {
     { label: "github", href: "https://github.com/bogdan-ts" },
     { label: "linkedin", href: "https://www.linkedin.com/in/bogdan-tsechoev-b7b81b182" }
   ],
-  resumeHref: "#resume"
+  resumeHref: "/bogdan-tsechoev-resume.pdf"
 };
