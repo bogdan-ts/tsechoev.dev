@@ -43,46 +43,52 @@ export type ResumeProfile = {
 
 export const profile: ResumeProfile = {
   name: "Bogdan Tsechoev",
-  role: "Software Engineer / Full Stack Developer",
+  role: "Senior Fullstack Engineer with backend and platform focus",
   location: "Bangkok, Thailand",
   summary:
-    "I build production platforms where PostgreSQL is more than storage: backend services, PL/pgSQL, APIs, React + TypeScript frontends, infrastructure automation, and AI workflows that ship to real users.",
+    "Senior fullstack engineer with strong backend and platform focus, specializing in Postgres-driven architectures, SQL-first APIs, self-service platforms, infrastructure automation, and production AI workflows.",
   skills: [
-    { title: "frontend", items: ["typescript", "react", "next.js", "graphql", "mobx"] },
-    { title: "backend", items: ["python", "flask", "api design", "postgresql", "pl/pgsql", "postgrest"] },
-    { title: "ai", items: ["llm integration", "streaming responses", "function calling", "rag workflows"] },
-    { title: "infra", items: ["docker", "kubernetes", "ansible", "terraform", "gitlab ci", "aws", "gcp"] }
+    { title: "backend", items: ["typescript", "node.js", "postgresql", "sql", "api design", "pl/pgsql", "postgrest", "python"] },
+    { title: "frontend", items: ["react", "next.js", "graphql", "mobx"] },
+    { title: "platform", items: ["docker", "kubernetes", "terraform", "ansible", "ci/cd", "gitlab ci", "aws", "gcp", "hetzner", "stripe billing"] },
+    { title: "ai", items: ["llm integration", "streaming responses", "tool calling", "rag workflows", "openai", "claude", "gemini", "deepseek"] }
   ],
   experience: [
     {
-      title: "Software Engineer",
+      title: "Senior Software Engineer",
       company: "Postgres.ai — Database Lab",
-      period: "Apr 2024 — Present",
+      period: "Apr 2024 — Mar 2026",
       location: "Remote",
       bullets: [
-        "Ship production features across a PostgreSQL-first platform: PL/pgSQL, APIs, backend logic, React + TypeScript UI, migrations, and rollout.",
-        "Build AI Assistant functionality with multiple LLM providers, streaming responses, function calling, and RAG-based workflows.",
-        "Own infrastructure and delivery work: multi-cloud provisioning, GitLab CI, Kubernetes deployments, and one-click monitoring stack setup."
+        "Designed and implemented Postgres-centric APIs and PL/pgSQL logic powering core platform functionality.",
+        "Enabled self-service deployment of the Postgres monitoring stack with multi-cloud provisioning across AWS, GCP, and Hetzner plus subscription billing workflows, cutting setup to a few minutes.",
+        "Implemented subscription billing with Stripe webhooks and access-control flows tied directly to platform provisioning.",
+        "Standardized CI/CD across multiple repositories and Kubernetes-based deployment workflows across services.",
+        "Built customer-facing platform UI and internal tools with React and TypeScript while owning end-to-end delivery from database and backend to rollout.",
+        "Integrated multiple LLM providers with streaming responses, tool calling, and RAG workflows for production features."
       ],
-      stack: ["typescript", "react", "next.js", "postgresql", "pl/pgsql", "postgrest", "python", "docker", "kubernetes", "ansible", "terraform", "aws", "gcp"]
+      stack: ["typescript", "node.js", "postgresql", "sql", "pl/pgsql", "postgrest", "python", "react", "next.js", "docker", "kubernetes", "ansible", "terraform", "gitlab ci", "aws", "gcp", "hetzner", "stripe"]
     },
     {
       title: "Frontend Developer",
       company: "Avanti Pharma",
       period: "Dec 2020 — Mar 2024",
-      location: "Hybrid",
+      location: "Vladivostok, Russia",
       bullets: [
-        "Built e-commerce, internal tools, marketing pages, and a React Native app across React, TypeScript, GraphQL, MobX, and Next.js.",
-        "Modernized legacy frontend systems: introduced TypeScript, improved build performance, and simplified client-server interactions with GraphQL."
+        "Led frontend development of a large-scale e-commerce platform using React, TypeScript, GraphQL, and Next.js.",
+        "Built internal business-critical tools including CMS, product management, and order management systems.",
+        "Modernized legacy architecture by introducing TypeScript and migrating to functional React patterns.",
+        "Improved frontend performance and build workflows, reducing page load time by about 50%."
       ]
     },
     {
       title: "Junior Frontend Developer",
-      company: "House",
+      company: "House VL",
       period: "Jul 2019 — Dec 2020",
-      location: "On-site",
+      location: "Vladivostok, Russia",
       bullets: [
-        "Developed e-commerce websites, corporate sites, portals, and landing pages with Next.js, JavaScript, and jQuery."
+        "Built e-commerce websites, corporate sites, web portals, and landing pages with Next.js, JavaScript, and jQuery.",
+        "Supported legacy projects and estimated implementation timelines for commercial work."
       ]
     }
   ],
