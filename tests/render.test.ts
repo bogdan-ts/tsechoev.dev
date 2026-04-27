@@ -7,7 +7,7 @@ describe("resume website rendering", () => {
 
   it("renders Bogdan's identity and role", () => {
     expect(html).toContain("Bogdan Tsechoev");
-    expect(html).toContain("Software Engineer / Full Stack Developer");
+    expect(html).toContain("Senior Fullstack Engineer with backend and platform focus");
   });
 
   it("renders required sections", () => {
@@ -19,16 +19,17 @@ describe("resume website rendering", () => {
 
   it("renders current role as the strongest experience block", () => {
     expect(html).toContain("Postgres.ai — Database Lab");
-    expect(html).toContain("LLM providers");
-    expect(html).toContain("PostgreSQL-first platform");
-    expect(html).toContain("one-click monitoring stack");
+    expect(html).toContain("Integrated multiple LLM providers");
+    expect(html).toContain("Postgres-centric APIs");
+    expect(html).toContain("multi-cloud provisioning");
+    expect(html).toContain("Stripe webhooks");
   });
 
   it("renders compressed older roles", () => {
     expect(html).toContain("Avanti Pharma");
-    expect(html).toContain("Modernized legacy frontend systems");
-    expect(html).toContain("House");
-    expect(html).toContain("Developed e-commerce websites");
+    expect(html).toContain("reducing page load time by about 50%");
+    expect(html).toContain("House VL");
+    expect(html).toContain("Built e-commerce websites");
   });
 
   it("renders education and public links", () => {
