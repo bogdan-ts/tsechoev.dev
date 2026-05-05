@@ -5,15 +5,18 @@ import App from "../src/App.svelte";
 describe("resume website rendering", () => {
   const html = render(App).body;
 
-  it("renders Bogdan's identity, role, and headline contact info", () => {
+  it("renders Bogdan's identity and role", () => {
     expect(html).toContain("Bogdan Tsechoev");
     expect(html).toContain("Senior Fullstack Engineer with backend and platform focus");
-    expect(html).toContain("tsechoev.bogdan@gmail.com");
-    expect(html).toContain("+66849947639");
+    expect(html).toContain("Bangkok, Thailand");
   });
 
   it("renders required sections", () => {
     expect(html).toContain("skills");
+    expect(html).toContain("backend");
+    expect(html).toContain("frontend");
+    expect(html).toContain("platform");
+    expect(html).toContain("ai");
     expect(html).toContain("experience");
     expect(html).toContain("education");
     expect(html).toContain("contact");
@@ -39,6 +42,7 @@ describe("resume website rendering", () => {
     expect(html).toContain("Far Eastern Federal University");
     expect(html).toContain("English");
     expect(html).toContain("Russian");
+    expect(html).toContain("mailto:tsechoev.bogdan@gmail.com");
     expect(html).toContain("https://github.com/bogdan-ts");
     expect(html).toContain("linkedin");
   });

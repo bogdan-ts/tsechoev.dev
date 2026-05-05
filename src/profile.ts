@@ -47,7 +47,10 @@ export const profile: ResumeProfile = {
   summary:
     "Senior Fullstack Engineer with 7 years of experience building end-to-end systems across frontend and backend, focused on PostgreSQL-backed applications, asynchronous workflows, provisioning, and billing.",
   skills: [
-    { title: "core", items: ["typescript", "node.js", "postgresql", "sql", "api design", "react", "terraform", "ansible", "ci/cd", "docker"] }
+    { title: "backend", items: ["typescript", "node.js", "postgresql", "sql", "api design", "pl/pgsql", "postgrest", "python"] },
+    { title: "frontend", items: ["react", "next.js", "graphql", "mobx"] },
+    { title: "platform", items: ["docker", "kubernetes", "terraform", "ansible", "ci/cd", "gitlab ci", "aws", "gcp", "hetzner", "stripe billing"] },
+    { title: "ai", items: ["llm integration", "streaming responses", "tool calling", "rag workflows", "openai", "claude", "gemini", "deepseek"] }
   ],
   experience: [
     {
