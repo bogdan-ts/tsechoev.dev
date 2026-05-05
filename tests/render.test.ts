@@ -9,6 +9,7 @@ describe("resume website rendering", () => {
     expect(html).toContain("Bogdan Tsechoev");
     expect(html).toContain("Senior Fullstack Engineer");
     expect(html).toContain("Bangkok, Thailand");
+    expect(html).toContain("Senior Fullstack Engineer with 7 years of experience building user-facing systems on top of complex application logic.");
   });
 
   it("renders required sections", () => {

@@ -13,5 +13,7 @@
   <h1 id="hero-title">{profile.name}</h1>
   <p class="role">{profile.role}</p>
   <p class="location">{profile.location}</p>
-  <p class="summary">{profile.summary}</p>
+  {#each profile.summary.split("\n\n") as paragraph}
+    <p class="summary">{paragraph}</p>
+  {/each}
 </section>
