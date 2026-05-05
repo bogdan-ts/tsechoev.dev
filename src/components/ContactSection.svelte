@@ -13,6 +13,7 @@
 <section aria-labelledby="contact-title">
   <SectionTitle title="contact" titleId="contact-title" />
   <ul>
+    <li><a href="mailto:tsechoev.bogdan@gmail.com">email</a></li>
     {#each links as link}
       <li><a href={link.href}>{link.label}</a></li>
     {/each}

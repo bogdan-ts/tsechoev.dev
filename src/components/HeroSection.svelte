@@ -12,6 +12,6 @@
   <p class="prompt">$ whoami</p>
   <h1 id="hero-title">{profile.name}</h1>
   <p class="role">{profile.role}</p>
-  <p class="location">{profile.phone} · <a href={`mailto:${profile.email}`}>{profile.email}</a> · {profile.location}</p>
+  <p class="location">{profile.location}</p>
   <p class="summary">{profile.summary}</p>
 </section>
