@@ -5,9 +5,11 @@ import App from "../src/App.svelte";
 describe("resume website rendering", () => {
   const html = render(App).body;
 
-  it("renders Bogdan's identity and role", () => {
+  it("renders Bogdan's identity, role, and headline contact info", () => {
     expect(html).toContain("Bogdan Tsechoev");
     expect(html).toContain("Senior Fullstack Engineer with backend and platform focus");
+    expect(html).toContain("tsechoev.bogdan@gmail.com");
+    expect(html).toContain("+66849947639");
   });
 
   it("renders required sections", () => {
@@ -15,25 +17,28 @@ describe("resume website rendering", () => {
     expect(html).toContain("experience");
     expect(html).toContain("education");
     expect(html).toContain("contact");
+    expect(html).toContain("languages");
   });
 
   it("renders current role as the strongest experience block", () => {
     expect(html).toContain("Postgres.ai — Database Lab");
-    expect(html).toContain("Integrated multiple LLM providers");
+    expect(html).toContain("Developed real-time AI chat interface");
     expect(html).toContain("Postgres-centric APIs");
-    expect(html).toContain("multi-cloud provisioning");
-    expect(html).toContain("Stripe webhooks");
+    expect(html).toContain("single-action self-service deployment flow");
+    expect(html).toContain("Stripe-based billing system from scratch");
   });
 
   it("renders compressed older roles", () => {
     expect(html).toContain("Avanti Pharma");
-    expect(html).toContain("reducing page load time by about 50%");
+    expect(html).toContain("reducing page load time by ~50%");
     expect(html).toContain("House VL");
-    expect(html).toContain("Built e-commerce websites");
+    expect(html).toContain("Developed e-commerce and corporate websites using Next.js");
   });
 
   it("renders education and public links", () => {
     expect(html).toContain("Far Eastern Federal University");
+    expect(html).toContain("English");
+    expect(html).toContain("Russian");
     expect(html).toContain("https://github.com/bogdan-ts");
     expect(html).toContain("linkedin");
   });
