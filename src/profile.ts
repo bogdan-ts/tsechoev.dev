@@ -45,7 +45,7 @@ export const profile: ResumeProfile = {
   email: "tsechoev.bogdan@gmail.com",
   phone: "+66849947639",
   summary:
-    "Senior Fullstack Engineer with 7 years of experience building end-to-end systems across frontend and backend, focused on PostgreSQL-backed applications, asynchronous workflows, provisioning, and billing.",
+    "Senior Fullstack Engineer with 7 years of experience building user-facing systems on top of complex application logic.\n\nI work across both frontend and backend, building interfaces and the underlying backend logic that drives complex application behavior. My experience includes frontend development, API design, and PostgreSQL-based systems.\n\nAt PostgresAI, I delivered features end-to-end, from backend and database logic to user interfaces and production rollout. This included building UI and workflows for asynchronous processes, integrating external services, and working on provisioning and billing systems.\n\nI have experience designing systems where frontend and backend are tightly coupled, and where the interface plays a key role in how users understand and interact with the system.",
   skills: [
     { title: "backend", items: ["typescript", "node.js", "postgresql", "sql", "api design", "pl/pgsql", "postgrest", "python"] },
     { title: "frontend", items: ["react", "next.js", "graphql", "mobx"] },
