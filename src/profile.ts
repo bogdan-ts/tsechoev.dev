@@ -40,7 +40,7 @@ export type ResumeProfile = {
 
 export const profile: ResumeProfile = {
   name: "Bogdan Tsechoev",
-  role: "Senior Fullstack Engineer with backend and platform focus",
+  role: "Senior Fullstack Engineer",
   location: "Bangkok, Thailand",
   email: "tsechoev.bogdan@gmail.com",
   phone: "+66849947639",
