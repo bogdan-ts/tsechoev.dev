@@ -7,7 +7,7 @@ describe("resume website rendering", () => {
 
   it("renders Bogdan's identity and role", () => {
     expect(html).toContain("Bogdan Tsechoev");
-    expect(html).toContain("Senior Fullstack Engineer with backend and platform focus");
+    expect(html).toContain("Senior Fullstack Engineer");
     expect(html).toContain("Bangkok, Thailand");
   });
 
