@@ -4,6 +4,7 @@ Made with ❤️ and vibecode.
 
 ## Stack
 
+- Svelte
 - TypeScript
 - Vite
 - Vitest
@@ -32,14 +33,14 @@ Push to `main` branch. GitHub Actions workflow builds/tests and deploys `dist/` 
 ## Project structure
 
 - `src/profile.ts` — profile content (experience, skills, links)
-- `src/render.ts` — HTML rendering helpers
+- `src/App.svelte` — root UI component
 - `src/styles.css` — UI styles
 - `tests/render.test.ts` — rendering tests
 
 ## Customization
 
 1. Edit data in `src/profile.ts`
-2. Adjust markup in `src/render.ts`
+2. Adjust markup in `src/App.svelte`
 3. Tweak styles in `src/styles.css`
 
 ## License

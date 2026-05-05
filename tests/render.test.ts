@@ -1,9 +1,9 @@
+import { render } from "svelte/server";
 import { describe, expect, it } from "vitest";
-import { profile } from "../src/profile";
-import { renderProfile } from "../src/render";
+import App from "../src/App.svelte";
 
 describe("resume website rendering", () => {
-  const html = renderProfile(profile);
+  const html = render(App).body;
 
   it("renders Bogdan's identity and role", () => {
     expect(html).toContain("Bogdan Tsechoev");

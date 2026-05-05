@@ -1,11 +1,9 @@
 import "./styles.css";
-import { profile } from "./profile";
-import { renderProfile } from "./render";
+import App from "./App.svelte";
+import { mount } from "svelte";
 
-const app = document.querySelector<HTMLDivElement>("#app");
+const app = mount(App, {
+  target: document.querySelector("#app")!
+});
 
-if (!app) {
-  throw new Error("App root was not found.");
-}
-
-app.innerHTML = renderProfile(profile);
+export default app;

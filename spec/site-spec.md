@@ -44,10 +44,11 @@ The page must include:
 ## Technical requirements
 
 - Use TypeScript.
+- Use Svelte with Vite.
 - Produce a static site deployable to GitHub Pages.
 - Avoid backend requirements.
-- Keep dependencies minimal.
-- Use tests for content/model rendering rules.
+- Keep dependencies minimal and framework-native where possible.
+- Use tests for content and component rendering rules.
 - The build output must be static files in `dist/`.
 
 ## Accessibility requirements
@@ -62,5 +63,6 @@ The page must include:
 
 - `npm test` passes.
 - `npm run build` produces `dist/index.html`.
-- Rendered content includes Bogdan's name, role, current company, compressed previous roles, skills, education, projects, and contact section.
+- Rendered content includes Bogdan's name, role, current company, compressed previous roles, skills, education, and contact section.
+- The app mounts through a Svelte root component.
 - Visual style uses JetBrains Mono with monospace fallback.
