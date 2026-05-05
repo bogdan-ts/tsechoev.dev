@@ -11,7 +11,10 @@
     "test:watch": "vitest"
   },
   "devDependencies": {
+    "@sveltejs/vite-plugin-svelte": "^7.1.0",
     "@vitest/browser": "latest",
+    "jsdom": "^26.1.0",
+    "svelte": "^5.55.5",
     "typescript": "latest",
     "vite": "latest",
     "vitest": "latest"

@@ -8,11 +8,6 @@ export type SkillGroup = {
   items: string[];
 };
 
-export type Project = {
-  name: string;
-  description: string;
-};
-
 export type ExperienceRole = {
   title: string;
   company: string;
@@ -36,7 +31,6 @@ export type ResumeProfile = {
   skills: SkillGroup[];
   experience: ExperienceRole[];
   education: Education[];
-  projects: Project[];
   links: ProfileLink[];
   resumeHref: string;
 };
@@ -99,7 +93,6 @@ export const profile: ResumeProfile = {
       period: "2019 — 2021"
     }
   ],
-  projects: [],
   links: [
     { label: "github", href: "https://github.com/bogdan-ts" },
     { label: "linkedin", href: "https://www.linkedin.com/in/bogdan-tsechoev-b7b81b182" }

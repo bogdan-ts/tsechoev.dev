@@ -13,6 +13,7 @@
     "moduleDetection": "force",
     "noEmit": true,
     "strict": true,
+    "types": ["svelte", "vitest/globals"],
     "noUnusedLocals": true,
     "noUnusedParameters": true,
     "noFallthroughCasesInSwitch": true
