@@ -1,7 +1,7 @@
 import type { ComponentType } from "react";
 import type { CommandResult, ContentCommand } from "../lib/commands";
 import type { CommandActionProps } from "./command-list";
-import { AboutCommand } from "./commands/about";
+import { WhoamiCommand } from "./commands/whoami";
 import { ContactCommand } from "./commands/contact";
 import { CvCommand } from "./commands/cv";
 import { EducationCommand } from "./commands/education";
@@ -14,7 +14,7 @@ import { TravelCommand } from "./commands/travel";
 type ContentViewProps = CommandActionProps & { view?: "globe" };
 
 const commandViews: Record<ContentCommand, ComponentType<ContentViewProps>> = {
-  whoami: AboutCommand,
+  whoami: WhoamiCommand,
   experience: ExperienceCommand,
   skills: SkillsCommand,
   opensource: OpenSourceCommand,

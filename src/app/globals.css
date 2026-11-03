@@ -135,3 +135,24 @@ h1 { font-size: 20px; font-weight: 500; line-height: 1.4; margin: 0 0 8px; }
   .contact-links a > span:first-child { min-width: auto; width: 100%; }
 }
 @media (prefers-reduced-motion: reduce) { *, *::before, *::after { animation: none !important; transition: none !important; scroll-behavior: auto !important; } }
+
+.site-shell { height: 100dvh; display: flex; flex-direction: column; }
+.site-header { display: flex; align-items: center; justify-content: space-between; gap: 16px; padding: 10px 16px; flex-shrink: 0; background: #141614; color: #9ba297; font-size: 12px; line-height: 1.7; border-bottom: 1px solid #343a31; }
+.site-header nav { display: flex; gap: 16px; }
+.site-header a { color: #9ba297; text-decoration: none; }
+.site-header a[aria-current] { color: #b3d88e; text-decoration: underline; }
+.site-header a:focus-visible { outline-color: #b3d88e; }
+.site-content { flex: 1; min-height: 0; }
+.site-content > .workspace { height: 100%; }
+.simple-page.workspace { flex: 1; min-height: 0; height: auto; overflow-y: auto; overflow-wrap: anywhere; }
+.simple-content { max-width: 960px; margin: 0 auto; padding: 24px 20px 48px; }
+.section-nav { display: flex; gap: 24px; margin-bottom: 32px; }
+.full-profile { display: grid; gap: 36px; }
+.simple-content > section { scroll-margin-top: 20px; }
+.simple-content > section + section { margin-top: 48px; border-top: 1px solid var(--border); padding-top: 32px; }
+.travel-globe-details { margin-top: 24px; }
+.travel-globe-details summary { cursor: pointer; color: var(--accent); margin-bottom: 16px; }
+@media (max-width: 600px) {
+  .site-header { padding: 8px 12px; font-size: 11px; }
+  .simple-content { padding: 20px 12px 32px; }
+}

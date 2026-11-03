@@ -1,6 +1,6 @@
 import React from "react";
 import { afterEach, describe, expect, it } from "vitest";
-import { cleanup, render, screen } from "@testing-library/react";
+import { cleanup, render, screen, within } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { Terminal } from "../src/components/terminal";
 
@@ -36,9 +36,9 @@ describe("interactive terminal", () => {
     expect(screen.getByRole("heading", { level: 1 })).toBeTruthy();
     await user.type(input, "skills{Enter}");
     expect(screen.getByText("ABOUT ME")).toBeTruthy();
-    expect(screen.getByRole("heading", { name: /Skills/ })).toBeTruthy();
+    expect(screen.getAllByRole("heading", { name: /Skills/ })).toHaveLength(2);
     await user.type(input, "history{Enter}");
-    expect(screen.getAllByRole("listitem").map((entry) => entry.textContent)).toEqual(["whoami", "skills", "history"]);
+    expect(within(document.querySelector(".history-list") as HTMLElement).getAllByRole("listitem").map((entry) => entry.textContent)).toEqual(["whoami", "skills", "history"]);
   });
 
   it("cycles Tab completions and keeps session history after clearing", async () => {
@@ -86,7 +86,7 @@ describe("interactive terminal", () => {
     expect(screen.getByText("whoami^C")).toBeTruthy();
     expect(screen.queryByText("ABOUT ME")).toBeNull();
     await user.type(input, "history{Enter}");
-    expect(screen.getAllByRole("listitem").map((entry) => entry.textContent)).toEqual(["history"]);
+    expect(within(document.querySelector(".history-list") as HTMLElement).getAllByRole("listitem").map((entry) => entry.textContent)).toEqual(["history"]);
     await user.type(input, "hello world");
     input.setSelectionRange(6, 6);
     await user.keyboard("{Control>}u{/Control}");

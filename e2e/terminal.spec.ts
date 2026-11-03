@@ -15,7 +15,7 @@ test("portfolio discovery, command execution and keyboard controls", async ({ pa
   const input = page.getByRole("textbox");
   await input.fill("opensource");
   await input.press("Enter");
-  await expect(page.getByRole("link", { name: "postgres-ai/postgresai ↗", exact: true })).toHaveAttribute("href", "https://github.com/postgres-ai/postgresai");
+  await expect(page.locator(".command-output").last().getByRole("link", { name: "postgres-ai/postgresai ↗", exact: true })).toHaveAttribute("href", "https://github.com/postgres-ai/postgresai");
   await input.fill("draft");
   await input.press("ArrowUp");
   await expect(input).toHaveValue("opensource");
@@ -29,7 +29,7 @@ test("portfolio discovery, command execution and keyboard controls", async ({ pa
   await input.press("Tab");
   await expect(input).toHaveValue("experience");
   await input.press("Enter");
-  await expect(page.getByText("Apr 2024 – Feb 2026", { exact: false })).toBeVisible();
+  await expect(page.locator(".command-output").last().getByText("Apr 2024 – Feb 2026", { exact: false })).toBeVisible();
   await expect(page.getByText("ABOUT ME", { exact: true })).toHaveCount(1);
   const latestOutput = page.locator(".transcript-entry").last();
   const topOffset = await latestOutput.evaluate(element => {

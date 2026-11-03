@@ -102,3 +102,10 @@ density with quantized brightness. Visited areas retain their green material but
 must not bypass shading. Use a denser responsive grid while preserving the
 displayed physical size and circular proportions. Cache geometry/light samples
 per resolution so animation frames only rotate and sample the geographic masks.
+# Simple version
+
+- Header links between Terminal (`/`) and Simple (`/simple/`), identifying the current version.
+- Simple is statically rendered, usable without JavaScript, with Whoami and Travel anchors.
+- Whoami includes description, experience, skills, open source, education, contact and CV, shared with the terminal command.
+- Travel stays separate, with 19 places, no cities or regions, and an optional expandable globe.
+- Preserve terminal keyboard and scrollback behavior; both versions fit mobile widths.
