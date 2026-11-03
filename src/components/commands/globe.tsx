@@ -40,13 +40,6 @@ export function TravelGlobe({ onCommand }: CommandActionProps) {
         <button type="button" onClick={globe.togglePause} disabled={globe.reducedMotion} aria-pressed={globe.paused}>
           {globe.paused ? "Resume rotation" : "Pause rotation"}
         </button>
-        <label>
-          Frame rate{" "}
-          <select value={globe.fps} onChange={event => globe.setFps(Number(event.target.value))}>
-            <option value={60}>60 FPS</option>
-            <option value={30}>30 FPS</option>
-          </select>
-        </label>
         {onCommand && <button type="button" onClick={() => onCommand("travel")}>Show visited places</button>}
         {globe.reducedMotion && <span className="muted small">Rotation off: reduced motion.</span>}
       </div>

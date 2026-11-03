@@ -84,7 +84,7 @@ the full `travel` list. The renderer and masks load only when the globe command 
 Canvas draws cached glyph sprites without per-frame React/DOM changes.
 Drag horizontally or use left/right arrows to position the sphere; release adds
 decaying inertia. Pause and reduced motion disable automatic movement and inertia.
-A selector offers 30 or 60 FPS, with a 60 FPS default ceiling.
+Frames follow the display/browser requestAnimationFrame cadence without a fixed FPS cap.
 Rotation follows requestAnimationFrame with elapsed-time
 angular movement, so speed does not depend on refresh rate. Rotation stops
 for reduced motion, offscreen output, hidden tabs and unmounted history entries.
@@ -131,8 +131,7 @@ CC BY-NC-ND 4.0.
 With a preview server running, compare the same three-second Chromium window:
 
 ```sh
-node --experimental-strip-types scripts/benchmark-globe.ts http://127.0.0.1:3000/ 60
-node --experimental-strip-types scripts/benchmark-globe.ts http://127.0.0.1:3000/ 30
+node --experimental-strip-types scripts/benchmark-globe.ts http://127.0.0.1:3000/
 ```
 
 The script reports DOM changes, paint counts and CDP task/script/layout time.

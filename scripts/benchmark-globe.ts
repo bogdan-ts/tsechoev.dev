@@ -9,7 +9,6 @@ try {
   await input.press("Enter");
   const globe = page.locator(".globe-command");
   await globe.waitFor();
-  if (process.argv[3]) await page.getByRole("combobox").selectOption(process.argv[3]);
   await page.waitForTimeout(1000);
   const cdp = await page.context().newCDPSession(page);
   await cdp.send("Performance.enable");

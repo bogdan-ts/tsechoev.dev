@@ -114,7 +114,7 @@ per resolution so animation frames only rotate and sample the geographic masks.
 
 - Keep ASCII geography and visited-country fills; render animation to one accessible canvas, without per-frame React state or DOM changes.
 - Load renderer and geographic masks only on a globe command or visiting the simple Travel page.
-- Default to a 60 FPS ceiling, offer 30 FPS; rotation uses elapsed time, not frame count.
+- Use every browser requestAnimationFrame callback with no FPS selector or fixed cap; rotation uses elapsed time, not frame count.
 - Horizontal pointer dragging rotates the globe; release adds decaying inertia. Pause stops automatic rotation and inertia but allows manual positioning. Reduced motion disables automatic movement and inertia.
 - Suspend work offscreen, in hidden tabs. Cancel animation and observers on unmount.
 - Preserve mobile vertical scrolling, keyboard arrow positioning, pause controls, theme changes, local fonts and high-DPI sharpness.

@@ -14,7 +14,6 @@ export function useGlobe() {
   const redraw = useRef(() => {});
   const [columns, setColumns] = useState(56);
   const [paused, setPaused] = useState(false);
-  const [fps, setFps] = useState(60);
   const [reducedMotion, setReducedMotion] = useState(true);
   const [visible, setVisible] = useState(false);
   const [documentVisible, setDocumentVisible] = useState(true);
@@ -93,21 +92,19 @@ export function useGlobe() {
     let animationFrame: number;
     const tick = (time: number) => {
       const elapsed = time - previousTime;
-      if (elapsed >= 1000 / fps - 0.5) {
-        previousTime = time;
-        if (!drag.current) {
-          const next = advanceRotation(angle.current, velocity.current, elapsed);
-          angle.current = next.angle;
-          velocity.current = next.velocity;
-          sky.current = advanceCometSky(sky.current, elapsed);
-          redraw.current();
-        }
+      previousTime = time;
+      if (!drag.current) {
+        const next = advanceRotation(angle.current, velocity.current, elapsed);
+        angle.current = next.angle;
+        velocity.current = next.velocity;
+        sky.current = advanceCometSky(sky.current, elapsed);
+        redraw.current();
       }
       animationFrame = window.requestAnimationFrame(tick);
     };
     animationFrame = window.requestAnimationFrame(tick);
     return () => window.cancelAnimationFrame(animationFrame);
-  }, [paused, reducedMotion, visible, documentVisible, fps]);
+  }, [paused, reducedMotion, visible, documentVisible]);
 
   const pointerDown = (event: PointerEvent<HTMLCanvasElement>) => {
     if (!event.isPrimary || event.button !== 0) return;
@@ -131,7 +128,7 @@ export function useGlobe() {
   };
 
   return {
-    containerRef, canvasRef, paused, reducedMotion, fps, setFps,
+    containerRef, canvasRef, paused, reducedMotion,
     togglePause: () => setPaused(current => !current),
     pointerDown, pointerMove, pointerEnd,
     rotateBy: (amount: number) => { angle.current += amount; velocity.current = 0; redraw.current(); },

@@ -67,16 +67,20 @@ describe("globe animation lifecycle", () => {
     act(() => document.dispatchEvent(new Event("visibilitychange")));
     expect(vi.getTimerCount()).toBe(0);
   });
-  it("caps frame draws and supports keyboard rotation while paused", () => {
+  it("uses every high-refresh frame and supports keyboard rotation while paused", () => {
+    let frame: FrameRequestCallback;
+    let sequence = 0;
+    vi.stubGlobal("requestAnimationFrame", (callback: FrameRequestCallback) => { frame = callback; return ++sequence; });
+    vi.stubGlobal("cancelAnimationFrame", vi.fn());
     render(<TravelGlobe />);
-    fireEvent.change(screen.getByRole("combobox"), { target: { value: "30" } });
+    const start = performance.now();
     vi.mocked(paintGlobe).mockClear();
-    act(() => vi.advanceTimersByTime(1000));
-    expect(vi.mocked(paintGlobe).mock.calls.length).toBeLessThanOrEqual(31);
+    for (let i = 1; i <= 12; i++) act(() => frame(start + i * 1000 / 120));
+    expect(vi.mocked(paintGlobe).mock.calls.length).toBe(12);
+    expect(screen.queryByRole("combobox")).toBeNull();
     fireEvent.click(screen.getByRole("button", { name: "Pause rotation" }));
     const before = vi.mocked(paintGlobe).mock.calls.at(-1)![2];
     fireEvent.keyDown(screen.getByRole("img"), { key: "ArrowRight" });
     expect(vi.mocked(paintGlobe).mock.calls.at(-1)![2]).toBeCloseTo(before + 0.12);
   });
-
 });
