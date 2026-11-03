@@ -110,7 +110,7 @@ h1 { font-size: 20px; font-weight: 500; line-height: 1.4; margin: 0 0 8px; }
 .small { font-size: 12px; }
 .globe-command { max-width: 580px; }
 .globe-figure { margin: 0 0 16px; }
-.globe-ascii { margin: 0 0 12px; font-size: 8px; line-height: 11px; font-weight: 400; white-space: pre; letter-spacing: 0; user-select: none; }
+.globe-ascii { display: block; max-width: 100%; touch-action: pan-y; cursor: grab; margin: 0 0 12px; font-size: 8px; line-height: 11px; font-weight: 400; white-space: pre; letter-spacing: 0; user-select: none; }
 .globe-land { color: var(--text); }
 .globe-water { color: #8faabc; }
 .workspace[data-theme='light'] .globe-water { color: #3d5e74; }
@@ -159,3 +159,7 @@ h1 { font-size: 20px; font-weight: 500; line-height: 1.4; margin: 0 0 8px; }
   .site-header { padding: 8px 12px; font-size: 11px; }
   .simple-content { padding: 20px 12px 32px; }
 }
+
+.globe-ascii:active { cursor: grabbing; }
+.globe-ascii:focus-visible { outline: 1px solid var(--accent); outline-offset: 4px; }
+.globe-controls select { font: inherit; color: var(--text); background: var(--bg); border: 1px solid var(--border); padding: 4px; }

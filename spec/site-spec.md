@@ -109,3 +109,14 @@ per resolution so animation frames only rotate and sample the geographic masks.
 - Whoami includes description, experience, skills, open source, education, contact and CV, shared with the terminal command.
 - Travel stays separate, with 19 places, no cities or regions, and an optional expandable globe.
 - Preserve terminal keyboard and scrollback behavior; both versions fit mobile widths.
+
+## Canvas globe and interaction
+
+- Keep ASCII geography and visited-country fills; render animation to one accessible canvas, without per-frame React state or DOM changes.
+- Load renderer and geographic masks only on a globe command or first opening the simple travel disclosure.
+- Default to a 60 FPS ceiling, offer 30 FPS; rotation uses elapsed time, not frame count.
+- Horizontal pointer dragging rotates the globe; release adds decaying inertia. Pause stops automatic rotation and inertia but allows manual positioning. Reduced motion disables automatic movement and inertia.
+- Suspend work offscreen, inside a closed disclosure and in hidden tabs. Cancel animation and observers on unmount.
+- Preserve mobile vertical scrolling, keyboard arrow positioning, pause controls, theme changes, local fonts and high-DPI sharpness.
+- Improve land/ocean contrast and clip glyphs to a smooth circular limb. No external runtime services or Worker.
+- Compare DOM node counts and Chromium task/layout time over the same three-second desktop animation window; report observations rather than universal speed claims.

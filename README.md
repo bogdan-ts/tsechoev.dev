@@ -80,7 +80,12 @@ polygons filled in green. `countries --globe` works through the existing alias;
 `travel` without a flag shows the list. There is no standalone `globe` command.
 Small territories can be below the raster or ASCII resolution; no point markers
 or enlarged borders stand in for them. The view has pause/resume and a link to
-the full `travel` list. Rotation follows requestAnimationFrame with elapsed-time
+the full `travel` list. The renderer and masks load only when a globe is opened.
+Canvas draws cached glyph sprites without per-frame React/DOM changes.
+Drag horizontally or use left/right arrows to position the sphere; release adds
+decaying inertia. Pause and reduced motion disable automatic movement and inertia.
+A selector offers 30 or 60 FPS, with a 60 FPS default ceiling.
+Rotation follows requestAnimationFrame with elapsed-time
 angular movement, so speed does not depend on refresh rate. Rotation stops
 for reduced motion, offscreen output, hidden tabs and unmounted history entries.
 
@@ -88,7 +93,8 @@ Surface-normal lighting stays fixed above and to the left while the map rotates.
 Ocean, neutral land and green visited areas share ambient light and limb darkening.
 Character density and brightness carry the shading. The denser responsive ASCII
 grid keeps the physical globe size; cached geometry avoids per-frame projection
-and lighting work.
+and lighting work. Glyph clipping smooths the silhouette and muted blue oceans
+separate unvisited land from water. High-DPI rendering is capped at 2×.
 
 Geography comes from [Natural Earth](https://www.naturalearthdata.com/), distributed
 by [world-atlas](https://github.com/topojson/world-atlas). The checked-in land mask
@@ -104,7 +110,9 @@ npm run generate:globe
 
 `scripts/generate-globe-data.ts` samples land outlines and fills the selected
 country shapes. Projection and ASCII rendering live in
-`src/lib/globe.ts`; animation lifecycle lives in `src/hooks/use-globe.ts`.
+`src/lib/globe.ts`; Canvas painting and its glyph cache are in
+`src/lib/globe-canvas.ts`. Animation lifecycle lives in `src/hooks/use-globe.ts`,
+with frame-independent inertia in `src/lib/globe-motion.ts`.
 
 ## Deployment
 
@@ -117,3 +125,16 @@ Production changes take effect only after the workflow successfully deploys.
 ## License
 
 CC BY-NC-ND 4.0.
+
+### Globe profiling
+
+With a preview server running, compare the same three-second Chromium window:
+
+```sh
+node --experimental-strip-types scripts/benchmark-globe.ts http://127.0.0.1:3000/ 60
+node --experimental-strip-types scripts/benchmark-globe.ts http://127.0.0.1:3000/ 30
+```
+
+The script reports DOM changes, paint counts and CDP task/script/layout time.
+Headless rendering and host load affect timing; these are local diagnostics,
+not device-wide performance guarantees.

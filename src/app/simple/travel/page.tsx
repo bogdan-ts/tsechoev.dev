@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import { SimpleNavigation } from "../../../components/simple-navigation";
-import { TravelGlobe } from "../../../components/commands/globe";
+import { GlobeDisclosure } from "../../../components/lazy-globe";
 import { countries } from "../../../lib/profile";
 
 export const metadata: Metadata = {
@@ -17,10 +17,7 @@ export default function TravelPage() {
         <ul>
           {countries.map(({ code, name }) => <li key={code}>{name}</li>)}
         </ul>
-        <details className="travel-globe-details">
-          <summary>View globe</summary>
-          <TravelGlobe />
-        </details>
+        <GlobeDisclosure />
       </section>
     </>
   );

@@ -64,10 +64,26 @@ export function useTerminal() {
     const screen = screenRef.current;
     if (!screen) return;
     const latest = latestEntryRef.current;
-    const paddingTop = Number.parseFloat(getComputedStyle(screen).paddingTop) || 0;
-    screen.scrollTop = latest
-      ? screen.scrollTop + latest.getBoundingClientRect().top - screen.getBoundingClientRect().top - paddingTop
-      : 0;
+    const alignOutput = () => {
+      const paddingTop = Number.parseFloat(getComputedStyle(screen).paddingTop) || 0;
+      screen.scrollTop = latest
+        ? screen.scrollTop + latest.getBoundingClientRect().top - screen.getBoundingClientRect().top - paddingTop
+        : 0;
+    };
+    alignOutput();
+    if (!latest?.querySelector(".globe-loading, canvas") || typeof ResizeObserver !== "function") return;
+    let followLoading = true;
+    const stopFollowing = () => { followLoading = false; };
+    const interactions = ["wheel", "touchstart", "pointerdown", "keydown"] as const;
+    interactions.forEach(event => screen.addEventListener(event, stopFollowing, { passive: true }));
+    const observer = new ResizeObserver(() => {
+      if (followLoading) alignOutput();
+    });
+    observer.observe(latest);
+    return () => {
+      observer.disconnect();
+      interactions.forEach(event => screen.removeEventListener(event, stopFollowing));
+    };
   }, [entries]);
 
   function appendEntry(input: string, result: CommandResult | null) {
@@ -183,7 +199,7 @@ export function useTerminal() {
   function focusPrompt(event: MouseEvent<HTMLElement>) {
     const target = event.target;
     if (!(target instanceof HTMLElement)) return;
-    if (target.closest("a, button, input, label") || window.getSelection()?.toString()) return;
+    if (target.closest("a, button, input, label, select, canvas, summary") || window.getSelection()?.toString()) return;
     inputRef.current?.focus({ preventScroll: true });
   }
 

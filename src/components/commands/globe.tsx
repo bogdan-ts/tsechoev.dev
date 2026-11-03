@@ -1,41 +1,52 @@
 "use client";
 
+import { useId } from "react";
 import { useGlobe } from "../../hooks/use-globe";
-import { renderGlobe } from "../../lib/globe";
 import type { CommandActionProps } from "../command-list";
 
 export function TravelGlobe({ onCommand }: CommandActionProps) {
   const globe = useGlobe();
-  const frame = renderGlobe(globe.columns, globe.columns / 2, globe.rotation);
+  const hintId = useId();
 
   return (
     <div className="globe-command" ref={globe.containerRef}>
       <h2>Travel globe</h2>
       <figure className="globe-figure">
-        <pre className="globe-ascii" aria-hidden="true">
-          {frame.rows.map((row, rowIndex) => (
-            <span key={rowIndex}>
-              {row.map((run, runIndex) => (
-                <span
-                  className={`globe-${run.kind}`}
-                  style={{ opacity: 0.16 + run.brightness * 0.84 }}
-                  key={runIndex}
-                >
-                  {run.text}
-                </span>
-              ))}
-              {rowIndex < frame.rows.length - 1 ? "\n" : null}
-            </span>
-          ))}
-        </pre>
-        <figcaption className="muted small">
-          <span className="accent">Green</span>: visited countries and territories.
+        <canvas
+          className="globe-ascii"
+          ref={globe.canvasRef}
+          role="img"
+          aria-label="Rotating ASCII globe with visited countries and territories in green"
+          aria-describedby={hintId}
+          tabIndex={0}
+          onPointerDown={globe.pointerDown}
+          onPointerMove={globe.pointerMove}
+          onPointerUp={globe.pointerEnd}
+          onPointerCancel={globe.pointerEnd}
+          onLostPointerCapture={globe.pointerEnd}
+          onKeyDown={event => {
+            if (event.key !== "ArrowLeft" && event.key !== "ArrowRight") return;
+            event.preventDefault();
+            globe.rotateBy(event.key === "ArrowLeft" ? -0.12 : 0.12);
+          }}
+        >
+          Visited countries and territories are listed by the travel command.
+        </canvas>
+        <figcaption className="muted small" id={hintId}>
+          <span className="accent">Green</span>: visited countries and territories. Drag or use left/right arrow keys to rotate.
         </figcaption>
       </figure>
       <div className="globe-controls">
         <button type="button" onClick={globe.togglePause} disabled={globe.reducedMotion} aria-pressed={globe.paused}>
           {globe.paused ? "Resume rotation" : "Pause rotation"}
         </button>
+        <label>
+          Frame rate{" "}
+          <select value={globe.fps} onChange={event => globe.setFps(Number(event.target.value))}>
+            <option value={60}>60 FPS</option>
+            <option value={30}>30 FPS</option>
+          </select>
+        </label>
         {onCommand && <button type="button" onClick={() => onCommand("travel")}>Show visited places</button>}
         {globe.reducedMotion && <span className="muted small">Rotation off: reduced motion.</span>}
       </div>

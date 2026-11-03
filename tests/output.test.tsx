@@ -1,8 +1,10 @@
 import React from "react";
-import { afterEach, describe, expect, it } from "vitest";
+import { afterEach, describe, expect, it, vi } from "vitest";
 import { cleanup, render, screen } from "@testing-library/react";
 import { Output } from "../src/components/output";
 import { executeCommand } from "../src/lib/commands";
+
+vi.mock("../src/components/lazy-globe", () => ({ LazyGlobe: () => <h2>Travel globe</h2> }));
 
 afterEach(cleanup);
 
