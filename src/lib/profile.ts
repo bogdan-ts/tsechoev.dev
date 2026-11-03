@@ -43,7 +43,7 @@ export const profile = {
   ],
   experience: [
     {
-      company: "Postgres.ai – Database Lab", role: "Senior Software Engineer", period: "Apr 2024 – Feb 2026", location: "California · Remote",
+      company: "PostgresAI", role: "Senior Software Engineer", period: "Apr 2024 – Feb 2026", location: "California · Remote",
       summary: "I worked in a team of eight, building managed PostgreSQL monitoring, an AI assistant and a consulting issue tracker.",
       bullets: [
         "Built and launched managed monitoring with React onboarding, Stripe billing and Ansible provisioning on AWS, GCP and Hetzner. Setup took one required field and 3–5 minutes from subscription to a running stack.",
