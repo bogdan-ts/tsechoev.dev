@@ -153,8 +153,6 @@ h1 { font-size: 20px; font-weight: 500; line-height: 1.4; margin: 0 0 8px; }
 .full-profile { display: grid; gap: 36px; }
 .simple-content > section { scroll-margin-top: 20px; }
 .simple-content > section + section { margin-top: 48px; border-top: 1px solid var(--border); padding-top: 32px; }
-.travel-globe-details { margin-top: 24px; }
-.travel-globe-details summary { cursor: pointer; color: var(--accent); margin-bottom: 16px; }
 @media (max-width: 600px) {
   .site-header { padding: 8px 12px; font-size: 11px; }
   .simple-content { padding: 20px 12px 32px; }

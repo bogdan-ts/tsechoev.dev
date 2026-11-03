@@ -80,7 +80,7 @@ polygons filled in green. `countries --globe` works through the existing alias;
 `travel` without a flag shows the list. There is no standalone `globe` command.
 Small territories can be below the raster or ASCII resolution; no point markers
 or enlarged borders stand in for them. The view has pause/resume and a link to
-the full `travel` list. The renderer and masks load only when a globe is opened.
+the full `travel` list. The renderer and masks load only when the globe command runs or the simple Travel page opens.
 Canvas draws cached glyph sprites without per-frame React/DOM changes.
 Drag horizontally or use left/right arrows to position the sphere; release adds
 decaying inertia. Pause and reduced motion disable automatic movement and inertia.

@@ -45,14 +45,14 @@ test("reduced motion keeps the globe static", async ({ page }) => {
 });
 
 
-test("globe loads on demand and pointer dragging changes a paused frame", async ({ page }) => {
+test("travel loads the globe automatically and supports pointer dragging", async ({ page }) => {
   const scripts: string[] = [];
   page.on("request", request => { if (request.resourceType() === "script") scripts.push(request.url()); });
-  await page.goto("/simple/travel/");
+  await page.goto("/simple/");
   await page.waitForLoadState("networkidle");
   await expect(page.locator("canvas")).toHaveCount(0);
   const before = new Set(scripts);
-  await page.getByText("View globe", { exact: true }).click();
+  await page.getByRole("link", { name: "Travel", exact: true }).click();
   const canvas = page.locator("canvas");
   await expect(canvas).toBeVisible();
   expect(scripts.some(url => !before.has(url))).toBe(true);
@@ -64,7 +64,7 @@ test("globe loads on demand and pointer dragging changes a paused frame", async 
   await page.mouse.move(box.x + box.width / 2 + 70, box.y + box.height / 2, { steps: 8 });
   await page.mouse.up();
   expect(await canvas.evaluate((element: HTMLCanvasElement) => element.toDataURL())).not.toBe(initial);
-  await page.getByText("View globe", { exact: true }).click();
+  await page.getByRole("link", { name: "Whoami", exact: true }).click();
   await expect(canvas).toHaveCount(0);
 });
 
@@ -91,7 +91,6 @@ test("touch dragging works with reduced motion without starting inertia", async 
   test.skip(testInfo.project.name !== "mobile", "Touch interaction is exercised in the mobile project.");
   await page.emulateMedia({ reducedMotion: "reduce" });
   await page.goto("/simple/travel/");
-  await page.getByText("View globe", { exact: true }).click();
   const canvas = page.locator("canvas");
   await expect(canvas).toBeVisible();
   await expect(page.getByText("Rotation off: reduced motion.")).toBeVisible();
