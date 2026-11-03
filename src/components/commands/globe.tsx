@@ -16,7 +16,13 @@ export function TravelGlobe({ onCommand }: CommandActionProps) {
           {frame.rows.map((row, rowIndex) => (
             <span key={rowIndex}>
               {row.map((run, runIndex) => (
-                <span className={`globe-${run.kind}`} key={runIndex}>{run.text}</span>
+                <span
+                  className={`globe-${run.kind}`}
+                  style={{ opacity: 0.16 + run.brightness * 0.84 }}
+                  key={runIndex}
+                >
+                  {run.text}
+                </span>
               ))}
               {rowIndex < frame.rows.length - 1 ? "\n" : null}
             </span>

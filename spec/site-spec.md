@@ -93,4 +93,12 @@ the output is cleared. Animation must not scroll the terminal or steal focus.
 Keep text accessible without announcing each ASCII animation frame. The command
 works offline after page assets load; preserve SSG and no runtime API dependency.
 Keep projection/rendering separate from React and test front/back clipping,
-rotation, marker coverage, pause, reduced motion and timer cleanup.
+rotation, polygon coverage, pause, reduced motion and timer cleanup.
+
+The globe must read as a lit sphere, not a flat disc. Compute a camera-fixed light
+from the upper left using surface normals, ambient light and limb darkening.
+Apply the same lighting to ocean, land and visited polygons, combining character
+density with quantized brightness. Visited areas retain their green material but
+must not bypass shading. Use a denser responsive grid while preserving the
+displayed physical size and circular proportions. Cache geometry/light samples
+per resolution so animation frames only rotate and sample the geographic masks.

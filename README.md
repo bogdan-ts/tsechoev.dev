@@ -84,6 +84,12 @@ the full `travel` list. Rotation follows requestAnimationFrame with elapsed-time
 angular movement, so speed does not depend on refresh rate. Rotation stops
 for reduced motion, offscreen output, hidden tabs and unmounted history entries.
 
+Surface-normal lighting stays fixed above and to the left while the map rotates.
+Ocean, neutral land and green visited areas share ambient light and limb darkening.
+Character density and brightness carry the shading. The denser responsive ASCII
+grid keeps the physical globe size; cached geometry avoids per-frame projection
+and lighting work.
+
 Geography comes from [Natural Earth](https://www.naturalearthdata.com/), distributed
 by [world-atlas](https://github.com/topojson/world-atlas). The checked-in land mask
 and visited polygon mask total about 54 KB; geometry tools are development-only.

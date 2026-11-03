@@ -2,7 +2,7 @@ import { useEffect, useRef, useState } from "react";
 
 export function useGlobe() {
   const containerRef = useRef<HTMLDivElement>(null);
-  const [columns, setColumns] = useState(40);
+  const [columns, setColumns] = useState(56);
   const [rotation, setRotation] = useState(Math.PI / 2);
   const [paused, setPaused] = useState(false);
   const [reducedMotion, setReducedMotion] = useState(true);
@@ -28,7 +28,7 @@ export function useGlobe() {
     if (!container) return;
     const resize = () => {
       const width = container.getBoundingClientRect().width;
-      setColumns(width < 340 ? 32 : width < 480 ? 40 : 56);
+      setColumns(width < 340 ? 48 : width < 480 ? 56 : 80);
     };
     resize();
     const observer = typeof ResizeObserver === "function" ? new ResizeObserver(resize) : null;
