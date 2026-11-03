@@ -28,6 +28,7 @@ regional groups, cities, notes or visit statistics. Replace the PDF.
 - `contact`: email, GitHub, LinkedIn; no automatic navigation.
 - `cv` / `resume`: download link to the new PDF.
 - `travel` / `countries`: supplied countries and territories in one list.
+- `globe`: rotating ASCII Earth with star markers for the supplied visited places.
 - `history`: session commands including itself.
 - `clear`: clear output, retain history.
 - `theme [dark|light]`: toggle or select theme.
@@ -71,3 +72,22 @@ uses an exhaustive typed component registry; command metadata and profile data
 remain separate from presentation. Keep session/input logic in a terminal hook,
 not mixed into command views. Shared prompt and command-list markup is reused.
 Review all site copy with stop-slop; preserve CV facts and numerical claims.
+
+## ASCII globe
+
+Render an orthographic sphere using a bundled Natural Earth land mask, not random
+characters or network maps. Place markers at approximate geographic reference
+points for the same 19 travel entries. Clip markers on the back of the sphere;
+merge labels when small territories share one character cell. Markers represent
+places, not exact borders, cities or travel routes. Explain their approximate
+positions and link to `travel` for names. Start facing Asia.
+
+Use responsive character dimensions, retaining a circular appearance and no
+horizontal overflow at 375px. Rotation is deterministic on initial render, runs
+at no more than 10fps, and has an accessible pause/resume control. Disable motion
+for reduced-motion users and stop timers when offscreen, the tab is hidden, or
+the output is cleared. Animation must not scroll the terminal or steal focus.
+Keep text accessible without announcing each ASCII animation frame. The command
+works offline after page assets load; preserve SSG and no runtime API dependency.
+Keep projection/rendering separate from React and test front/back clipping,
+rotation, marker coverage, pause, reduced motion and timer cleanup.

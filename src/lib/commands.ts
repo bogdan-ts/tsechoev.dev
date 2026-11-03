@@ -7,6 +7,7 @@ export const commands = [
   { name: "contact", description: "Email, GitHub and LinkedIn", aliases: [] },
   { name: "cv", description: "Download CV (PDF)", aliases: ["resume"] },
   { name: "travel", description: "Countries and territories I’ve visited", aliases: ["countries"] },
+  { name: "globe", description: "Rotating ASCII globe with visited places", aliases: [] },
   { name: "help", description: "List commands", aliases: ["ls"] },
   { name: "history", description: "Command history", aliases: [] },
   { name: "clear", description: "Clear the screen", aliases: [] },
@@ -14,7 +15,7 @@ export const commands = [
   { name: "pwd", description: "Print the current directory", aliases: [] },
 ] as const;
 
-export type ContentCommand = "whoami" | "experience" | "skills" | "opensource" | "education" | "contact" | "cv" | "travel" | "help";
+export type ContentCommand = "whoami" | "experience" | "skills" | "opensource" | "education" | "contact" | "cv" | "travel" | "globe" | "help";
 export type CommandResult =
   | { kind: "content"; command: ContentCommand }
   | { kind: "error"; message: string }

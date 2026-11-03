@@ -33,7 +33,7 @@ JavaScript enables command execution; CV and email links also work without it.
 ## Commands and controls
 
 `whoami`, `experience`, `skills`, `opensource`, `education`, `contact`, `cv`,
-`travel`, `help`, `history`, `clear`, `theme [dark|light]`, `pwd`.
+`travel`, `globe`, `help`, `history`, `clear`, `theme [dark|light]`, `pwd`.
 
 Aliases: `about`, `oss`, `resume`, `countries`, `ls`.
 
@@ -72,6 +72,30 @@ The 19 entries come from Bogdan's travel screenshots; the output has no regional
 groups, cities or visit statistics. No entries are inferred from residence or
 employment. Open-source entries link to the CV's two
 repositories, not fabricated individual PRs or live contribution counts.
+
+## ASCII globe
+
+`globe` renders a rotating ASCII sphere with star markers for the same 19 travel
+entries. Positions use approximate geographic centres, not city visits or borders.
+Hover a star for its place names; nearby places can share a character cell.
+The command has pause/resume and a link to the full `travel` list. Rotation stops
+for reduced motion, offscreen output, hidden tabs and unmounted history entries.
+
+Geography comes from [Natural Earth](https://www.naturalearthdata.com/), distributed
+by [world-atlas](https://github.com/topojson/world-atlas). The checked-in land mask
+and reference points total about 12 KB; geometry tools are development-only.
+No map service, external request or backend is needed at runtime. Attribution and
+the redistribution license ship in `public/world-atlas-license.txt`.
+
+After changing the travel list, regenerate geometry with Node.js 22.18+:
+
+```sh
+npm run generate:globe
+```
+
+`scripts/generate-globe-data.ts` samples land outlines and derives centres from
+the matching country shapes. Projection and ASCII rendering live in
+`src/lib/globe.ts`; animation lifecycle lives in `src/hooks/use-globe.ts`.
 
 ## Deployment
 

@@ -7,6 +7,7 @@ import { CvCommand } from "./commands/cv";
 import { EducationCommand } from "./commands/education";
 import { ExperienceCommand } from "./commands/experience";
 import { HelpCommand } from "./commands/help";
+import { GlobeCommand } from "./commands/globe";
 import { OpenSourceCommand } from "./commands/opensource";
 import { SkillsCommand } from "./commands/skills";
 import { TravelCommand } from "./commands/travel";
@@ -20,6 +21,7 @@ const commandViews = {
   contact: ContactCommand,
   cv: CvCommand,
   travel: TravelCommand,
+  globe: GlobeCommand,
   help: HelpCommand,
 } satisfies Record<ContentCommand, ComponentType<CommandActionProps>>;
 
