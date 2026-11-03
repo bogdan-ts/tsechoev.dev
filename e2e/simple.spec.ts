@@ -37,6 +37,7 @@ test("switch versions and read the complete profile without commands", async ({
     .click();
   await expect(page).toHaveURL(/\/simple\/travel\//);
   await expect(page.locator("#travel li")).toHaveCount(19);
+  await expect(page.locator("canvas")).toHaveCount(1);
   await page.reload();
   await expect(page.getByRole("heading", { level: 1, name: "Travel" })).toBeVisible();
   await page.getByRole("link", { name: "Terminal", exact: true }).click();
@@ -58,6 +59,7 @@ test("simple profile is statically available without JavaScript", async ({ brows
     .getByRole("link", { name: "Travel" })
     .click();
   await expect(page.locator("#travel li")).toHaveCount(19);
+  await expect(page.locator("canvas")).toHaveCount(1);
   await page.getByRole("link", { name: "Whoami", exact: true }).click();
   await expect(page.getByRole("heading", { name: "Experience", exact: true })).toHaveCount(1);
   await page.getByRole("link", { name: "Terminal", exact: true }).click();

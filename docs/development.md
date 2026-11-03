@@ -33,7 +33,7 @@ is memoized and receives a stable command callback.
 The globe hook coordinates environment observation, pointer input and Canvas
 resource ownership. The renderer measures fonts only during setup/refresh and
 owns a bounded sprite cache that is cleared on disposal. Animation data stays
-in refs rather than React state. The loader isolates chunk/render errors; a missing
+in refs rather than React state. A local error boundary isolates renderer errors; a missing
 Canvas context falls back to readable content and the travel list.
 
 Dependency versions are exact and recorded in the lockfile. ESLint 9 is retained

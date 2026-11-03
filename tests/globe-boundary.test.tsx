@@ -7,10 +7,10 @@ afterEach(() => {
   vi.restoreAllMocks();
 });
 
-it("isolates renderer/loading errors without removing surrounding content", () => {
+it("isolates renderer errors without removing surrounding content", () => {
   vi.spyOn(console, "error").mockImplementation(() => {});
   function BrokenGlobe(): never {
-    throw new Error("Chunk load failed");
+    throw new Error("Renderer failed");
   }
   render(
     <>

@@ -3,7 +3,7 @@ import { cleanup, render, screen } from "@testing-library/react";
 import { Output } from "../src/components/output";
 import { executeCommand } from "../src/lib/commands";
 
-vi.mock("../src/components/lazy-globe", () => ({ LazyGlobe: () => <h2>Travel globe</h2> }));
+vi.mock("../src/components/globe-view", () => ({ GlobeView: () => <h2>Travel globe</h2> }));
 
 afterEach(cleanup);
 

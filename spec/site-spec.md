@@ -114,7 +114,7 @@ per resolution so animation frames only rotate and sample the geographic masks.
 ## Canvas globe and interaction
 
 - Keep ASCII geography and visited-country fills; render animation to one accessible canvas, without per-frame React state or DOM changes.
-- Load renderer and geographic masks only on a globe command or visiting the simple Travel page.
+- Use ordinary globe imports with no dynamic loader, in both versions.
 - Use every browser requestAnimationFrame callback with no FPS selector or fixed cap; rotation uses elapsed time, not frame count.
 - Horizontal pointer dragging rotates the globe; release adds decaying inertia. Pause stops automatic rotation and inertia but allows manual positioning. Reduced motion disables automatic movement and inertia.
 - Suspend work offscreen, in hidden tabs. Cancel animation and observers on unmount.
@@ -138,3 +138,5 @@ per resolution so animation frames only rotate and sample the geographic masks.
 - Cache Canvas font metrics outside the frame loop; bound sprite caches and avoid non-null assertions around browser resources.
 - Each static page must have matching canonical and Open Graph URLs. Keyboard focus, no-JavaScript profile/list content and mobile scrolling must remain usable.
 - Enforce formatting, lint, strict TypeScript (including e2e), unit tests, static build and browser/accessibility checks in CI. Pin installed dependency versions and document local quality checks.
+
+- Initialize the random comet schedule only after mounting/starting animation, never during static rendering.

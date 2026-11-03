@@ -18,7 +18,7 @@ behavior are preserved. Binary CV/image assets were not rewritten.
 | Globe lifecycle, input and rendering were coupled              | Environment, pointer and Canvas resource hooks; small animation coordinator | Pause, visibility, reduced motion, high-refresh and touch tests |
 | Frame rendering measured computed styles repeatedly            | Renderer-owned font metrics refreshed only on setup/theme/font readiness    | Unit test checks no font measurement in the frame loop          |
 | Canvas contexts and cache access relied on non-null assertions | Explicit resource checks, owned bounded sprite cache and disposal           | Context-unavailable unit/browser fallback tests                 |
-| Lazy chunk/render errors could remove surrounding content      | Local globe error boundary with reload action                               | Error-isolation regression test                                 |
+| Renderer errors could remove surrounding content               | Local globe error boundary with reload action                               | Error-isolation regression test                                 |
 | Simple routes inherited the root Open Graph URL                | Shared metadata builder with per-route canonical/OG URLs                    | All three routes checked in Chromium                            |
 | e2e files were outside TypeScript checks                       | Include e2e and enable unused/return/fallthrough checks                     | Typecheck and static build                                      |
 | Formatting/lint rules were not enforced                        | Prettier, Next/TypeScript/React ESLint rules, zero-warning CI gate          | `npm run check`                                                 |
@@ -51,6 +51,6 @@ Upgrade the lint preset/plugins together when compatible patched versions exist.
 ## Deliberate boundaries
 
 No runtime backend, generic state library, Worker, arbitrary FPS cap, new command
-framework or content rewrite was introduced. The renderer stays lazy-loaded;
+framework or content rewrite was introduced. The globe uses ordinary imports without a dynamic loader;
 animation still follows native requestAnimationFrame cadence. Known tiny-territory
 limitations of the geographic raster/ASCII grid are unchanged.

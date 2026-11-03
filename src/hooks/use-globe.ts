@@ -7,8 +7,12 @@ import { useGlobePointer } from "./use-globe-pointer";
 
 export function useGlobe() {
   const containerRef = useRef<HTMLDivElement>(null);
-  const [initialSky] = useState(createCometSky);
-  const motionRef = useRef<GlobeMotion>({ angle: Math.PI / 2, velocity: 0, sky: initialSky });
+  const skyInitializedRef = useRef(false);
+  const motionRef = useRef<GlobeMotion>({
+    angle: Math.PI / 2,
+    velocity: 0,
+    sky: { time: 0, nextAt: Infinity, comet: null },
+  });
   const [paused, setPaused] = useState(false);
   const { columns, reducedMotion, visible, documentVisible } = useGlobeEnvironment(containerRef);
   const { canvasRef, redrawRef, available } = useGlobeCanvas(columns, motionRef);
@@ -17,6 +21,10 @@ export function useGlobe() {
   useEffect(() => {
     motionRef.current.velocity = 0;
     if (paused || reducedMotion || !visible || !documentVisible || !available) return;
+    if (!skyInitializedRef.current) {
+      motionRef.current.sky = createCometSky();
+      skyInitializedRef.current = true;
+    }
     let previousTime = performance.now();
     let animationFrame: number;
     const tick = (time: number) => {

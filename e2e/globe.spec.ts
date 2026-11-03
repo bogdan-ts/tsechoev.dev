@@ -66,18 +66,12 @@ test("reduced motion keeps the globe static", async ({ page }) => {
 });
 
 test("travel loads the globe automatically and supports pointer dragging", async ({ page }) => {
-  const scripts: string[] = [];
-  page.on("request", (request) => {
-    if (request.resourceType() === "script") scripts.push(request.url());
-  });
   await page.goto("/simple/");
   await page.waitForLoadState("networkidle");
   await expect(page.locator("canvas")).toHaveCount(0);
-  const before = new Set(scripts);
   await page.getByRole("link", { name: "Travel", exact: true }).click();
   const canvas = page.locator("canvas");
   await expect(canvas).toBeVisible();
-  expect(scripts.some((url) => !before.has(url))).toBe(true);
   await page.getByRole("button", { name: "Pause rotation" }).click();
   const initial = await canvas.evaluate((element: HTMLCanvasElement) => element.toDataURL());
   const box = await canvas.boundingBox();

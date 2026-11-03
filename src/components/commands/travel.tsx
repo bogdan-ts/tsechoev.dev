@@ -1,11 +1,11 @@
 import { countries } from "../../lib/profile";
 import type { CommandActionProps } from "../command-list";
-import { LazyGlobe } from "../lazy-globe";
+import { GlobeView } from "../globe-view";
 
 type TravelCommandProps = CommandActionProps & { view?: "globe" };
 
 export function TravelCommand({ view, onCommand }: TravelCommandProps) {
-  if (view === "globe") return <LazyGlobe onCommand={onCommand} />;
+  if (view === "globe") return <GlobeView onCommand={onCommand} />;
   return (
     <>
       <h2>Travel</h2>
