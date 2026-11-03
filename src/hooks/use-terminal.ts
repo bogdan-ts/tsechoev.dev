@@ -64,8 +64,9 @@ export function useTerminal() {
     const screen = screenRef.current;
     if (!screen) return;
     const latest = latestEntryRef.current;
+    const paddingTop = Number.parseFloat(getComputedStyle(screen).paddingTop) || 0;
     screen.scrollTop = latest
-      ? screen.scrollTop + latest.getBoundingClientRect().top - screen.getBoundingClientRect().top
+      ? screen.scrollTop + latest.getBoundingClientRect().top - screen.getBoundingClientRect().top - paddingTop
       : 0;
   }, [entries]);
 

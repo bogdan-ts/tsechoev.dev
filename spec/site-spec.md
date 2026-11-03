@@ -13,7 +13,9 @@ Use the November 2026 supplied CV: Senior Full-Stack Engineer, Manila, Philippin
 open to any time zone, bogdan.tsechoev@gmail.com. Postgres.ai ended February 2026.
 Do not infer current employment or hiring availability. Open source links to the
 two CV repositories with contribution context, not invented PRs or counts. Travel
-is a typed empty dataset until countries are supplied. Replace the PDF.
+uses the 19 entries in Bogdan's supplied travel screenshots, including Hong Kong
+and Macau as separate territories. Render one alphabetical list of names, without
+regional groups, cities, notes or visit statistics. Replace the PDF.
 
 ## Commands
 
@@ -25,7 +27,7 @@ is a typed empty dataset until countries are supplied. Replace the PDF.
 - `education`: both degrees.
 - `contact`: email, GitHub, LinkedIn; no automatic navigation.
 - `cv` / `resume`: download link to the new PDF.
-- `travel` / `countries`: countries or honest pending state.
+- `travel` / `countries`: supplied countries and territories in one list.
 - `history`: session commands including itself.
 - `clear`: clear output, retain history.
 - `theme [dark|light]`: toggle or select theme.
@@ -37,7 +39,10 @@ render it as text. Append each command and answer to scrollback, preserving the
 welcome until clear. Keep the last 100 output entries with stable identities;
 keep command recall separately for Up/Down without truncating it with scrollback.
 The terminal fills the viewport; only its output scrolls, while the prompt stays
-visible at the bottom. After a command, scroll to the beginning of its new output
+visible at the bottom. The scroll container spans the full viewport width, placing
+its scrollbar at the right screen edge. Apply small inner text padding (16px on
+desktop, 12px on mobile), with no outer frame or margins around the terminal.
+After a command, scroll to the beginning of its new output
 (or as far as the scroll range permits). Do not scroll the outer page or jump
 while the visitor is reading older output. Clear and Ctrl/Cmd+L remove scrollback
 and the welcome message, but retain command recall.

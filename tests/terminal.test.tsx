@@ -63,7 +63,9 @@ describe("interactive terminal", () => {
     const user = userEvent.setup();
     const { container } = render(<Terminal />);
     await user.click(screen.getByRole("button", { name: /travel/ }));
-    expect(screen.getByText(/haven’t added my country list/)).toBeTruthy();
+    expect(screen.getAllByRole("listitem")).toHaveLength(19);
+    expect(screen.getByText("Hong Kong")).toBeTruthy();
+    expect(screen.getByText("Macau")).toBeTruthy();
     const input = screen.getByRole("textbox");
     await user.type(input, "theme light{Enter}");
     expect(container.querySelector("main")?.dataset.theme).toBe("light");

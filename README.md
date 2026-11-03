@@ -67,8 +67,10 @@ through `next/font/local`, with local WOFF2 files and no Google Fonts requests.
 - `public/bogdan-tsechoev-resume.pdf`: supplied CV.
 - `public/og.svg`: editable social-image source; `public/og.png` is the shared asset.
 
-Add travel entries to `countries` using `{ name, code, note? }`. No countries are
-inferred from residence or employment. Open-source entries link to the CV's two
+Travel entries use `{ name, code }` in `countries`, ordered alphabetically.
+The 19 entries come from Bogdan's travel screenshots; the output has no regional
+groups, cities or visit statistics. No entries are inferred from residence or
+employment. Open-source entries link to the CV's two
 repositories, not fabricated individual PRs or live contribution counts.
 
 ## Deployment

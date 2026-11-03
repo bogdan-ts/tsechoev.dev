@@ -26,7 +26,7 @@ describe("terminal command contract", () => {
     expect(completeCommand("c")).toEqual(["contact", "cv", "clear"]);
     expect(completeCommand("whoami arg")).toEqual([]);
   });
-  it("uses the new CV and never invents countries", () => {
+  it("uses the supplied CV and travel list", () => {
     expect(profile.email).toBe("bogdan.tsechoev@gmail.com");
     expect(profile.location).toBe("Manila, Philippines");
     expect(profile.experience[0].period).toBe("Apr 2024 – Feb 2026");
@@ -35,6 +35,7 @@ describe("terminal command contract", () => {
       "https://github.com/postgres-ai/postgresai",
       "https://github.com/postgres-ai/database-lab-engine",
     ]);
-    expect(countries).toEqual([]);
+    expect(countries).toHaveLength(19);
+    expect(new Set(countries.map(country => country.code)).size).toBe(19);
   });
 });

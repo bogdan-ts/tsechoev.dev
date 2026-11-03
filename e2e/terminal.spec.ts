@@ -34,7 +34,7 @@ test("portfolio discovery, command execution and keyboard controls", async ({ pa
   const latestOutput = page.locator(".transcript-entry").last();
   const topOffset = await latestOutput.evaluate(element => {
     const screen = element.closest(".terminal-screen")!;
-    return element.getBoundingClientRect().top - screen.getBoundingClientRect().top;
+    return element.getBoundingClientRect().top - screen.getBoundingClientRect().top - Number.parseFloat(getComputedStyle(screen).paddingTop);
   });
   expect(Math.abs(topOffset)).toBeLessThan(2);
   await page.locator(".terminal-screen").evaluate(element => { element.scrollTop = element.scrollHeight; });
@@ -48,7 +48,9 @@ test("portfolio discovery, command execution and keyboard controls", async ({ pa
   await page.screenshot({ path: testInfo.outputPath("light-output.png"), fullPage: true });
   await input.fill("travel");
   await input.press("Enter");
-  await expect(page.getByText(/haven’t added my country list/)).toBeVisible();
+  const travelOutput = page.locator(".command-output").last();
+  await expect(travelOutput.getByRole("listitem")).toHaveCount(19);
+  await expect(travelOutput.getByRole("heading", { name: "Travel", exact: true })).toBeVisible();
   await input.fill("clear");
   await input.press("Enter");
   await expect(page.getByRole("heading", { level: 1 })).toHaveCount(0);

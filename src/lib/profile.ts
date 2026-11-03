@@ -1,5 +1,25 @@
-export type Country = { name: string; code: string; note?: string };
-export const countries: Country[] = [];
+export type Country = { name: string; code: string };
+export const countries: Country[] = [
+  { name: "Cambodia", code: "KH" },
+  { name: "China", code: "CN" },
+  { name: "Georgia", code: "GE" },
+  { name: "Hong Kong", code: "HK" },
+  { name: "India", code: "IN" },
+  { name: "Indonesia", code: "ID" },
+  { name: "Japan", code: "JP" },
+  { name: "Kazakhstan", code: "KZ" },
+  { name: "Kyrgyzstan", code: "KG" },
+  { name: "Laos", code: "LA" },
+  { name: "Macau", code: "MO" },
+  { name: "Malaysia", code: "MY" },
+  { name: "Philippines", code: "PH" },
+  { name: "Russia", code: "RU" },
+  { name: "South Korea", code: "KR" },
+  { name: "Thailand", code: "TH" },
+  { name: "United Arab Emirates", code: "AE" },
+  { name: "Uzbekistan", code: "UZ" },
+  { name: "Vietnam", code: "VN" },
+];
 
 export const profile = {
   name: "Bogdan Tsechoev",

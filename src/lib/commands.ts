@@ -6,7 +6,7 @@ export const commands = [
   { name: "education", description: "Degrees and university", aliases: [] },
   { name: "contact", description: "Email, GitHub and LinkedIn", aliases: [] },
   { name: "cv", description: "Download CV (PDF)", aliases: ["resume"] },
-  { name: "travel", description: "Countries I’ve visited", aliases: ["countries"] },
+  { name: "travel", description: "Countries and territories I’ve visited", aliases: ["countries"] },
   { name: "help", description: "List commands", aliases: ["ls"] },
   { name: "history", description: "Command history", aliases: [] },
   { name: "clear", description: "Clear the screen", aliases: [] },
