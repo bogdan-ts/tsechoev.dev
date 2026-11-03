@@ -111,6 +111,6 @@ describe("globe animation lifecycle", () => {
     const before = vi.mocked(paintGlobe).mock.calls.at(-1)?.[1];
     if (before === undefined) throw new Error("Missing painted frame");
     fireEvent.keyDown(screen.getByRole("img"), { key: "ArrowRight" });
-    expect(vi.mocked(paintGlobe).mock.calls.at(-1)?.[1]).toBeCloseTo(before + 0.12);
+    expect(vi.mocked(paintGlobe).mock.calls.at(-1)?.[1]).not.toEqual(before);
   });
 });

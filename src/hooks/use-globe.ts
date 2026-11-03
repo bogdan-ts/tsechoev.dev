@@ -1,4 +1,5 @@
 import { useEffect, useRef, useState } from "react";
+import { initialOrientation, ZERO_VELOCITY } from "../lib/globe-orientation";
 import { advanceRotation, type GlobeMotion } from "../lib/globe-motion";
 import { advanceCometSky, createCometSky } from "../lib/globe-comets";
 import { useGlobeEnvironment } from "./use-globe-environment";
@@ -9,8 +10,8 @@ export function useGlobe() {
   const containerRef = useRef<HTMLDivElement>(null);
   const skyInitializedRef = useRef(false);
   const motionRef = useRef<GlobeMotion>({
-    angle: Math.PI / 2,
-    velocity: 0,
+    orientation: initialOrientation(),
+    velocity: ZERO_VELOCITY,
     sky: { time: 0, nextAt: Infinity, comet: null },
   });
   const [paused, setPaused] = useState(false);
@@ -19,7 +20,7 @@ export function useGlobe() {
   const { dragRef, ...pointer } = useGlobePointer(motionRef, redrawRef, !paused && !reducedMotion);
 
   useEffect(() => {
-    motionRef.current.velocity = 0;
+    motionRef.current.velocity = ZERO_VELOCITY;
     if (paused || reducedMotion || !visible || !documentVisible || !available) return;
     if (!skyInitializedRef.current) {
       motionRef.current.sky = createCometSky();
@@ -31,8 +32,12 @@ export function useGlobe() {
       const elapsed = time - previousTime;
       previousTime = time;
       if (!dragRef.current) {
-        const next = advanceRotation(motionRef.current.angle, motionRef.current.velocity, elapsed);
-        motionRef.current.angle = next.angle;
+        const next = advanceRotation(
+          motionRef.current.orientation,
+          motionRef.current.velocity,
+          elapsed,
+        );
+        motionRef.current.orientation = next.orientation;
         motionRef.current.velocity = next.velocity;
         motionRef.current.sky = advanceCometSky(motionRef.current.sky, elapsed);
         redrawRef.current();

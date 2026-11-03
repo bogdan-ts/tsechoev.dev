@@ -130,11 +130,31 @@ test("touch dragging works with reduced motion without starting inertia", async 
   await cdp.send("Input.dispatchTouchEvent", { type: "touchStart", touchPoints: [{ x, y }] });
   await cdp.send("Input.dispatchTouchEvent", {
     type: "touchMove",
-    touchPoints: [{ x: x + 60, y }],
+    touchPoints: [{ x, y: y + 60 }],
   });
   await cdp.send("Input.dispatchTouchEvent", { type: "touchEnd", touchPoints: [] });
   const dragged = await canvas.evaluate((element: HTMLCanvasElement) => element.toDataURL());
   expect(dragged).not.toBe(initial);
   await page.waitForTimeout(300);
   expect(await canvas.evaluate((element: HTMLCanvasElement) => element.toDataURL())).toBe(dragged);
+});
+
+test("vertical arrow keys and vertical dragging rotate a paused globe", async ({ page }) => {
+  await page.goto("/simple/travel/");
+  const canvas = page.locator("canvas");
+  await expect(canvas).toBeVisible();
+  await page.getByRole("button", { name: "Pause rotation" }).click();
+  const initial = await canvas.evaluate((element: HTMLCanvasElement) => element.toDataURL());
+  await canvas.press("ArrowUp");
+  const tilted = await canvas.evaluate((element: HTMLCanvasElement) => element.toDataURL());
+  expect(tilted !== initial).toBe(true);
+  const box = await canvas.boundingBox();
+  if (!box) throw new Error("Missing globe bounds");
+  await page.mouse.move(box.x + box.width / 2, box.y + box.height / 2);
+  await page.mouse.down();
+  await page.mouse.move(box.x + box.width / 2, box.y + box.height / 2 + 65, { steps: 8 });
+  await page.mouse.up();
+  expect(await canvas.evaluate((element: HTMLCanvasElement) => element.toDataURL())).not.toBe(
+    tilted,
+  );
 });

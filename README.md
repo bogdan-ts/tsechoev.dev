@@ -84,8 +84,9 @@ Small territories can be below the raster or ASCII resolution; no point markers
 or enlarged borders stand in for them. The view has pause/resume and a link to
 the full `travel` list. The renderer and masks use ordinary imports; there is no dynamic globe loader.
 Canvas draws cached glyph sprites without per-frame React/DOM changes.
-Drag horizontally or use left/right arrows to position the sphere; release adds
-decaying inertia. Pause and reduced motion disable automatic movement and inertia.
+Drag in any direction or use all four arrow keys to position the sphere; release
+adds decaying multi-axis inertia. The quaternion trackball supports pole crossings
+and roll near the rim. Touch gestures rotate the globe; scroll the page outside it. Pause and reduced motion disable automatic movement and inertia.
 Frames follow the display/browser requestAnimationFrame cadence without a fixed FPS cap.
 Rotation follows requestAnimationFrame with elapsed-time
 angular movement, so speed does not depend on refresh rate. Rotation stops
@@ -94,8 +95,8 @@ for reduced motion, offscreen output, hidden tabs and unmounted history entries.
 Surface-normal lighting stays fixed above and to the left while the map rotates.
 Ocean, neutral land and green visited areas share ambient light and limb darkening.
 Character density and brightness carry the shading. The denser responsive ASCII
-grid keeps the physical globe size; cached geometry avoids per-frame projection
-and lighting work. Glyph clipping smooths the silhouette and muted blue oceans
+grid keeps the physical globe size. Visible-sphere normals and lighting are cached;
+the orientation matrix maps them to geographic coordinates each frame. Glyph clipping smooths the silhouette and muted blue oceans
 separate unvisited land from water. High-DPI rendering is capped at 2×.
 
 Geography comes from [Natural Earth](https://www.naturalearthdata.com/), distributed
@@ -114,7 +115,8 @@ npm run generate:globe
 country shapes. Projection and ASCII rendering live in
 `src/lib/globe.ts`; Canvas painting and its glyph cache are in
 `src/lib/globe-canvas.ts`. Animation lifecycle lives in `src/hooks/use-globe.ts`,
-with frame-independent inertia in `src/lib/globe-motion.ts`.
+with frame-independent inertia in `src/lib/globe-motion.ts` and trackball math
+in `src/lib/globe-orientation.ts`.
 
 ## Deployment
 

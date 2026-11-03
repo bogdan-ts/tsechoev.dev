@@ -1,3 +1,4 @@
+import { initialOrientation } from "../src/lib/globe-orientation";
 import { afterEach, describe, expect, it, vi } from "vitest";
 import { createGlobeRenderer } from "../src/lib/globe-canvas";
 import { createCometSky } from "../src/lib/globe-comets";
@@ -34,8 +35,8 @@ describe("Canvas resource ownership", () => {
     expect(style).toHaveBeenCalledTimes(1);
     const colors = { land: "#fff", visited: "#0f0", water: "#888" };
     const sky = createCometSky(() => 0.5);
-    renderer.draw(48, 0, colors, sky);
-    renderer.draw(48, 0.1, colors, sky);
+    renderer.draw(48, initialOrientation(0), colors, sky);
+    renderer.draw(48, initialOrientation(0.1), colors, sky);
     expect(style).toHaveBeenCalledTimes(1);
     expect(context.measureText).toHaveBeenCalledTimes(1);
     renderer.refreshFont();

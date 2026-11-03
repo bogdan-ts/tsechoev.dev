@@ -1,9 +1,10 @@
+import type { Quaternion } from "./globe-orientation";
 import { renderGlobe, type GlobeRun } from "./globe";
 import { paintComet, type CometSky } from "./globe-comets";
 
 export type GlobeColors = { land: string; visited: string; water: string };
 export type GlobeRenderer = {
-  draw: (columns: number, rotation: number, colors: GlobeColors, sky: CometSky) => void;
+  draw: (columns: number, orientation: Quaternion, colors: GlobeColors, sky: CometSky) => void;
   refreshFont: () => void;
   dispose: () => void;
 };
@@ -51,7 +52,7 @@ export function createGlobeRenderer(canvas: HTMLCanvasElement): GlobeRenderer | 
     return image;
   }
 
-  function draw(columns: number, rotation: number, colors: GlobeColors, sky: CometSky) {
+  function draw(columns: number, orientation: Quaternion, colors: GlobeColors, sky: CometSky) {
     if (!context || cellWidth <= 0) return;
     const rows = columns / 2;
     const sphereWidth = columns * cellWidth;
@@ -81,7 +82,7 @@ export function createGlobeRenderer(canvas: HTMLCanvasElement): GlobeRenderer | 
     context.beginPath();
     context.ellipse(sphereWidth / 2, sphereHeight / 2, radiusX, radiusY, 0, 0, Math.PI * 2);
     context.clip();
-    const frame = renderGlobe(columns, rows, rotation);
+    const frame = renderGlobe(columns, rows, orientation);
     frame.rows.forEach((row, index) => {
       let column = 0;
       for (const run of row) {

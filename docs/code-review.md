@@ -29,7 +29,7 @@ behavior are preserved. Binary CV/image assets were not rewritten.
 ## Verification
 
 - Formatting, zero-warning lint, strict typecheck and static export pass.
-- 46 unit tests and 25 browser tests pass. One duplicate desktop touch test is
+- 49 unit tests and 27 browser tests pass. One duplicate desktop touch test is
   intentionally skipped; the touch scenario runs in the mobile project.
 - axe reports no violations on the three tested pages in both viewport projects.
 - A clean `npm ci` passes. Regenerated geographic masks and their license are
@@ -54,3 +54,12 @@ No runtime backend, generic state library, Worker, arbitrary FPS cap, new comman
 framework or content rewrite was introduced. The globe uses ordinary imports without a dynamic loader;
 animation still follows native requestAnimationFrame cadence. Known tiny-territory
 limitations of the geographic raster/ASCII grid are unchanged.
+
+## Follow-up interaction changes
+
+The globe now uses ordinary imports, with deterministic static rendering and
+post-mount comet scheduling. A quaternion trackball supports arbitrary dragging,
+pole crossings, rim roll and all four arrow keys. Inertia decays along the drag
+axis; illumination stays camera-fixed. New tests cover orientation normalization,
+opposite vectors, frame-independent multi-axis motion, vertical mouse/touch input
+and arrow positioning.

@@ -1,15 +1,15 @@
 import land from "./data/globe-land.json";
 import visited from "./data/globe-visited.json";
 import { surfaceBrightness } from "./globe-lighting";
+import { orientationMatrix, type Quaternion } from "./globe-orientation";
 
 type CellKind = "space" | "land" | "water" | "visited";
 export type GlobeRun = { text: string; kind: CellKind; brightness: number };
 type Cell = GlobeRun;
 type Mask = { width: number; height: number; data: string };
-type SurfaceSample = { latitude: number; longitude: number; brightness: number; light: number };
+type SurfaceSample = { x: number; y: number; z: number; brightness: number; light: number };
 
 const radians = Math.PI / 180;
-const tilt = 20 * radians;
 const landBits = Uint8Array.from(atob(land.data), (character) => character.charCodeAt(0));
 const visitedBits = Uint8Array.from(atob(visited.data), (character) => character.charCodeAt(0));
 const geometryCache = new Map<string, (SurfaceSample | null)[][]>();
@@ -33,9 +33,9 @@ function sphereGeometry(columns: number, rows: number) {
       const depth = Math.sqrt(1 - distance);
       const light = surfaceBrightness(horizontal, vertical, depth);
       return {
-        latitude: Math.asin(vertical * Math.cos(tilt) + depth * Math.sin(tilt)) / radians,
-        longitude:
-          Math.atan2(horizontal, depth * Math.cos(tilt) - vertical * Math.sin(tilt)) / radians,
+        x: horizontal,
+        y: vertical,
+        z: depth,
         brightness: Math.round(light * 12) / 12,
         light,
       };
@@ -79,13 +79,18 @@ function compressRow(cells: Cell[]): GlobeRun[] {
   return runs;
 }
 
-export function renderGlobe(columns: number, rows: number, rotation: number) {
+export function renderGlobe(columns: number, rows: number, orientation: Quaternion) {
+  const matrix = orientationMatrix(orientation);
   const cells: Cell[][] = sphereGeometry(columns, rows).map((row) =>
     row.map((sample) => {
       if (!sample) return { text: " ", kind: "space", brightness: 0 };
-      const longitude = sample.longitude + rotation / radians;
-      const visitedArea = isVisited(sample.latitude, longitude);
-      const landArea = visitedArea || isLand(sample.latitude, longitude);
+      const worldX = matrix[0] * sample.x + matrix[1] * sample.y + matrix[2] * sample.z;
+      const worldY = matrix[3] * sample.x + matrix[4] * sample.y + matrix[5] * sample.z;
+      const worldZ = matrix[6] * sample.x + matrix[7] * sample.y + matrix[8] * sample.z;
+      const latitude = Math.asin(Math.max(-1, Math.min(1, worldY))) / radians;
+      const longitude = Math.atan2(worldX, worldZ) / radians;
+      const visitedArea = isVisited(latitude, longitude);
+      const landArea = visitedArea || isLand(latitude, longitude);
       const palette = landArea ? landPalette : waterPalette;
       return {
         text: palette[Math.min(palette.length - 1, Math.floor(sample.light * palette.length))],

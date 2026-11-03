@@ -22,7 +22,7 @@ export function useGlobeCanvas(columns: number, motionRef: RefObject<GlobeMotion
     const workspace = canvas.closest(".workspace");
     let colors = { land: "#e5e8df", visited: "#b3d88e", water: "#68899f" };
     const draw = () =>
-      renderer.draw(columns, motionRef.current.angle, colors, motionRef.current.sky);
+      renderer.draw(columns, motionRef.current.orientation, colors, motionRef.current.sky);
     const updateTheme = () => {
       const style = getComputedStyle(canvas);
       colors = {

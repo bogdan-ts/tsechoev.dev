@@ -118,7 +118,7 @@ per resolution so animation frames only rotate and sample the geographic masks.
 - Use every browser requestAnimationFrame callback with no FPS selector or fixed cap; rotation uses elapsed time, not frame count.
 - Horizontal pointer dragging rotates the globe; release adds decaying inertia. Pause stops automatic rotation and inertia but allows manual positioning. Reduced motion disables automatic movement and inertia.
 - Suspend work offscreen, in hidden tabs. Cancel animation and observers on unmount.
-- Preserve mobile vertical scrolling, keyboard arrow positioning, pause controls, theme changes, local fonts and high-DPI sharpness.
+- Preserve mobile vertical scrolling outside the globe, keyboard arrow positioning, pause controls, theme changes, local fonts and high-DPI sharpness.
 - Improve land/ocean contrast and clip glyphs to a smooth circular limb. No external runtime services or Worker.
 - Compare DOM node counts and Chromium task/layout time over the same three-second desktop animation window; report observations rather than universal speed claims.
 
@@ -140,3 +140,10 @@ per resolution so animation frames only rotate and sample the geographic masks.
 - Enforce formatting, lint, strict TypeScript (including e2e), unit tests, static build and browser/accessibility checks in CI. Pin installed dependency versions and document local quality checks.
 
 - Initialize the random comet schedule only after mounting/starting animation, never during static rendering.
+
+## Free globe orientation
+
+- Use a quaternion trackball for dragging in any direction, including pole crossings and roll near the rim. Do not clamp latitude or introduce Euler-angle gimbal lock.
+- All four arrow keys rotate around screen-relative horizontal/vertical axes. Inertia follows the last drag axis and decays with elapsed time; auto-spin remains independent of frame rate.
+- Keep illumination camera-fixed. Cache visible-sphere normals/lighting independently of orientation; rotate normals into geographic coordinates per frame.
+- Capture touch gestures on the globe for full-axis control. Normal page scrolling remains available outside it. Pause/reduced motion stop automatic movement but allow manual positioning.

@@ -1,8 +1,16 @@
 "use client";
 
 import { useId } from "react";
+import type { Vector3 } from "../../lib/globe-orientation";
 import { useGlobe } from "../../hooks/use-globe";
 import type { CommandActionProps } from "../command-list";
+
+const arrowAxes: Record<string, Vector3 | undefined> = {
+  ArrowLeft: { x: 0, y: 1, z: 0 },
+  ArrowRight: { x: 0, y: -1, z: 0 },
+  ArrowUp: { x: 1, y: 0, z: 0 },
+  ArrowDown: { x: -1, y: 0, z: 0 },
+};
 
 export function TravelGlobe({ onCommand }: CommandActionProps) {
   const {
@@ -37,9 +45,10 @@ export function TravelGlobe({ onCommand }: CommandActionProps) {
             onPointerCancel={pointerEnd}
             onLostPointerCapture={pointerEnd}
             onKeyDown={(event) => {
-              if (event.key !== "ArrowLeft" && event.key !== "ArrowRight") return;
+              const axis = arrowAxes[event.key];
+              if (!axis) return;
               event.preventDefault();
-              rotateBy(event.key === "ArrowLeft" ? -0.12 : 0.12);
+              rotateBy(axis, 0.12);
             }}
           >
             Visited countries and territories are listed by the travel command.

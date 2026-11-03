@@ -1,3 +1,4 @@
+import { initialOrientation } from "../src/lib/globe-orientation";
 import { describe, expect, it } from "vitest";
 import { renderGlobe, isLand, isVisited } from "../src/lib/globe";
 import visited from "../src/lib/data/globe-visited.json";
@@ -30,8 +31,8 @@ describe("ASCII globe geography", () => {
     expect(upperLeft).toBeLessThanOrEqual(1);
   });
   it("keeps lighting fixed while both ocean and visited surfaces rotate", () => {
-    const first = renderGlobe(40, 20, Math.PI / 2);
-    const second = renderGlobe(40, 20, -Math.PI / 2);
+    const first = renderGlobe(40, 20, initialOrientation(Math.PI / 2));
+    const second = renderGlobe(40, 20, initialOrientation(-Math.PI / 2));
     const brightness = (frame: ReturnType<typeof renderGlobe>) =>
       frame.rows.flatMap((row) =>
         row.flatMap((run) => Array.from({ length: run.text.length }, () => run.brightness)),
@@ -48,7 +49,7 @@ describe("ASCII globe geography", () => {
     }
   });
   it("renders bounded ASCII frames with filled areas rather than stars", () => {
-    const frame = renderGlobe(40, 20, Math.PI / 2);
+    const frame = renderGlobe(40, 20, initialOrientation(Math.PI / 2));
     expect(frame.rows).toHaveLength(20);
     expect(frame.rows.every((row) => row.map((run) => run.text).join("").length === 40)).toBe(true);
     const highlighted = frame.rows
@@ -59,7 +60,7 @@ describe("ASCII globe geography", () => {
     expect(highlighted.length).toBeGreaterThan(30);
     expect(highlighted).not.toContain("*");
     expect(frame.rows[0].every((run) => run.kind === "space")).toBe(true);
-    const other = renderGlobe(40, 20, -Math.PI / 2);
+    const other = renderGlobe(40, 20, initialOrientation(-Math.PI / 2));
     expect(other.rows).not.toEqual(frame.rows);
     const farSideFill = other.rows
       .flat()
