@@ -1,68 +1,48 @@
-# Personal resume website spec
+# Terminal portfolio contract
 
-## Product goal
+An English-language interactive terminal portfolio. Only the terminal: a plain
+full-page background, self-hosted Martian Mono via next/font/local, restrained green accents, no site header,
+footer, decorative window controls, borders, status bars, or oversized hero.
+On first load show a short introduction and the full
+command list, server-rendered for SEO and no-JavaScript visitors, with ordinary
+contact/CV links. Show detailed `whoami` output only when requested.
 
-Create a minimal personal resume website for Bogdan Tsechoev, a full stack engineer.
+## Content
 
-The site should be simple enough to host on GitHub Pages and maintain without framework bullshit.
+Use the November 2026 supplied CV: Senior Full-Stack Engineer, Manila, Philippines,
+open to any time zone, bogdan.tsechoev@gmail.com. Postgres.ai ended February 2026.
+Do not infer current employment or hiring availability. Open source links to the
+two CV repositories with contribution context, not invented PRs or counts. Travel
+is a typed empty dataset until countries are supplied. Replace the PDF.
 
-## Style direction
+## Commands
 
-- Minimalist.
-- Monospace typography with JetBrains Mono.
-- Terminal-inspired visual language.
-- Clean and readable, not a fake hacker toy.
-- Fast loading.
-- Works well on mobile and desktop.
+- `whoami` / `about`: identity, summary, selected measurable outcomes.
+- `help` / `ls`: all commands with descriptions.
+- `experience`: three roles and achievements.
+- `skills`: grouped technologies and languages.
+- `opensource` / `oss`: PostgresAI and Database Lab Engine contributions.
+- `education`: both degrees.
+- `contact`: email, GitHub, LinkedIn; no automatic navigation.
+- `cv` / `resume`: download link to the new PDF.
+- `travel` / `countries`: countries or honest pending state.
+- `history`: session commands including itself.
+- `clear`: clear output, retain history.
+- `theme [dark|light]`: toggle or select theme.
+- `pwd`: a virtual path, not a real server path.
 
-## Content strategy
+Trim whitespace, ignore command-name case, treat blank input as a no-op. Unknown
+commands and invalid arguments return helpful errors. Never execute shell input;
+render it as text. Bound output to 100 entries. Tab cycles completions, Up/Down
+recall history and restore the input draft, Ctrl/Cmd+L clears output, Escape clears
+input. Quick-command buttons support touch. No initial mobile autofocus. Use a
+labelled input, live status, visible focus, reduced-motion support, and no overflow
+at 375px. Do not persist personal command history.
 
-The page should be short, sharp, and recruiter-readable.
+## Architecture and acceptance
 
-- Keep the latest role as the main selling point.
-- Compress older roles heavily.
-- Avoid LinkedIn-style long responsibility dumps.
-- Prefer outcome-oriented bullets over generic responsibilities.
-- Emphasize full-stack product ownership, PostgreSQL-heavy systems, AI/LLM integration, React + TypeScript, infrastructure automation, and production delivery.
-
-## Content requirements
-
-The page must include:
-
-1. A short hero intro.
-2. A clear role line: software engineer / full stack developer.
-3. A compact summary based on current work.
-4. Skills grouped by category.
-5. Concise experience entries:
-   - Postgres.ai — Database Lab: current role, strongest detail.
-   - Avanti Pharma: compressed frontend/product engineering role.
-   - House: compressed junior role.
-6. Education.
-7. Contact links.
-8. A resume/CV link or placeholder for it.
-
-## Technical requirements
-
-- Use TypeScript.
-- Use Svelte with Vite.
-- Produce a static site deployable to GitHub Pages.
-- Avoid backend requirements.
-- Keep dependencies minimal and framework-native where possible.
-- Use tests for content and component rendering rules.
-- The build output must be static files in `dist/`.
-
-## Accessibility requirements
-
-- Use semantic HTML.
-- Keep sufficient contrast.
-- Ensure the page has one `h1`.
-- Main content must be inside a `main` element.
-- Links must have meaningful labels.
-
-## Initial acceptance criteria
-
-- `npm test` passes.
-- `npm run build` produces `dist/index.html`.
-- Rendered content includes Bogdan's name, role, current company, compressed previous roles, skills, education, and contact section.
-- The app mounts through a Svelte root component.
-- Visual style uses JetBrains Mono with monospace fallback.
+Latest stable Next.js/React, App Router, TypeScript, static export to `out/` for
+existing GitHub Pages hosting. Server-rendered initial content and isolated client
+terminal. Metadata, Open Graph image, sitemap and robots; no remote font requests
+or unnecessary backend. Command tests first, then implementation, interaction
+tests, typecheck, production build and desktop/mobile browser smoke checks.

@@ -1,0 +1,71 @@
+export type Country = { name: string; code: string; note?: string };
+export const countries: Country[] = [];
+
+export const profile = {
+  name: "Bogdan Tsechoev",
+  role: "Senior Full-Stack Engineer",
+  location: "Manila, Philippines",
+  timezone: "Open to any time zone",
+  email: "bogdan.tsechoev@gmail.com",
+  summary: "I build products end to end — from React and TypeScript interfaces to Node.js and Python services, PostgreSQL APIs, cloud deployment, and production support. 7+ years across SaaS, AI, e-commerce, mobile, and internal tools.",
+  highlights: [
+    { value: "3–5 min", label: "to a running monitoring stack" },
+    { value: "1.15M+", label: "documents in a daily-updated RAG knowledge base" },
+    { value: "3 people", label: "frontend team led at Avanti Pharma" },
+  ],
+  skills: [
+    { title: "Frontend & mobile", items: ["React", "TypeScript", "JavaScript", "Next.js", "React Native", "GraphQL", "Redux", "MobX", "Nano Stores", "Material UI", "HTML5", "CSS3", "Sass"] },
+    { title: "Backend & data", items: ["Node.js", "Express.js", "Python", "Flask", "PostgreSQL", "PostgREST", "PL/pgSQL", "SQL", "REST", "WebSocket", "Stripe"] },
+    { title: "AI & SaaS", items: ["OpenAI", "Claude", "Gemini", "DeepSeek", "RAG", "Tool calling", "Multi-tenancy", "OAuth", "RBAC", "Fine-grained authorization"] },
+    { title: "Cloud & delivery", items: ["Docker", "GCP", "Hetzner", "Terraform", "Ansible", "GitLab CI/CD", "Vite", "Webpack", "Jest", "Playwright", "Cypress", "Sentry"] },
+    { title: "AI-assisted development", items: ["Codex", "Claude Code"] },
+    { title: "Languages", items: ["Russian (native)", "English (B2)"] },
+  ],
+  experience: [
+    {
+      company: "Postgres.ai — Database Lab", role: "Senior Software Engineer", period: "Apr 2024 — Feb 2026", location: "California · Remote",
+      summary: "Owned full-stack delivery for three SaaS products in a team of eight: managed PostgreSQL monitoring, an AI assistant, and a consulting issue tracker.",
+      bullets: [
+        "Launched managed monitoring from scratch: one required field and 3–5 minutes from subscription to a running stack, with React onboarding, backend services, Stripe billing, and Ansible provisioning on AWS, GCP, and Hetzner.",
+        "Moved 10+ consulting clients from GitLab Issues into a custom React, Node.js, and Python tracker with discussions, prepaid-hours tracking, and automated monitoring follow-up.",
+        "Designed PostgreSQL schemas, migrations, and PostgREST APIs using PL/pgSQL functions, triggers, and views; extended multi-tenant RBAC, authorization, and subscription entitlements with access-control tests.",
+        "Built a streaming React interface and Python WebSocket layer for a PostgreSQL AI assistant, including rate limiting and error handling; contributed to multi-provider LLM integrations and multi-step tool calling.",
+        "Built a Python ingestion service keeping a PostgreSQL-backed RAG knowledge base of 1.15M+ documents updated daily.",
+        "Cut React builds from about 15 to 5 minutes with Vite and dynamic imports; maintained GitLab CI/CD across 8+ repositories, Kubernetes manifests, and Terraform deployments.",
+        "Raised React test coverage to about 80% with Jest, React Testing Library, and Playwright; reviewed and tested changes produced with Codex and Claude Code.",
+        "Extended the open-source TypeScript PostgresAI CLI for monitoring deployments, database checkups, and reports; added integration and access-control tests.",
+      ],
+    },
+    {
+      company: "Avanti Pharma", role: "Senior Frontend Developer · Frontend Lead", period: "Dec 2020 — Mar 2024", location: "Vladivostok, Russia",
+      summary: "Led a three-person frontend team across a 10,000+ product pharmacy storefront, mobile apps, promotional sites, and internal systems.",
+      bullets: [
+        "Mentored two developers, set development standards, reviewed code, planned work, and managed releases.",
+        "Redesigned cart and checkout using heat-map insights and pharmacy recommendations, contributing to a 10–15% year-over-year increase in completed orders (internal analytics).",
+        "Reduced initial page-load time by about 50% through bundle optimization, code splitting, lighter dependencies, fonts, and images.",
+        "Owned search, checkout, delivery, loyalty, promotions, recommendations, and payment integrations using React, TypeScript, and GraphQL.",
+        "Shipped a React Native e-commerce app to App Store and Google Play in about five months.",
+        "Built SEO-focused Next.js landing pages with SSR/SSG, metadata, sitemaps, and image optimization; delivered an internal operations portal for about 100 employees.",
+      ],
+    },
+    {
+      company: "House VL", role: "Junior Frontend Developer", period: "Jul 2019 — Dec 2020", location: "Vladivostok, Russia",
+      summary: "Built frontend applications from scratch for 6–7 client projects at a web development studio.",
+      bullets: ["Delivered responsive e-commerce and corporate websites with React and Next.js, REST integrations, and server-side rendering for SEO."],
+    },
+  ],
+  education: [
+    { school: "Far Eastern Federal University", degree: "Master’s degree · Computer Science", period: "2019 — 2021" },
+    { school: "Far Eastern Federal University", degree: "Bachelor’s degree · Mathematics and Computer Science", period: "2015 — 2019" },
+  ],
+  opensource: [
+    { name: "postgres-ai/postgresai", href: "https://github.com/postgres-ai/postgresai", label: "PostgreSQL monitoring & tooling", description: "Extended the TypeScript CLI to deploy monitoring and manage database checkups and reports. Added integration and access-control tests." },
+    { name: "postgres-ai/database-lab-engine", href: "https://github.com/postgres-ai/database-lab-engine", label: "Database Lab Engine", description: "Contributed to the open-source PostgresAI / Database Lab ecosystem while working at Postgres.ai. This is the second contribution repository referenced in my CV." },
+  ],
+  links: [
+    { label: "Email", href: "mailto:bogdan.tsechoev@gmail.com", text: "bogdan.tsechoev@gmail.com" },
+    { label: "GitHub", href: "https://github.com/bogdan-ts", text: "github.com/bogdan-ts" },
+    { label: "LinkedIn", href: "https://www.linkedin.com/in/bogdan-tsechoev-b7b81b182", text: "Connect on LinkedIn" },
+  ],
+  resumeHref: "/bogdan-tsechoev-resume.pdf",
+};
