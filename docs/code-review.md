@@ -9,22 +9,22 @@ behavior are preserved. Binary CV/image assets were not rewritten.
 
 ## Findings addressed
 
-| Finding                                                        | Change                                                                      | Verification                                                    |
-| -------------------------------------------------------------- | --------------------------------------------------------------------------- | --------------------------------------------------------------- |
-| Batched commands lost prior history through a stale closure    | Pure terminal reducer with ordered state transitions                        | Regression reproduced before the fix, now passes                |
-| IME composition triggered recall/submission                    | Composition lifecycle guards; preserve the browser-native Cmd+L shortcut    | Composition regression test                                     |
-| Typing re-rendered historical profile content                  | Stable command callback and memoized output                                 | Existing command/recall/scrollback flows                        |
-| One terminal hook mixed domain, caret and scroll logic         | Dedicated reducer, cursor and scroll synchronization hooks                  | Unit and desktop/mobile browser tests                           |
-| Globe lifecycle, input and rendering were coupled              | Environment, pointer and Canvas resource hooks; small animation coordinator | Pause, visibility, reduced motion, high-refresh and touch tests |
-| Frame rendering measured computed styles repeatedly            | Renderer-owned font metrics refreshed only on setup/theme/font readiness    | Unit test checks no font measurement in the frame loop          |
-| Canvas contexts and cache access relied on non-null assertions | Explicit resource checks, owned bounded sprite cache and disposal           | Context-unavailable unit/browser fallback tests                 |
-| Renderer errors could remove surrounding content               | Local globe error boundary with reload action                               | Error-isolation regression test                                 |
-| Simple routes inherited the root Open Graph URL                | Shared metadata builder with per-route canonical/OG URLs                    | All three routes checked in Chromium                            |
-| e2e files were outside TypeScript checks                       | Include e2e and enable unused/return/fallthrough checks                     | Typecheck and static build                                      |
-| Formatting/lint rules were not enforced                        | Prettier, Next/TypeScript/React ESLint rules, zero-warning CI gate          | `npm run check`                                                 |
-| Dependency declarations used floating versions                 | Exact direct versions, lockfile and Node version/engine contract            | Clean-install check and CI                                      |
-| Browser failures were hard to diagnose                         | Retained traces/screenshots and CI failure artifacts                        | Playwright configuration                                        |
-| Accessibility had no automated gate                            | axe checks for every page at desktop/mobile sizes                           | Browser suite                                                   |
+| Finding                                                        | Change                                                                         | Verification                                                    |
+| -------------------------------------------------------------- | ------------------------------------------------------------------------------ | --------------------------------------------------------------- |
+| Batched commands lost prior history through a stale closure    | Pure terminal reducer with ordered state transitions                           | Regression reproduced before the fix, now passes                |
+| IME composition triggered recall/submission                    | Composition lifecycle guards; preserve the browser-native Cmd+L shortcut       | Composition regression test                                     |
+| Typing re-rendered historical profile content                  | Stable command callback and memoized output                                    | Existing command/recall/scrollback flows                        |
+| One terminal hook mixed domain, caret and scroll logic         | Dedicated reducer, cursor and scroll synchronization hooks                     | Unit and desktop/mobile browser tests                           |
+| Globe lifecycle, input and rendering were coupled              | Environment, pointer and Canvas resource hooks; small animation coordinator    | Pause, visibility, reduced motion, high-refresh and touch tests |
+| Frame rendering measured computed styles repeatedly            | Renderer-owned font metrics refreshed only on setup/theme/font readiness       | Unit test checks no font measurement in the frame loop          |
+| Canvas contexts and cache access relied on non-null assertions | Explicit resource checks, bounded material texture cache and renderer disposal | Context-unavailable unit/browser fallback tests                 |
+| Renderer errors could remove surrounding content               | Local globe error boundary with reload action                                  | Error-isolation regression test                                 |
+| Simple routes inherited the root Open Graph URL                | Shared metadata builder with per-route canonical/OG URLs                       | All three routes checked in Chromium                            |
+| e2e files were outside TypeScript checks                       | Include e2e and enable unused/return/fallthrough checks                        | Typecheck and static build                                      |
+| Formatting/lint rules were not enforced                        | Prettier, Next/TypeScript/React ESLint rules, zero-warning CI gate             | `npm run check`                                                 |
+| Dependency declarations used floating versions                 | Exact direct versions, lockfile and Node version/engine contract               | Clean-install check and CI                                      |
+| Browser failures were hard to diagnose                         | Retained traces/screenshots and CI failure artifacts                           | Playwright configuration                                        |
+| Accessibility had no automated gate                            | axe checks for every page at desktop/mobile sizes                              | Browser suite                                                   |
 
 ## Verification
 

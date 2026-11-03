@@ -9,7 +9,7 @@ const subscribeToVisibility = (notify: () => void) => {
 const documentIsVisible = () => document.visibilityState !== "hidden";
 
 export function useGlobeEnvironment(containerRef: RefObject<HTMLDivElement | null>) {
-  const [columns, setColumns] = useState(56);
+  const [columns, setColumns] = useState(64);
   const [intersects, setIntersects] = useState(false);
   const documentVisible = useSyncExternalStore(
     subscribeToVisibility,
@@ -36,7 +36,7 @@ export function useGlobeEnvironment(containerRef: RefObject<HTMLDivElement | nul
     if (!container || typeof ResizeObserver !== "function") return;
     const observer = new ResizeObserver((entries) => {
       const width = entries[0]?.contentRect.width ?? container.getBoundingClientRect().width;
-      if (width > 0) setColumns(width < 340 ? 48 : width < 480 ? 56 : 80);
+      if (width > 0) setColumns(width < 400 ? 64 : width < 720 ? 96 : 128);
     });
     observer.observe(container);
     return () => observer.disconnect();

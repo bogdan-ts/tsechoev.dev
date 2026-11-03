@@ -147,3 +147,10 @@ per resolution so animation frames only rotate and sample the geographic masks.
 - All four arrow keys rotate around screen-relative horizontal/vertical axes. Inertia follows the last drag axis and decays with elapsed time; auto-spin remains independent of frame rate.
 - Keep illumination camera-fixed. Cache visible-sphere normals/lighting independently of orientation; rotate normals into geographic coordinates per frame.
 - Capture touch gestures on the globe for full-axis control. Normal page scrolling remains available outside it. Pause/reduced motion stop automatic movement but allow manual positioning.
+
+## Globe illustration styling
+
+- Match the approved illustration's direction: a larger globe, warm upper-left sunlight, cool blue oceans, deeper night-side shading and restrained glyph glow. Keep real geographic masks and visited fills.
+- Increase desktop scale to about 800 CSS pixels for the sphere; use a denser responsive grid without horizontal overflow on phones.
+- Compress glyph width/height near the limb to suggest curved surface orientation. Cache the projection and baked light/material textures; do not measure fonts, blur whole frames or allocate per-cell objects during animation.
+- Preserve native requestAnimationFrame cadence, quaternion interaction, reduced-motion behavior, comet depth and static export.

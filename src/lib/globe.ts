@@ -1,20 +1,29 @@
 import land from "./data/globe-land.json";
 import visited from "./data/globe-visited.json";
-import { surfaceBrightness } from "./globe-lighting";
+import { glyphForeshortening, LIGHT_LEVELS, surfaceBrightness } from "./globe-lighting";
 import { orientationMatrix, type Quaternion } from "./globe-orientation";
 
-type CellKind = "space" | "land" | "water" | "visited";
+export type CellKind = "space" | "land" | "water" | "visited";
 export type GlobeRun = { text: string; kind: CellKind; brightness: number };
 type Cell = GlobeRun;
 type Mask = { width: number; height: number; data: string };
-type SurfaceSample = { x: number; y: number; z: number; brightness: number; light: number };
+export type GlobeCell = Readonly<{
+  column: number;
+  row: number;
+  scaleX: number;
+  scaleY: number;
+  brightness: number;
+  landCharacter: string;
+  waterCharacter: string;
+}>;
+type SurfaceSample = GlobeCell & { x: number; y: number; z: number; light: number };
 
 const radians = Math.PI / 180;
 const landBits = Uint8Array.from(atob(land.data), (character) => character.charCodeAt(0));
 const visitedBits = Uint8Array.from(atob(visited.data), (character) => character.charCodeAt(0));
 const geometryCache = new Map<string, (SurfaceSample | null)[][]>();
 const landPalette = ".,:;=+x#%@";
-const waterPalette = ".,:;-~=+";
+const waterPalette = "....::::";
 
 function sphereGeometry(columns: number, rows: number) {
   const key = `${columns}x${rows}`;
@@ -33,10 +42,17 @@ function sphereGeometry(columns: number, rows: number) {
       const depth = Math.sqrt(1 - distance);
       const light = surfaceBrightness(horizontal, vertical, depth);
       return {
+        column,
+        row,
+        landCharacter:
+          landPalette[Math.min(landPalette.length - 1, Math.floor(light * landPalette.length))],
+        waterCharacter:
+          waterPalette[Math.min(waterPalette.length - 1, Math.floor(light * waterPalette.length))],
+        ...glyphForeshortening(horizontal, vertical),
         x: horizontal,
         y: vertical,
         z: depth,
-        brightness: Math.round(light * 12) / 12,
+        brightness: Math.round(light * (LIGHT_LEVELS - 1)) / (LIGHT_LEVELS - 1),
         light,
       };
     }),
@@ -79,11 +95,26 @@ function compressRow(cells: Cell[]): GlobeRun[] {
   return runs;
 }
 
-export function renderGlobe(columns: number, rows: number, orientation: Quaternion) {
+export function forEachProjectedCell(
+  columns: number,
+  rows: number,
+  visit: (cell: GlobeCell) => void,
+) {
+  for (const row of sphereGeometry(columns, rows)) {
+    for (const sample of row) if (sample) visit(sample);
+  }
+}
+
+export function forEachGlobeCell(
+  columns: number,
+  rows: number,
+  orientation: Quaternion,
+  visit: (cell: GlobeCell, character: string, kind: Exclude<CellKind, "space">) => void,
+) {
   const matrix = orientationMatrix(orientation);
-  const cells: Cell[][] = sphereGeometry(columns, rows).map((row) =>
-    row.map((sample) => {
-      if (!sample) return { text: " ", kind: "space", brightness: 0 };
+  for (const row of sphereGeometry(columns, rows)) {
+    for (const sample of row) {
+      if (!sample) continue;
       const worldX = matrix[0] * sample.x + matrix[1] * sample.y + matrix[2] * sample.z;
       const worldY = matrix[3] * sample.x + matrix[4] * sample.y + matrix[5] * sample.z;
       const worldZ = matrix[6] * sample.x + matrix[7] * sample.y + matrix[8] * sample.z;
@@ -91,14 +122,18 @@ export function renderGlobe(columns: number, rows: number, orientation: Quaterni
       const longitude = Math.atan2(worldX, worldZ) / radians;
       const visitedArea = isVisited(latitude, longitude);
       const landArea = visitedArea || isLand(latitude, longitude);
-      const palette = landArea ? landPalette : waterPalette;
-      return {
-        text: palette[Math.min(palette.length - 1, Math.floor(sample.light * palette.length))],
-        kind: visitedArea ? "visited" : landArea ? "land" : "water",
-        brightness: sample.brightness,
-      };
-    }),
-  );
+      const character = landArea ? sample.landCharacter : sample.waterCharacter;
+      visit(sample, character, visitedArea ? "visited" : landArea ? "land" : "water");
+    }
+  }
+}
 
+export function renderGlobe(columns: number, rows: number, orientation: Quaternion) {
+  const cells: Cell[][] = Array.from({ length: rows }, () =>
+    Array.from({ length: columns }, () => ({ text: " ", kind: "space", brightness: 0 })),
+  );
+  forEachGlobeCell(columns, rows, orientation, (cell, text, kind) => {
+    cells[cell.row][cell.column] = { text, kind, brightness: cell.brightness };
+  });
   return { rows: cells.map(compressRow) };
 }
