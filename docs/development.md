@@ -32,10 +32,7 @@ is memoized and receives a stable command callback.
 
 The globe hook coordinates environment observation, pointer input and Canvas
 resource ownership. The renderer measures fonts only during setup/refresh and
-bakes camera-fixed light, glyph foreshortening and subtle glow into three material
-textures. A shared cache retains at most two layout/theme texture sets; frame
-composition copies contiguous geographic row ranges instead of individual glyphs.
-The renderer stops drawing on disposal. Animation data stays
+owns a bounded sprite cache that is cleared on disposal. Animation data stays
 in refs rather than React state. A local error boundary isolates renderer errors; a missing
 Canvas context falls back to readable content and the travel list.
 
@@ -44,20 +41,3 @@ because the React/import/accessibility plugins shipped by Next's ESLint preset
 currently declare support through ESLint 9. Do not force incompatible peer ranges
 or major transitive overrides just to silence an audit report. See the review
 notes for the remaining development-tooling advisory.
-
-### Illustration-style globe rendering
-
-The responsive globe uses 64/96/128 columns and a two-to-one glyph cell aspect
-ratio to keep the sphere round. Camera-space shading is shared by land, visited
-areas and water; limb glyphs are compressed without changing geographic masks.
-Bright land glyphs receive a small cached glow. Comet tails scale with the canvas.
-
-A local Chromium headless sample at 1280×720 recorded 176 frame paints over three
-seconds, zero DOM mutations, 614 ms of script time and zero layout time. The first
-per-glyph version of this same larger design recorded 31 paints in the same
-benchmark; this is not a comparison with the earlier deployed small globe.
-These are software-browser measurements, not a guarantee for physical devices.
-Run `npm run benchmark:globe -- http://127.0.0.1:3000/` against a fresh static preview
-to reproduce the sampling procedure. Initial material baking is outside the
-steady-state measurement. The renderer follows native requestAnimationFrame
-cadence; it does not impose a fixed FPS cap.

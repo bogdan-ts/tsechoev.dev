@@ -61,8 +61,8 @@ export function TravelGlobe({ onCommand, showHeading = true }: TravelGlobeProps)
           </p>
         )}
         <figcaption className="muted small" id={hintId}>
-          <span className="accent">Green</span>: visited countries and territories. Drag in any
-          direction or use the arrow keys to rotate.
+          <span className="accent">Green</span>: visited countries and territories. Drag or use
+          left/right arrow keys to rotate.
         </figcaption>
       </figure>
       <div className="globe-controls">

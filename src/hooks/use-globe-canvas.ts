@@ -20,7 +20,7 @@ export function useGlobeCanvas(columns: number, motionRef: RefObject<GlobeMotion
     if (!canvas || !renderer) return;
     let disposed = false;
     const workspace = canvas.closest(".workspace");
-    let colors = { land: "#e5e8df", visited: "#b3d88e", water: "#679bb8" };
+    let colors = { land: "#e5e8df", visited: "#b3d88e", water: "#68899f" };
     const draw = () =>
       renderer.draw(columns, motionRef.current.orientation, colors, motionRef.current.sky);
     const updateTheme = () => {
@@ -28,7 +28,7 @@ export function useGlobeCanvas(columns: number, motionRef: RefObject<GlobeMotion
       colors = {
         land: style.getPropertyValue("--text").trim() || "#e5e8df",
         visited: style.getPropertyValue("--accent").trim() || "#b3d88e",
-        water: workspace?.getAttribute("data-theme") === "light" ? "#3d5e74" : "#679bb8",
+        water: workspace?.getAttribute("data-theme") === "light" ? "#3d5e74" : "#68899f",
       };
       renderer.refreshFont();
       draw();

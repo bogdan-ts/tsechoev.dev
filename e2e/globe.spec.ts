@@ -74,7 +74,6 @@ test("travel loads the globe automatically and supports pointer dragging", async
   await expect(canvas).toBeVisible();
   await page.getByRole("button", { name: "Pause rotation" }).click();
   const initial = await canvas.evaluate((element: HTMLCanvasElement) => element.toDataURL());
-  await canvas.scrollIntoViewIfNeeded();
   const box = await canvas.boundingBox();
   if (!box) throw new Error("Missing globe bounds");
   await page.mouse.move(box.x + box.width / 2, box.y + box.height / 2);
@@ -123,7 +122,6 @@ test("touch dragging works with reduced motion without starting inertia", async 
   await expect(canvas).toBeVisible();
   await expect(page.getByText("Rotation off: reduced motion.")).toBeVisible();
   const initial = await canvas.evaluate((element: HTMLCanvasElement) => element.toDataURL());
-  await canvas.scrollIntoViewIfNeeded();
   const box = await canvas.boundingBox();
   if (!box) throw new Error("Missing globe bounds");
   const x = box.x + box.width / 2;
@@ -150,7 +148,6 @@ test("vertical arrow keys and vertical dragging rotate a paused globe", async ({
   await canvas.press("ArrowUp");
   const tilted = await canvas.evaluate((element: HTMLCanvasElement) => element.toDataURL());
   expect(tilted !== initial).toBe(true);
-  await canvas.scrollIntoViewIfNeeded();
   const box = await canvas.boundingBox();
   if (!box) throw new Error("Missing globe bounds");
   await page.mouse.move(box.x + box.width / 2, box.y + box.height / 2);

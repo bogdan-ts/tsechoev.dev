@@ -66,12 +66,10 @@ export function paintComet(
   context.fillStyle = comet.warm ? "#f1ce87" : "#a6dce8";
   context.shadowColor = context.fillStyle;
   context.shadowBlur = 5;
-  const tailLength = Math.min(width, height) * 0.42;
-  const segments = Math.max(24, Math.min(72, Math.round(tailLength / 5)));
-  for (let i = segments; i >= 0; i--) {
-    const distance = (i / segments) * tailLength;
+  for (let i = 22; i >= 0; i--) {
+    const distance = i * 3.5;
     const shimmer = 0.6 + 0.4 * Math.sin(sky.time * 0.02 + i * 2.3 + comet.seed) ** 2;
-    context.globalAlpha = fade * (1 - i / (segments + 1)) ** 1.5 * shimmer;
+    context.globalAlpha = fade * (1 - i / 24) ** 1.5 * shimmer;
     context.fillText(
       i === 0 ? "*" : i < 5 ? "+" : ".",
       headX - dx * distance,
@@ -82,7 +80,7 @@ export function paintComet(
   for (let i = 0; i < 16; i++) {
     const phase = (sky.time / 650 + i * 0.618 + comet.seed) % 1;
     const spread = Math.sin(i * 23.17 + comet.seed) * phase * 18;
-    const distance = phase * tailLength * 0.6 + (i % 4) * 6;
+    const distance = phase * 90 + (i % 4) * 6;
     context.globalAlpha =
       fade * (1 - phase) ** 2 * (0.3 + 0.7 * Math.sin(sky.time * 0.027 + i) ** 2);
     context.fillText(
