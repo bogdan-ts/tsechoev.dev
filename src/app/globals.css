@@ -5,12 +5,16 @@ button, input, code, pre, kbd { font: inherit; }
 button, a, input { -webkit-tap-highlight-color: transparent; }
 button, a { touch-action: manipulation; }
 button { cursor: pointer; color: inherit; }
-button:focus-visible, a:focus-visible, input:focus-visible { outline: 2px solid var(--accent); outline-offset: 4px; }
+button:focus-visible, a:focus-visible { outline: 2px solid var(--accent); outline-offset: 4px; }
 a { color: var(--accent); text-underline-offset: 4px; }
 ::selection { background: #a8cc8540; }
 .workspace { --bg: #141614; --panel: #1a1c1a; --inset: #171917; --text: #e5e8df; --muted: #9ba297; --accent: #b3d88e; --border: #343a31; min-height: 100dvh; background: var(--bg); color: var(--text); font-size: 14px; line-height: 1.7; padding: 32px; }
 .workspace[data-theme='light'] { --bg: #fafbf5; --panel: #fafbf5; --inset: #e6e9df; --text: #252e23; --muted: #58634f; --accent: #3b6421; --border: #cbd2c3; }
-.terminal-window { max-width: 960px; }
+.workspace { height: 100dvh; min-height: 0; overflow: hidden; }
+.terminal-window { max-width: 960px; height: 100%; }
+.terminal-body { display: flex; flex-direction: column; height: 100%; min-height: 0; }
+.terminal-screen { flex: 1; min-height: 0; overflow-y: auto; overflow-wrap: anywhere; scrollbar-width: thin; scrollbar-color: var(--border) transparent; }
+.terminal-screen:focus-visible { outline: 1px dotted var(--muted); outline-offset: -1px; }
 .muted, .section-label { color: var(--muted); }
 .accent { color: var(--accent); }
 .eyebrow { font-size: 11px; color: var(--muted); margin: 0; }
@@ -26,15 +30,21 @@ h1 { font-size: 20px; font-weight: 500; line-height: 1.4; margin: 0 0 8px; }
 .command-item button > span { display: none; }
 .command-item button:hover { text-decoration: underline; text-underline-offset: 4px; }
 .command-item code { color: var(--accent); }
-.prompt { display: flex; gap: 10px; align-items: center; margin-top: 24px; }
+.prompt { display: flex; flex-shrink: 0; gap: 10px; align-items: center; margin-top: 20px; }
 .prompt-prefix { white-space: nowrap; }
 .prompt-host { color: var(--muted); }
 .prompt-path { color: #9eb8d0; padding: 0 5px; }
-.prompt input { flex: 1; min-width: 0; background: none; border: none; color: var(--text); padding: 8px 3px; border-radius: 2px; caret-color: var(--accent); font-size: 16px; }
-.prompt input::placeholder { color: var(--muted); font-size: 14px; }
-.enter-button { color: var(--muted); border: none; background: none; min-width: 44px; min-height: 44px; }
+.command-input { position: relative; flex: 1; min-width: 0; font-size: 16px; overflow: hidden; }
+.prompt input { width: 100%; min-width: 0; background: none; border: none; outline: none; box-shadow: none; color: var(--text); padding: 8px 0; border-radius: 0; caret-color: transparent; font-size: inherit; }
+.cursor-track { display: none; position: absolute; left: 0; top: 50%; white-space: pre; pointer-events: none; align-items: center; }
+.command-input:focus-within .cursor-track[data-selected='false'] { display: inline-flex; }
+.cursor-offset { visibility: hidden; }
+.block-cursor { display: inline-block; flex-shrink: 0; width: 1ch; height: 1.25em; background: var(--accent); opacity: .75; animation: cursor-blink 1s steps(1, end) infinite; }
+@keyframes cursor-blink { 50% { opacity: 0; } }
+.completions { flex-shrink: 0; color: var(--muted); white-space: pre-wrap; margin: 4px 0 0; }
+.enter-button { display: none; color: var(--muted); border: none; background: none; min-width: 44px; min-height: 44px; }
 .enter-button:hover { color: var(--accent); }
-.transcript-entry { scroll-margin-top: 24px; margin-top: 28px; }
+.transcript-entry { margin: 0; }
 .executed-command { overflow-wrap: anywhere; margin: 0 0 18px; }
 .command-output { overflow-wrap: anywhere; }
 .command-output h2 { font-size: 18px; font-weight: 500; margin: 0 0 16px; }
@@ -77,8 +87,7 @@ h1 { font-size: 20px; font-weight: 500; line-height: 1.4; margin: 0 0 8px; }
   .command-item button { min-height: 28px; }
   .prompt-host { display: none; }
   .prompt { gap: 5px; }
-  .prompt input { width: 100px; }
-  .prompt input::placeholder { font-size: 12px; }
+  .enter-button { display: block; }
   .command-output h2 > span:not(.accent) { display: block; margin-top: 4px; }
   .metrics { grid-template-columns: 1fr; gap: 12px; }
   .metrics span { max-width: none; }

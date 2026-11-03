@@ -15,11 +15,11 @@ const martianMono = localFont({
 
 export const metadata: Metadata = {
   metadataBase: new URL("https://tsechoev.dev"),
-  title: "Bogdan Tsechoev — Senior Full-Stack Engineer",
-  description: "7+ years building SaaS, AI, e-commerce, and mobile products. Explore my experience, open-source contributions, and skills through an interactive terminal.",
+  title: "Bogdan Tsechoev | Senior Full-Stack Engineer",
+  description: "Full-stack engineer with 7+ years in SaaS, AI, e-commerce and mobile apps. Work experience, technical skills, open-source contributions and CV.",
   alternates: { canonical: "/" },
   icons: { icon: "/favicon.svg" },
-  openGraph: { title: "Bogdan Tsechoev — beyond the prompt", description: "Senior Full-Stack Engineer. Products, PostgreSQL, and a little curiosity. Explore my interactive portfolio.", url: "/", type: "website", images: [{ url: "/og.png", width: 1200, height: 630, alt: "Bogdan Tsechoev — Senior Full-Stack Engineer" }] },
+  openGraph: { title: "Bogdan Tsechoev | Senior Full-Stack Engineer", description: "I build SaaS products and AI tools with React, TypeScript, Python and PostgreSQL. Work experience, open-source contributions and CV.", url: "/", type: "website", images: [{ url: "/og.png", width: 1200, height: 630, alt: "Bogdan Tsechoev, Senior Full-Stack Engineer" }] },
   twitter: { card: "summary_large_image" },
 };
 

@@ -29,7 +29,7 @@ describe("terminal command contract", () => {
   it("uses the new CV and never invents countries", () => {
     expect(profile.email).toBe("bogdan.tsechoev@gmail.com");
     expect(profile.location).toBe("Manila, Philippines");
-    expect(profile.experience[0].period).toBe("Apr 2024 — Feb 2026");
+    expect(profile.experience[0].period).toBe("Apr 2024 – Feb 2026");
     expect(profile.education).toHaveLength(2);
     expect(profile.opensource.map((repo) => repo.href)).toEqual([
       "https://github.com/postgres-ai/postgresai",

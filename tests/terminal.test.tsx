@@ -12,7 +12,7 @@ describe("interactive terminal", () => {
     expect(screen.getByRole("heading", { level: 1 }).textContent).toBe("I’m Bogdan.");
     expect(screen.getByRole("button", { name: /whoami/ })).toBeTruthy();
     expect(screen.getByRole("button", { name: /travel/ })).toBeTruthy();
-    expect(screen.queryByText("THE PERSON BEHIND THE PROMPT")).toBeNull();
+    expect(screen.queryByText("ABOUT ME")).toBeNull();
   });
 
   it("runs typed commands and retains unfinished drafts through history", async () => {
@@ -20,12 +20,25 @@ describe("interactive terminal", () => {
     render(<Terminal />);
     const input = screen.getByRole("textbox");
     await user.type(input, "whoami{Enter}");
-    expect(screen.getByText("THE PERSON BEHIND THE PROMPT")).toBeTruthy();
+    expect(screen.getByText("ABOUT ME")).toBeTruthy();
     await user.type(input, "unfinished");
     await user.keyboard("{ArrowUp}");
     expect((input as HTMLInputElement).value).toBe("whoami");
     await user.keyboard("{ArrowDown}");
     expect((input as HTMLInputElement).value).toBe("unfinished");
+  });
+
+  it("replaces the screen on every command while retaining recall history", async () => {
+    const user = userEvent.setup();
+    render(<Terminal />);
+    const input = screen.getByRole("textbox");
+    await user.type(input, "whoami{Enter}");
+    expect(screen.queryByRole("heading", { level: 1 })).toBeNull();
+    await user.type(input, "skills{Enter}");
+    expect(screen.queryByText("ABOUT ME")).toBeNull();
+    expect(screen.getByRole("heading", { name: /Skills/ })).toBeTruthy();
+    await user.type(input, "history{Enter}");
+    expect(screen.getAllByRole("listitem").map((entry) => entry.textContent)).toEqual(["whoami", "skills", "history"]);
   });
 
   it("cycles Tab completions and keeps session history after clearing", async () => {
@@ -49,7 +62,7 @@ describe("interactive terminal", () => {
     const user = userEvent.setup();
     const { container } = render(<Terminal />);
     await user.click(screen.getByRole("button", { name: /travel/ }));
-    expect(screen.getByText(/country list hasn’t been added/)).toBeTruthy();
+    expect(screen.getByText(/haven’t added my country list/)).toBeTruthy();
     const input = screen.getByRole("textbox");
     await user.type(input, "theme light{Enter}");
     expect(container.querySelector("main")?.dataset.theme).toBe("light");
@@ -58,5 +71,25 @@ describe("interactive terminal", () => {
     expect(screen.getByText(/Command not found/)).toBeTruthy();
     await user.keyboard("{Control>}l{/Control}");
     expect(screen.queryByText(/Command not found/)).toBeNull();
+  });
+
+  it("cancels drafts without execution or history and edits around the cursor", async () => {
+    const user = userEvent.setup();
+    render(<Terminal />);
+    const input = screen.getByRole("textbox") as HTMLInputElement;
+    await user.type(input, "whoami");
+    await user.keyboard("{Control>}c{/Control}");
+    expect(input.value).toBe("");
+    expect(screen.getByText("whoami^C")).toBeTruthy();
+    expect(screen.queryByText("ABOUT ME")).toBeNull();
+    await user.type(input, "history{Enter}");
+    expect(screen.getAllByRole("listitem").map((entry) => entry.textContent)).toEqual(["history"]);
+    await user.type(input, "hello world");
+    input.setSelectionRange(6, 6);
+    await user.keyboard("{Control>}u{/Control}");
+    expect(input.value).toBe("world");
+    input.setSelectionRange(2, 2);
+    await user.keyboard("{Control>}k{/Control}");
+    expect(input.value).toBe("wo");
   });
 });

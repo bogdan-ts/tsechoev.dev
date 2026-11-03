@@ -39,6 +39,12 @@ Aliases: `about`, `oss`, `resume`, `countries`, `ls`.
 
 Enter submits; Tab cycles command completions; Up/Down navigate history and
 restore the unfinished input. Escape clears input; Ctrl/Cmd+L clears output.
+Ctrl+C cancels a draft without executing or recording it. Ctrl+U deletes before
+the cursor; Ctrl+K deletes after it. Text selection preserves Ctrl+C copying.
+Tab shows ambiguous completions. Desktop starts at the prompt; background clicks
+refocus it. The borderless prompt uses a blinking block cursor (steady
+with reduced motion). Mobile retains its keyboard and explicit submit button.
+Each command replaces the screen. Only output scrolls; the prompt stays visible.
 Clickable commands support touch. History and appearance remain session-local;
 no analytics, cookies, remote fonts, API calls, or shell execution are involved.
 Martian Mono (SIL Open Font License) is bundled from `@fontsource/martian-mono`
@@ -51,6 +57,8 @@ through `next/font/local`, with local WOFF2 files and no Google Fonts requests.
 - `src/lib/commands.ts`: pure command parser and completion.
 - `src/components/terminal.tsx`: interactive shell.
 - `src/components/output.tsx`: command output views.
+- `src/components/commands/`: individual content commands, selected by a typed registry.
+- `src/hooks/use-terminal.ts`: session state, keyboard controls and cursor tracking.
 - `src/app/`: routes, metadata, global styles.
 - `tests/`: command and interaction tests.
 - `public/bogdan-tsechoev-resume.pdf`: supplied CV.
