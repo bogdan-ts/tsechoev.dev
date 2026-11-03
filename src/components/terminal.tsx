@@ -7,7 +7,7 @@ import { Welcome } from "./welcome";
 
 export function Terminal() {
   const terminal = useTerminal();
-  const { input, entry, cursor } = terminal;
+  const { input, entries, cursor } = terminal;
 
   return (
     <main className="workspace" data-theme={terminal.theme} onClick={terminal.focusPrompt}>
@@ -21,8 +21,12 @@ export function Terminal() {
             tabIndex={0}
           >
             {terminal.showWelcome && <Welcome onCommand={terminal.run} />}
-            {entry && (
-              <div className="transcript-entry">
+            {entries.map((entry, index) => (
+              <div
+                className="transcript-entry"
+                key={entry.id}
+                ref={index === entries.length - 1 ? terminal.latestEntryRef : undefined}
+              >
                 <p className="executed-command">
                   <PromptPrefix /> <span>{entry.input}</span>
                 </p>
@@ -32,7 +36,7 @@ export function Terminal() {
                   </div>
                 )}
               </div>
-            )}
+            ))}
           </div>
           <form className="prompt" onSubmit={terminal.submit}>
             <label htmlFor="command" className="prompt-prefix">

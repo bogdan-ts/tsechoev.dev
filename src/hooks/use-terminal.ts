@@ -10,11 +10,14 @@ import {
 } from "react";
 import { completeCommand, executeCommand, type CommandResult } from "../lib/commands";
 
-type Entry = { input: string; result: CommandResult | null };
+type Entry = { id: number; input: string; result: CommandResult | null };
+
+const MAX_SCROLLBACK_ENTRIES = 100;
 
 export function useTerminal() {
   const [input, setInput] = useState("");
-  const [entry, setEntry] = useState<Entry | null>(null);
+  const [entries, setEntries] = useState<Entry[]>([]);
+  const entrySequence = useRef(0);
   const [history, setHistory] = useState<string[]>([]);
   const [showWelcome, setShowWelcome] = useState(true);
   const [theme, setTheme] = useState<"dark" | "light">("dark");
@@ -24,6 +27,7 @@ export function useTerminal() {
   const pendingCursor = useRef<number | null>(null);
   const inputRef = useRef<HTMLInputElement>(null);
   const screenRef = useRef<HTMLDivElement>(null);
+  const latestEntryRef = useRef<HTMLDivElement>(null);
   const historyIndex = useRef<number | null>(null);
   const draft = useRef("");
   const completion = useRef<{ matches: string[]; index: number } | null>(null);
@@ -56,9 +60,19 @@ export function useTerminal() {
     }
   }, []);
 
-  useEffect(() => {
-    if (screenRef.current) screenRef.current.scrollTop = 0;
-  }, [entry]);
+  useLayoutEffect(() => {
+    const screen = screenRef.current;
+    if (!screen) return;
+    const latest = latestEntryRef.current;
+    screen.scrollTop = latest
+      ? screen.scrollTop + latest.getBoundingClientRect().top - screen.getBoundingClientRect().top
+      : 0;
+  }, [entries]);
+
+  function appendEntry(input: string, result: CommandResult | null) {
+    const entry: Entry = { id: ++entrySequence.current, input, result };
+    setEntries(current => [...current, entry].slice(-MAX_SCROLLBACK_ENTRIES));
+  }
 
   function resetCompletion() {
     completion.current = null;
@@ -66,7 +80,7 @@ export function useTerminal() {
   }
 
   function clear() {
-    setEntry(null);
+    setEntries([]);
     setShowWelcome(false);
     resetCompletion();
     setStatus("Screen cleared. History retained.");
@@ -80,7 +94,6 @@ export function useTerminal() {
     if (!result) return;
     setHistory(nextHistory);
     setInput("");
-    setShowWelcome(false);
     historyIndex.current = null;
     resetCompletion();
     if (result.kind === "clear") {
@@ -89,7 +102,7 @@ export function useTerminal() {
       if (result.kind === "theme") {
         setTheme((current) => result.theme ?? (current === "dark" ? "light" : "dark"));
       }
-      setEntry({ input: trimmed, result });
+      appendEntry(trimmed, result);
       setStatus(`${trimmed}: output ready.`);
     }
     inputRef.current?.focus({ preventScroll: true });
@@ -111,8 +124,7 @@ export function useTerminal() {
       historyIndex.current = null;
       const cursorOffset = event.currentTarget.selectionStart ?? input.length;
       if (key === "c") {
-        setShowWelcome(false);
-        setEntry({ input: `${input}^C`, result: null });
+        appendEntry(`${input}^C`, null);
         setInput("");
         setStatus("Input cancelled.");
       } else if (key === "u") {
@@ -182,7 +194,7 @@ export function useTerminal() {
 
   return {
     input,
-    entry,
+    entries,
     showWelcome,
     theme,
     status,
@@ -190,6 +202,7 @@ export function useTerminal() {
     cursor,
     inputRef,
     screenRef,
+    latestEntryRef,
     run,
     submit,
     keyDown,

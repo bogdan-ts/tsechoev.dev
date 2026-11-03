@@ -44,7 +44,10 @@ the cursor; Ctrl+K deletes after it. Text selection preserves Ctrl+C copying.
 Tab shows ambiguous completions. Desktop starts at the prompt; background clicks
 refocus it. The borderless prompt uses a blinking block cursor (steady
 with reduced motion). Mobile retains its keyboard and explicit submit button.
-Each command replaces the screen. Only output scrolls; the prompt stays visible.
+Commands append to scrollback, capped at 100 entries. Only output scrolls; the
+prompt stays visible. New output scrolls to its beginning, so long answers open
+at the first line. `clear` and Ctrl/Cmd+L remove output and the welcome message
+without deleting command recall. Reading older output does not trigger scrolling.
 Clickable commands support touch. History and appearance remain session-local;
 no analytics, cookies, remote fonts, API calls, or shell execution are involved.
 Martian Mono (SIL Open Font License) is bundled from `@fontsource/martian-mono`

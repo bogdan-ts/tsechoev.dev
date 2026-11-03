@@ -45,6 +45,7 @@ h1 { font-size: 20px; font-weight: 500; line-height: 1.4; margin: 0 0 8px; }
 .enter-button { display: none; color: var(--muted); border: none; background: none; min-width: 44px; min-height: 44px; }
 .enter-button:hover { color: var(--accent); }
 .transcript-entry { margin: 0; }
+.welcome + .transcript-entry, .transcript-entry + .transcript-entry { margin-top: 28px; }
 .executed-command { overflow-wrap: anywhere; margin: 0 0 18px; }
 .command-output { overflow-wrap: anywhere; }
 .command-output h2 { font-size: 18px; font-weight: 500; margin: 0 0 16px; }

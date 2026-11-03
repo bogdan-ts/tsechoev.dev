@@ -28,14 +28,14 @@ describe("interactive terminal", () => {
     expect((input as HTMLInputElement).value).toBe("unfinished");
   });
 
-  it("replaces the screen on every command while retaining recall history", async () => {
+  it("appends output and retains previous answers and recall history", async () => {
     const user = userEvent.setup();
     render(<Terminal />);
     const input = screen.getByRole("textbox");
     await user.type(input, "whoami{Enter}");
-    expect(screen.queryByRole("heading", { level: 1 })).toBeNull();
+    expect(screen.getByRole("heading", { level: 1 })).toBeTruthy();
     await user.type(input, "skills{Enter}");
-    expect(screen.queryByText("ABOUT ME")).toBeNull();
+    expect(screen.getByText("ABOUT ME")).toBeTruthy();
     expect(screen.getByRole("heading", { name: /Skills/ })).toBeTruthy();
     await user.type(input, "history{Enter}");
     expect(screen.getAllByRole("listitem").map((entry) => entry.textContent)).toEqual(["whoami", "skills", "history"]);
@@ -54,6 +54,7 @@ describe("interactive terminal", () => {
     expect(screen.getByRole("link", { name: /Download CV PDF/ })).toBeTruthy();
     await user.type(input, "clear{Enter}");
     expect(screen.queryByRole("heading", { level: 1 })).toBeNull();
+    expect(screen.queryByRole("link", { name: /Download CV PDF/ })).toBeNull();
     await user.type(input, "history{Enter}");
     expect(screen.getAllByRole("listitem").map((item) => item.textContent)).toEqual(["cv", "clear", "history"]);
   });

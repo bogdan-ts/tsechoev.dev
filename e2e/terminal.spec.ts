@@ -30,14 +30,21 @@ test("portfolio discovery, command execution and keyboard controls", async ({ pa
   await expect(input).toHaveValue("experience");
   await input.press("Enter");
   await expect(page.getByText("Apr 2024 – Feb 2026", { exact: false })).toBeVisible();
-  await expect(page.getByText("ABOUT ME", { exact: true })).toHaveCount(0);
+  await expect(page.getByText("ABOUT ME", { exact: true })).toHaveCount(1);
+  const latestOutput = page.locator(".transcript-entry").last();
+  const topOffset = await latestOutput.evaluate(element => {
+    const screen = element.closest(".terminal-screen")!;
+    return element.getBoundingClientRect().top - screen.getBoundingClientRect().top;
+  });
+  expect(Math.abs(topOffset)).toBeLessThan(2);
   await page.locator(".terminal-screen").evaluate(element => { element.scrollTop = element.scrollHeight; });
   await expect(input).toBeInViewport();
   expect(await page.evaluate(() => document.documentElement.scrollHeight <= window.innerHeight)).toBe(true);
   await input.fill("theme light");
   await input.press("Enter");
   await expect(page.locator("main")).toHaveAttribute("data-theme", "light");
-  expect(await page.locator(".terminal-screen").evaluate(element => element.scrollTop)).toBe(0);
+  await expect(page.getByText("Theme changed.")).toBeVisible();
+  expect(await page.locator(".terminal-screen").evaluate(element => element.scrollTop)).toBeGreaterThan(0);
   await page.screenshot({ path: testInfo.outputPath("light-output.png"), fullPage: true });
   await input.fill("travel");
   await input.press("Enter");

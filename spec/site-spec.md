@@ -33,10 +33,14 @@ is a typed empty dataset until countries are supplied. Replace the PDF.
 
 Trim whitespace, ignore command-name case, treat blank input as a no-op. Unknown
 commands and invalid arguments return helpful errors. Never execute shell input;
-render it as text. Each command replaces the screen, including the welcome view;
-never append previous outputs. Keep command history separately for Up/Down.
+render it as text. Append each command and answer to scrollback, preserving the
+welcome until clear. Keep the last 100 output entries with stable identities;
+keep command recall separately for Up/Down without truncating it with scrollback.
 The terminal fills the viewport; only its output scrolls, while the prompt stays
-visible at the bottom. New commands reset output scroll to the top.
+visible at the bottom. After a command, scroll to the beginning of its new output
+(or as far as the scroll range permits). Do not scroll the outer page or jump
+while the visitor is reading older output. Clear and Ctrl/Cmd+L remove scrollback
+and the welcome message, but retain command recall.
 Tab cycles completions, Up/Down
 recall history and restore the input draft, Ctrl/Cmd+L clears output, Escape clears
 input. Ctrl+C cancels the draft with a visible ^C and never executes or records it;
