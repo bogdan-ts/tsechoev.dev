@@ -1,4 +1,5 @@
 import { renderGlobe } from "./globe";
+import { paintComet, type CometSky } from "./globe-comets";
 
 export type GlobeColors = { land: string; visited: string; water: string };
 type GlyphAtlas = { signature: string; glyphs: Map<string, HTMLCanvasElement> };
@@ -9,6 +10,7 @@ export function paintGlobe(
   columns: number,
   rotation: number,
   colors: GlobeColors,
+  sky?: CometSky,
 ) {
   const context = canvas.getContext("2d");
   if (!context) return;
@@ -17,8 +19,11 @@ export function paintGlobe(
   const cellWidth = context.measureText("M").width;
   const cellHeight = 11;
   const rows = columns / 2;
-  const width = columns * cellWidth;
-  const height = rows * cellHeight;
+  const padding = 24;
+  const sphereWidth = columns * cellWidth;
+  const sphereHeight = rows * cellHeight;
+  const width = sphereWidth + padding * 2;
+  const height = sphereHeight + padding * 2;
   const ratio = Math.min(window.devicePixelRatio || 1, 2);
   const signature = `${font}|${ratio}|${colors.land}|${colors.visited}|${colors.water}`;
   let atlas = atlases.get(canvas);
@@ -30,15 +35,16 @@ export function paintGlobe(
     canvas.width = Math.ceil(width * ratio);
     canvas.height = Math.ceil(height * ratio);
     canvas.style.width = `${width}px`;
-    canvas.style.height = `${height}px`;
+    canvas.style.height = "auto";
   }
   context.setTransform(ratio, 0, 0, ratio, 0, 0);
   context.clearRect(0, 0, width, height);
   context.font = font;
   context.textBaseline = "middle";
   context.save();
+  context.translate(padding, padding);
   context.beginPath();
-  context.ellipse(width / 2, height / 2, (columns - 1) * cellWidth / 2, (rows - 1) * cellHeight / 2, 0, 0, Math.PI * 2);
+  context.ellipse(sphereWidth / 2, sphereHeight / 2, (columns - 1) * cellWidth / 2, (rows - 1) * cellHeight / 2, 0, 0, Math.PI * 2);
   context.clip();
   const frame = renderGlobe(columns, rows, rotation);
   frame.rows.forEach((row, index) => {
@@ -70,4 +76,5 @@ export function paintGlobe(
     }
   });
   context.restore();
+  if (sky) paintComet(context, sky, width, height, (columns - 1) * cellWidth / 2, (rows - 1) * cellHeight / 2);
 }

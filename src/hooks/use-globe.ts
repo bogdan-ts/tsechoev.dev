@@ -1,12 +1,15 @@
 import { useEffect, useRef, useState, type PointerEvent } from "react";
 import { advanceRotation } from "../lib/globe-motion";
 import { paintGlobe } from "../lib/globe-canvas";
+import { advanceCometSky, createCometSky } from "../lib/globe-comets";
 
 export function useGlobe() {
   const containerRef = useRef<HTMLDivElement>(null);
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const angle = useRef(Math.PI / 2);
   const velocity = useRef(0);
+  const [initialSky] = useState(createCometSky);
+  const sky = useRef(initialSky);
   const drag = useRef<{ id: number; x: number; time: number } | null>(null);
   const redraw = useRef(() => {});
   const [columns, setColumns] = useState(56);
@@ -61,7 +64,7 @@ export function useGlobe() {
     let disposed = false;
     const workspace = canvas.closest(".workspace");
     let colors = { land: "#e5e8df", visited: "#b3d88e", water: "#68899f" };
-    const draw = () => paintGlobe(canvas, columns, angle.current, colors);
+    const draw = () => paintGlobe(canvas, columns, angle.current, colors, sky.current);
     const updateTheme = () => {
       const style = getComputedStyle(canvas);
       colors = {
@@ -96,6 +99,7 @@ export function useGlobe() {
           const next = advanceRotation(angle.current, velocity.current, elapsed);
           angle.current = next.angle;
           velocity.current = next.velocity;
+          sky.current = advanceCometSky(sky.current, elapsed);
           redraw.current();
         }
       }

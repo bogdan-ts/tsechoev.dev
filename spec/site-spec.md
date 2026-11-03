@@ -120,3 +120,10 @@ per resolution so animation frames only rotate and sample the geographic masks.
 - Preserve mobile vertical scrolling, keyboard arrow positioning, pause controls, theme changes, local fonts and high-DPI sharpness.
 - Improve land/ocean contrast and clip glyphs to a smooth circular limb. No external runtime services or Worker.
 - Compare DOM node counts and Chromium task/layout time over the same three-second desktop animation window; report observations rather than universal speed claims.
+
+## Rare comet Easter egg
+
+- Schedule one comet after 45–120 seconds of active animation, then another 45–120 seconds after the previous pass ends. Never spawn a burst or overlap passes.
+- Randomize direction, crossing angle, warm/cool tint and foreground/background depth. Draw a short-lived ASCII head, fading tail and twinkling sparks.
+- Background trails are occluded by the full sphere silhouette, not visible through gaps between ASCII characters. Foreground trails cross in front.
+- Use the existing Canvas clock/FPS/lifecycle: freeze on pause, reduced motion, offscreen and hidden tabs. No extra timers, React frame updates or network assets.

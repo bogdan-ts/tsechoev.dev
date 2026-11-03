@@ -138,3 +138,9 @@ node --experimental-strip-types scripts/benchmark-globe.ts http://127.0.0.1:3000
 The script reports DOM changes, paint counts and CDP task/script/layout time.
 Headless rendering and host load affect timing; these are local diagnostics,
 not device-wide performance guarantees.
+
+The globe also has a rare comet Easter egg. A pass is scheduled after 45–120
+seconds of active animation, with another quiet interval after it ends. Direction,
+angle, tint and front/back depth vary; the sphere fully occludes background
+sparks. Comets share the existing pause, reduced-motion and visibility lifecycle.
+There are no comet timers or additional network assets.
