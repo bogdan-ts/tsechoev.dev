@@ -106,9 +106,9 @@ per resolution so animation frames only rotate and sample the geographic masks.
 # Simple version
 
 - Header links between Terminal (`/`) and Simple (`/simple/`), identifying the current version.
-- Simple is statically rendered, usable without JavaScript, with Whoami (`/simple/`) and Travel (`/simple/travel/`) on separate pages.
+- Simple is statically rendered, usable without JavaScript, with Whoami (`/simple/`) and Atlas (`/simple/travel/`) on separate pages.
 - Whoami includes description, experience, skills, open source, education, contact and CV, shared with the terminal command.
-- Travel stays separate, with 19 places, no cities or regions, and an automatically displayed globe above the list.
+- Atlas stays separate, with 19 places, no cities or regions, and an automatically displayed globe above the list.
 - Preserve terminal keyboard and scrollback behavior; both versions fit mobile widths.
 
 ## Canvas globe and interaction
@@ -147,3 +147,7 @@ per resolution so animation frames only rotate and sample the geographic masks.
 - All four arrow keys rotate around screen-relative horizontal/vertical axes. Inertia follows the last drag axis and decays with elapsed time; auto-spin remains independent of frame rate.
 - Keep illumination camera-fixed. Cache visible-sphere normals/lighting independently of orientation; rotate normals into geographic coordinates per frame.
 - Capture touch gestures on the globe for full-axis control. Normal page scrolling remains available outside it. Pause/reduced motion stop automatic movement but allow manual positioning.
+
+## Atlas page naming
+
+The simple-mode globe page is named Atlas in navigation, its heading and metadata. Keep `/simple/travel/` and terminal `travel` commands unchanged.

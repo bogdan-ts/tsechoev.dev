@@ -7,7 +7,7 @@ export function SimpleNavigation({ section }: { section: "whoami" | "travel" }) 
         Whoami
       </Link>
       <Link href="/simple/travel/" aria-current={section === "travel" ? "page" : undefined}>
-        Travel
+        Atlas
       </Link>
     </nav>
   );

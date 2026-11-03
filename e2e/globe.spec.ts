@@ -69,7 +69,7 @@ test("travel loads the globe automatically and supports pointer dragging", async
   await page.goto("/simple/");
   await page.waitForLoadState("networkidle");
   await expect(page.locator("canvas")).toHaveCount(0);
-  await page.getByRole("link", { name: "Travel", exact: true }).click();
+  await page.getByRole("link", { name: "Atlas", exact: true }).click();
   const canvas = page.locator("canvas");
   await expect(canvas).toBeVisible();
   await page.getByRole("button", { name: "Pause rotation" }).click();
