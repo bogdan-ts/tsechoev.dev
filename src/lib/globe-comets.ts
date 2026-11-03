@@ -70,15 +70,24 @@ export function paintComet(
     const distance = i * 3.5;
     const shimmer = 0.6 + 0.4 * Math.sin(sky.time * 0.02 + i * 2.3 + comet.seed) ** 2;
     context.globalAlpha = fade * (1 - i / 24) ** 1.5 * shimmer;
-    context.fillText(i === 0 ? "*" : i < 5 ? "+" : ".", headX - dx * distance, headY - dy * distance);
+    context.fillText(
+      i === 0 ? "*" : i < 5 ? "+" : ".",
+      headX - dx * distance,
+      headY - dy * distance,
+    );
   }
   context.shadowBlur = 2;
   for (let i = 0; i < 16; i++) {
     const phase = (sky.time / 650 + i * 0.618 + comet.seed) % 1;
     const spread = Math.sin(i * 23.17 + comet.seed) * phase * 18;
     const distance = phase * 90 + (i % 4) * 6;
-    context.globalAlpha = fade * (1 - phase) ** 2 * (0.3 + 0.7 * Math.sin(sky.time * 0.027 + i) ** 2);
-    context.fillText(i % 3 === 0 ? "+" : ".", headX - dx * distance - dy * spread, headY - dy * distance + dx * spread);
+    context.globalAlpha =
+      fade * (1 - phase) ** 2 * (0.3 + 0.7 * Math.sin(sky.time * 0.027 + i) ** 2);
+    context.fillText(
+      i % 3 === 0 ? "+" : ".",
+      headX - dx * distance - dy * spread,
+      headY - dy * distance + dx * spread,
+    );
   }
   context.restore();
 }

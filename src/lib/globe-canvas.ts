@@ -1,80 +1,113 @@
-import { renderGlobe } from "./globe";
+import { renderGlobe, type GlobeRun } from "./globe";
 import { paintComet, type CometSky } from "./globe-comets";
 
 export type GlobeColors = { land: string; visited: string; water: string };
-type GlyphAtlas = { signature: string; glyphs: Map<string, HTMLCanvasElement> };
-const atlases = new WeakMap<HTMLCanvasElement, GlyphAtlas>();
+export type GlobeRenderer = {
+  draw: (columns: number, rotation: number, colors: GlobeColors, sky: CometSky) => void;
+  refreshFont: () => void;
+  dispose: () => void;
+};
+const CELL_HEIGHT = 11;
+const SKY_PADDING = 24;
+const MAX_SPRITES = 512;
+const MAX_PIXEL_RATIO = 2;
 
-export function paintGlobe(
-  canvas: HTMLCanvasElement,
-  columns: number,
-  rotation: number,
-  colors: GlobeColors,
-  sky?: CometSky,
-) {
-  const context = canvas.getContext("2d");
-  if (!context) return;
-  const font = getComputedStyle(canvas).font;
-  context.font = font;
-  const cellWidth = context.measureText("M").width;
-  const cellHeight = 11;
-  const rows = columns / 2;
-  const padding = 24;
-  const sphereWidth = columns * cellWidth;
-  const sphereHeight = rows * cellHeight;
-  const width = sphereWidth + padding * 2;
-  const height = sphereHeight + padding * 2;
-  const ratio = Math.min(window.devicePixelRatio || 1, 2);
-  const signature = `${font}|${ratio}|${colors.land}|${colors.visited}|${colors.water}`;
-  let atlas = atlases.get(canvas);
-  if (atlas?.signature !== signature) {
-    atlas = { signature, glyphs: new Map() };
-    atlases.set(canvas, atlas);
+export function createGlobeRenderer(canvas: HTMLCanvasElement): GlobeRenderer | null {
+  const candidate = canvas.getContext("2d");
+  if (!candidate) return null;
+  const context = candidate;
+  const sprites = new Map<string, HTMLCanvasElement>();
+  let font = "";
+  let cellWidth = 0;
+  let signature = "";
+
+  function refreshFont() {
+    const style = getComputedStyle(canvas);
+    font = `${style.fontWeight} ${style.fontSize} ${style.fontFamily}`;
+    context.font = font;
+    cellWidth = context.measureText("M").width;
+    sprites.clear();
   }
-  if (canvas.width !== Math.ceil(width * ratio) || canvas.height !== Math.ceil(height * ratio)) {
-    canvas.width = Math.ceil(width * ratio);
-    canvas.height = Math.ceil(height * ratio);
-    canvas.style.width = `${width}px`;
-    canvas.style.height = "auto";
-  }
-  context.setTransform(ratio, 0, 0, ratio, 0, 0);
-  context.clearRect(0, 0, width, height);
-  context.font = font;
-  context.textBaseline = "middle";
-  context.save();
-  context.translate(padding, padding);
-  context.beginPath();
-  context.ellipse(sphereWidth / 2, sphereHeight / 2, (columns - 1) * cellWidth / 2, (rows - 1) * cellHeight / 2, 0, 0, Math.PI * 2);
-  context.clip();
-  const frame = renderGlobe(columns, rows, rotation);
-  frame.rows.forEach((row, index) => {
-    let column = 0;
-    for (const run of row) {
-      if (run.kind !== "space") {
-        context.globalAlpha = 0.16 + run.brightness * 0.84;
-        const key = `${run.kind}:${run.text}`;
-        let glyph = atlas!.glyphs.get(key);
-        if (!glyph) {
-          glyph = document.createElement("canvas");
-          glyph.width = Math.ceil(run.text.length * cellWidth * ratio);
-          glyph.height = Math.ceil(cellHeight * ratio);
-          const glyphContext = glyph.getContext("2d")!;
-          glyphContext.scale(ratio, ratio);
-          glyphContext.font = font;
-          glyphContext.textBaseline = "middle";
-          glyphContext.fillStyle = colors[run.kind];
-          glyphContext.fillText(run.text, 0, cellHeight / 2);
-          if (atlas!.glyphs.size >= 512) {
-            const oldest = atlas!.glyphs.keys().next().value;
-            if (oldest !== undefined) atlas!.glyphs.delete(oldest);
-          }
-          atlas!.glyphs.set(key, glyph);
-        }
-        context.drawImage(glyph, column * cellWidth, index * cellHeight, glyph.width / ratio, glyph.height / ratio);
-      }
-      column += run.text.length;
+
+  function sprite(run: GlobeRun, color: string, ratio: number) {
+    const key = `${run.kind}:${run.text}`;
+    const cached = sprites.get(key);
+    if (cached) return cached;
+    const image = document.createElement("canvas");
+    image.width = Math.ceil(run.text.length * cellWidth * ratio);
+    image.height = Math.ceil(CELL_HEIGHT * ratio);
+    const painter = image.getContext("2d");
+    if (!painter) return null;
+    painter.scale(ratio, ratio);
+    painter.font = font;
+    painter.textBaseline = "middle";
+    painter.fillStyle = color;
+    painter.fillText(run.text, 0, CELL_HEIGHT / 2);
+    if (sprites.size >= MAX_SPRITES) {
+      const oldest = sprites.keys().next().value;
+      if (oldest !== undefined) sprites.delete(oldest);
     }
-  });
-  context.restore();
-  if (sky) paintComet(context, sky, width, height, (columns - 1) * cellWidth / 2, (rows - 1) * cellHeight / 2);
+    sprites.set(key, image);
+    return image;
+  }
+
+  function draw(columns: number, rotation: number, colors: GlobeColors, sky: CometSky) {
+    if (!context || cellWidth <= 0) return;
+    const rows = columns / 2;
+    const sphereWidth = columns * cellWidth;
+    const sphereHeight = rows * CELL_HEIGHT;
+    const width = sphereWidth + SKY_PADDING * 2;
+    const height = sphereHeight + SKY_PADDING * 2;
+    const ratio = Math.min(window.devicePixelRatio || 1, MAX_PIXEL_RATIO);
+    const nextSignature = `${font}|${ratio}|${colors.land}|${colors.visited}|${colors.water}`;
+    if (signature !== nextSignature) {
+      signature = nextSignature;
+      sprites.clear();
+    }
+    if (canvas.width !== Math.ceil(width * ratio) || canvas.height !== Math.ceil(height * ratio)) {
+      canvas.width = Math.ceil(width * ratio);
+      canvas.height = Math.ceil(height * ratio);
+      canvas.style.width = `${width}px`;
+      canvas.style.height = "auto";
+    }
+    context.setTransform(ratio, 0, 0, ratio, 0, 0);
+    context.clearRect(0, 0, width, height);
+    context.font = font;
+    context.textBaseline = "middle";
+    const radiusX = ((columns - 1) * cellWidth) / 2;
+    const radiusY = ((rows - 1) * CELL_HEIGHT) / 2;
+    context.save();
+    context.translate(SKY_PADDING, SKY_PADDING);
+    context.beginPath();
+    context.ellipse(sphereWidth / 2, sphereHeight / 2, radiusX, radiusY, 0, 0, Math.PI * 2);
+    context.clip();
+    const frame = renderGlobe(columns, rows, rotation);
+    frame.rows.forEach((row, index) => {
+      let column = 0;
+      for (const run of row) {
+        if (run.kind !== "space") {
+          const image = sprite(run, colors[run.kind], ratio);
+          context.globalAlpha = 0.16 + run.brightness * 0.84;
+          if (image)
+            context.drawImage(
+              image,
+              column * cellWidth,
+              index * CELL_HEIGHT,
+              image.width / ratio,
+              image.height / ratio,
+            );
+          else {
+            context.fillStyle = colors[run.kind];
+            context.fillText(run.text, column * cellWidth, (index + 0.5) * CELL_HEIGHT);
+          }
+        }
+        column += run.text.length;
+      }
+    });
+    context.restore();
+    paintComet(context, sky, width, height, radiusX, radiusY);
+  }
+
+  refreshFont();
+  return { draw, refreshFont, dispose: () => sprites.clear() };
 }

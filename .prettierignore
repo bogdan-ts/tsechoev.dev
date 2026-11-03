@@ -1,0 +1,12 @@
+.next/
+out/
+node_modules/
+test-results/
+playwright-report/
+package-lock.json
+src/lib/data/
+public/
+next-env.d.ts
+LICENSE
+dist/
+coverage/

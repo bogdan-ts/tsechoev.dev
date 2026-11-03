@@ -5,7 +5,7 @@ TypeScript, App Router, and static export. Hosted on GitHub Pages.
 
 ## Develop
 
-Node.js 22+ and npm are required.
+Node.js 22.18+ (or 24+) and npm are required. `.nvmrc` selects Node.js 22.
 
 ```sh
 npm ci
@@ -17,8 +17,7 @@ Open http://localhost:3000. `npm run preview` serves the production `out/` direc
 ## Checks
 
 ```sh
-npm test
-npm run typecheck
+npm run check
 npm run build
 ```
 
@@ -30,6 +29,9 @@ The build generates `out/`, including server-rendered introductory content and
 command discovery, the downloadable CV, Open Graph image, robots, and sitemap.
 JavaScript enables command execution; CV and email links also work without it.
 
+Quality gates and the review record are documented in [development](docs/development.md)
+and [code review](docs/code-review.md).
+
 ## Commands and controls
 
 `whoami`, `experience`, `skills`, `opensource`, `education`, `contact`, `cv`,
@@ -38,7 +40,7 @@ JavaScript enables command execution; CV and email links also work without it.
 Aliases: `about`, `oss`, `resume`, `countries`, `ls`.
 
 Enter submits; Tab cycles command completions; Up/Down navigate history and
-restore the unfinished input. Escape clears input; Ctrl/Cmd+L clears output.
+restore the unfinished input. Escape clears input; Ctrl+L clears output; Cmd+L keeps its browser behavior.
 Ctrl+C cancels a draft without executing or recording it. Ctrl+U deletes before
 the cursor; Ctrl+K deletes after it. Text selection preserves Ctrl+C copying.
 Tab shows ambiguous completions. Desktop starts at the prompt; background clicks

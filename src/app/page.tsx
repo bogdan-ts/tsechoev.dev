@@ -5,7 +5,9 @@ export default function Page() {
   return (
     <div className="site-shell">
       <SiteHeader version="terminal" />
-      <div className="site-content"><Terminal /></div>
+      <div className="site-content">
+        <Terminal />
+      </div>
     </div>
   );
 }

@@ -10,8 +10,8 @@ type SurfaceSample = { latitude: number; longitude: number; brightness: number; 
 
 const radians = Math.PI / 180;
 const tilt = 20 * radians;
-const landBits = Uint8Array.from(atob(land.data), character => character.charCodeAt(0));
-const visitedBits = Uint8Array.from(atob(visited.data), character => character.charCodeAt(0));
+const landBits = Uint8Array.from(atob(land.data), (character) => character.charCodeAt(0));
+const visitedBits = Uint8Array.from(atob(visited.data), (character) => character.charCodeAt(0));
 const geometryCache = new Map<string, (SurfaceSample | null)[][]>();
 const landPalette = ".,:;=+x#%@";
 const waterPalette = ".,:;-~=+";
@@ -34,7 +34,8 @@ function sphereGeometry(columns: number, rows: number) {
       const light = surfaceBrightness(horizontal, vertical, depth);
       return {
         latitude: Math.asin(vertical * Math.cos(tilt) + depth * Math.sin(tilt)) / radians,
-        longitude: Math.atan2(horizontal, depth * Math.cos(tilt) - vertical * Math.sin(tilt)) / radians,
+        longitude:
+          Math.atan2(horizontal, depth * Math.cos(tilt) - vertical * Math.sin(tilt)) / radians,
         brightness: Math.round(light * 12) / 12,
         light,
       };
@@ -49,9 +50,12 @@ function sphereGeometry(columns: number, rows: number) {
 }
 
 function sampleMask(mask: Mask, bits: Uint8Array, latitude: number, longitude: number): boolean {
-  const wrapped = ((longitude + 180) % 360 + 360) % 360;
-  const column = Math.min(mask.width - 1, Math.floor(wrapped / 360 * mask.width));
-  const row = Math.min(mask.height - 1, Math.max(0, Math.floor((90 - latitude) / 180 * mask.height)));
+  const wrapped = (((longitude + 180) % 360) + 360) % 360;
+  const column = Math.min(mask.width - 1, Math.floor((wrapped / 360) * mask.width));
+  const row = Math.min(
+    mask.height - 1,
+    Math.max(0, Math.floor(((90 - latitude) / 180) * mask.height)),
+  );
   const index = row * mask.width + column;
   return (bits[index >> 3] & (1 << (index & 7))) !== 0;
 }
@@ -68,15 +72,16 @@ function compressRow(cells: Cell[]): GlobeRun[] {
   const runs: GlobeRun[] = [];
   for (const cell of cells) {
     const previous = runs.at(-1);
-    if (previous?.kind === cell.kind && previous.brightness === cell.brightness) previous.text += cell.text;
+    if (previous?.kind === cell.kind && previous.brightness === cell.brightness)
+      previous.text += cell.text;
     else runs.push({ ...cell });
   }
   return runs;
 }
 
 export function renderGlobe(columns: number, rows: number, rotation: number) {
-  const cells: Cell[][] = sphereGeometry(columns, rows).map(row =>
-    row.map(sample => {
+  const cells: Cell[][] = sphereGeometry(columns, rows).map((row) =>
+    row.map((sample) => {
       if (!sample) return { text: " ", kind: "space", brightness: 0 };
       const longitude = sample.longitude + rotation / radians;
       const visitedArea = isVisited(sample.latitude, longitude);

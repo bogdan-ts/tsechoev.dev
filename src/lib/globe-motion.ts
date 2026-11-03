@@ -1,3 +1,7 @@
+import type { CometSky } from "./globe-comets";
+
+export type GlobeMotion = { angle: number; velocity: number; sky: CometSky };
+
 export const AUTO_SPEED = 0.00018;
 
 export function advanceRotation(angle: number, velocity: number, elapsed: number) {

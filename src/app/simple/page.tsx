@@ -1,11 +1,8 @@
-import type { Metadata } from "next";
+import { siteMetadata } from "../../lib/site-metadata";
 import { WhoamiCommand } from "../../components/commands/whoami";
 import { SimpleNavigation } from "../../components/simple-navigation";
 
-export const metadata: Metadata = {
-  title: "Bogdan Tsechoev | Profile",
-  alternates: { canonical: "https://tsechoev.dev/simple/" },
-};
+export const metadata = siteMetadata("Bogdan Tsechoev | Profile", "/simple/");
 
 export default function SimplePage() {
   return (

@@ -1,4 +1,4 @@
-import type { ComponentType } from "react";
+import { memo, type ComponentType } from "react";
 import type { CommandResult, ContentCommand } from "../lib/commands";
 import type { CommandActionProps } from "./command-list";
 import { WhoamiCommand } from "./commands/whoami";
@@ -27,11 +27,16 @@ const commandViews: Record<ContentCommand, ComponentType<ContentViewProps>> = {
 
 type OutputProps = CommandActionProps & { result: CommandResult };
 
-export function Output({ result, onCommand }: OutputProps) {
+function OutputView({ result, onCommand }: OutputProps) {
   switch (result.kind) {
     case "content": {
       const CommandView = commandViews[result.command];
-      return <CommandView onCommand={onCommand} view={result.command === "travel" ? result.view : undefined} />;
+      return (
+        <CommandView
+          onCommand={onCommand}
+          view={result.command === "travel" ? result.view : undefined}
+        />
+      );
     }
     case "error":
       return <p className="error">{result.message}</p>;
@@ -39,8 +44,10 @@ export function Output({ result, onCommand }: OutputProps) {
       return <p>{result.message}</p>;
     case "history":
       return (
-        <ol className="history-list">
-          {result.entries.map((command, index) => <li key={index}>{command}</li>)}
+        <ol className="history-list" aria-label="Command history">
+          {result.entries.map((command, index) => (
+            <li key={index}>{command}</li>
+          ))}
         </ol>
       );
     case "theme":
@@ -53,3 +60,5 @@ export function Output({ result, onCommand }: OutputProps) {
     }
   }
 }
+
+export const Output = memo(OutputView);

@@ -1,6 +1,7 @@
 import {
   useEffect,
-  useLayoutEffect,
+  useCallback,
+  useReducer,
   useRef,
   useState,
   type ChangeEvent,
@@ -8,47 +9,22 @@ import {
   type KeyboardEvent,
   type MouseEvent,
 } from "react";
-import { completeCommand, executeCommand, type CommandResult } from "../lib/commands";
-
-type Entry = { id: number; input: string; result: CommandResult | null };
-
-const MAX_SCROLLBACK_ENTRIES = 100;
+import { completeCommand } from "../lib/commands";
+import { createTerminalState, terminalReducer } from "../lib/terminal-state";
+import { useTerminalCursor } from "./use-terminal-cursor";
+import { useTerminalScroll } from "./use-terminal-scroll";
 
 export function useTerminal() {
+  const [state, dispatch] = useReducer(terminalReducer, undefined, createTerminalState);
+  const { entries, history, showWelcome, theme, status } = state;
   const [input, setInput] = useState("");
-  const [entries, setEntries] = useState<Entry[]>([]);
-  const entrySequence = useRef(0);
-  const [history, setHistory] = useState<string[]>([]);
-  const [showWelcome, setShowWelcome] = useState(true);
-  const [theme, setTheme] = useState<"dark" | "light">("dark");
-  const [status, setStatus] = useState("");
   const [suggestions, setSuggestions] = useState<string[]>([]);
-  const [cursor, setCursor] = useState({ offset: 0, scrollLeft: 0, selected: false });
-  const pendingCursor = useRef<number | null>(null);
-  const inputRef = useRef<HTMLInputElement>(null);
-  const screenRef = useRef<HTMLDivElement>(null);
-  const latestEntryRef = useRef<HTMLDivElement>(null);
+  const { inputRef, cursor, pendingCursorRef, syncCursor } = useTerminalCursor(input);
+  const { screenRef, latestEntryRef } = useTerminalScroll(entries);
+  const composing = useRef(false);
   const historyIndex = useRef<number | null>(null);
   const draft = useRef("");
   const completion = useRef<{ matches: string[]; index: number } | null>(null);
-
-  function syncCursor() {
-    const element = inputRef.current;
-    if (!element) return;
-    setCursor({
-      offset: element.selectionStart ?? 0,
-      scrollLeft: element.scrollLeft,
-      selected: element.selectionStart !== element.selectionEnd,
-    });
-  }
-
-  useLayoutEffect(() => {
-    if (pendingCursor.current !== null) {
-      inputRef.current?.setSelectionRange(pendingCursor.current, pendingCursor.current);
-      pendingCursor.current = null;
-    }
-    syncCursor();
-  }, [input]);
 
   useEffect(() => {
     if (
@@ -58,38 +34,7 @@ export function useTerminal() {
     ) {
       inputRef.current?.focus({ preventScroll: true });
     }
-  }, []);
-
-  useLayoutEffect(() => {
-    const screen = screenRef.current;
-    if (!screen) return;
-    const latest = latestEntryRef.current;
-    const alignOutput = () => {
-      const paddingTop = Number.parseFloat(getComputedStyle(screen).paddingTop) || 0;
-      screen.scrollTop = latest
-        ? screen.scrollTop + latest.getBoundingClientRect().top - screen.getBoundingClientRect().top - paddingTop
-        : 0;
-    };
-    alignOutput();
-    if (!latest?.querySelector(".globe-loading, canvas") || typeof ResizeObserver !== "function") return;
-    let followLoading = true;
-    const stopFollowing = () => { followLoading = false; };
-    const interactions = ["wheel", "touchstart", "pointerdown", "keydown"] as const;
-    interactions.forEach(event => screen.addEventListener(event, stopFollowing, { passive: true }));
-    const observer = new ResizeObserver(() => {
-      if (followLoading) alignOutput();
-    });
-    observer.observe(latest);
-    return () => {
-      observer.disconnect();
-      interactions.forEach(event => screen.removeEventListener(event, stopFollowing));
-    };
-  }, [entries]);
-
-  function appendEntry(input: string, result: CommandResult | null) {
-    const entry: Entry = { id: ++entrySequence.current, input, result };
-    setEntries(current => [...current, entry].slice(-MAX_SCROLLBACK_ENTRIES));
-  }
+  }, [inputRef]);
 
   function resetCompletion() {
     completion.current = null;
@@ -97,43 +42,34 @@ export function useTerminal() {
   }
 
   function clear() {
-    setEntries([]);
-    setShowWelcome(false);
+    dispatch({ type: "clear" });
     resetCompletion();
-    setStatus("Screen cleared. History retained.");
   }
 
-  function run(command: string) {
-    const trimmed = command.trim();
-    if (!trimmed) return;
-    const nextHistory = [...history, trimmed];
-    const result = executeCommand(trimmed, nextHistory);
-    if (!result) return;
-    setHistory(nextHistory);
-    setInput("");
-    historyIndex.current = null;
-    resetCompletion();
-    if (result.kind === "clear") {
-      clear();
-    } else {
-      if (result.kind === "theme") {
-        setTheme((current) => result.theme ?? (current === "dark" ? "light" : "dark"));
-      }
-      appendEntry(trimmed, result);
-      setStatus(`${trimmed}: output ready.`);
-    }
-    inputRef.current?.focus({ preventScroll: true });
-  }
+  const run = useCallback(
+    (command: string) => {
+      if (!command.trim()) return;
+      dispatch({ type: "run", command });
+      setInput("");
+      historyIndex.current = null;
+      completion.current = null;
+      setSuggestions([]);
+      inputRef.current?.focus({ preventScroll: true });
+    },
+    [inputRef],
+  );
 
   function submit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
-    run(input);
+    if (!composing.current) run(input);
   }
 
   function keyDown(event: KeyboardEvent<HTMLInputElement>) {
+    if (composing.current || event.nativeEvent.isComposing) return;
     const key = event.key.toLowerCase();
     if (event.ctrlKey && !event.metaKey && ["c", "u", "k"].includes(key)) {
-      const hasSelection = Boolean(window.getSelection()?.toString()) ||
+      const hasSelection =
+        Boolean(window.getSelection()?.toString()) ||
         event.currentTarget.selectionStart !== event.currentTarget.selectionEnd;
       if (key === "c" && hasSelection) return;
       event.preventDefault();
@@ -141,18 +77,17 @@ export function useTerminal() {
       historyIndex.current = null;
       const cursorOffset = event.currentTarget.selectionStart ?? input.length;
       if (key === "c") {
-        appendEntry(`${input}^C`, null);
+        dispatch({ type: "cancel", input });
         setInput("");
-        setStatus("Input cancelled.");
       } else if (key === "u") {
-        pendingCursor.current = cursorOffset > 0 ? 0 : null;
+        pendingCursorRef.current = cursorOffset > 0 ? 0 : null;
         setInput(input.slice(cursorOffset));
       } else {
         setInput(input.slice(0, cursorOffset));
       }
       return;
     }
-    if ((event.ctrlKey || event.metaKey) && key === "l") {
+    if (event.ctrlKey && !event.metaKey && key === "l") {
       event.preventDefault();
       clear();
       return;
@@ -165,9 +100,13 @@ export function useTerminal() {
       completion.current = { matches, index };
       setSuggestions(matches.length > 1 ? matches : []);
       setInput(matches[index]);
-      setStatus(
-        matches.length > 1 ? `Completions: ${matches.join(", ")}` : `Completed: ${matches[index]}`,
-      );
+      dispatch({
+        type: "announce",
+        message:
+          matches.length > 1
+            ? `Completions: ${matches.join(", ")}`
+            : `Completed: ${matches[index]}`,
+      });
       return;
     }
     resetCompletion();
@@ -199,7 +138,11 @@ export function useTerminal() {
   function focusPrompt(event: MouseEvent<HTMLElement>) {
     const target = event.target;
     if (!(target instanceof HTMLElement)) return;
-    if (target.closest("a, button, input, label, select, canvas, summary") || window.getSelection()?.toString()) return;
+    if (
+      target.closest("a, button, input, label, select, canvas, summary") ||
+      window.getSelection()?.toString()
+    )
+      return;
     inputRef.current?.focus({ preventScroll: true });
   }
 
@@ -226,5 +169,11 @@ export function useTerminal() {
     focusPrompt,
     syncCursor,
     changeInput,
+    startComposition: () => {
+      composing.current = true;
+    },
+    endComposition: () => {
+      composing.current = false;
+    },
   };
 }

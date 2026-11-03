@@ -10,7 +10,9 @@ export function OpenSourceCommand() {
           <article key={name}>
             <span className="eyebrow">{label}</span>
             <h3>
-              <a href={href} target="_blank" rel="noreferrer">{name} ↗</a>
+              <a href={href} target="_blank" rel="noreferrer">
+                {name} ↗
+              </a>
             </h3>
             <p>{description}</p>
           </article>

@@ -1,16 +1,25 @@
-import React from "react";
 import { act, cleanup, fireEvent, render, screen } from "@testing-library/react";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
-import { paintGlobe } from "../src/lib/globe-canvas";
+import { createGlobeRenderer, type GlobeRenderer } from "../src/lib/globe-canvas";
+const paintGlobe = vi.fn<GlobeRenderer["draw"]>();
 
-vi.mock("../src/lib/globe-canvas", () => ({ paintGlobe: vi.fn() }));
+vi.mock("../src/lib/globe-canvas", () => ({ createGlobeRenderer: vi.fn() }));
 
 import { TravelGlobe } from "../src/components/commands/globe";
 
 beforeEach(() => {
-  vi.mocked(paintGlobe).mockClear();
+  paintGlobe.mockClear();
+  vi.mocked(createGlobeRenderer).mockReturnValue({
+    draw: paintGlobe,
+    refreshFont: vi.fn(),
+    dispose: vi.fn(),
+  });
   vi.useFakeTimers();
-  vi.stubGlobal("matchMedia", () => ({ matches: false, addEventListener: vi.fn(), removeEventListener: vi.fn() }));
+  vi.stubGlobal("matchMedia", () => ({
+    matches: false,
+    addEventListener: vi.fn(),
+    removeEventListener: vi.fn(),
+  }));
   vi.spyOn(document, "visibilityState", "get").mockReturnValue("visible");
 });
 
@@ -24,7 +33,7 @@ afterEach(() => {
 describe("globe animation lifecycle", () => {
   it("rotates, pauses, resumes and releases timers when cleared", () => {
     const { unmount } = render(<TravelGlobe />);
-    const frame = () => vi.mocked(paintGlobe).mock.calls.at(-1)?.[2];
+    const frame = () => vi.mocked(paintGlobe).mock.calls.at(-1)?.[1];
     const initial = frame();
     act(() => vi.advanceTimersByTime(500));
     expect(frame()).not.toBe(initial);
@@ -40,29 +49,46 @@ describe("globe animation lifecycle", () => {
   });
 
   it("does not animate for reduced-motion users", () => {
-    vi.stubGlobal("matchMedia", () => ({ matches: true, addEventListener: vi.fn(), removeEventListener: vi.fn() }));
+    vi.stubGlobal("matchMedia", () => ({
+      matches: true,
+      addEventListener: vi.fn(),
+      removeEventListener: vi.fn(),
+    }));
     render(<TravelGlobe />);
     const draws = vi.mocked(paintGlobe).mock.calls.length;
     act(() => vi.advanceTimersByTime(3000));
     expect(vi.mocked(paintGlobe).mock.calls.length).toBe(draws);
-    expect((screen.getByRole("button", { name: "Pause rotation" }) as HTMLButtonElement).disabled).toBe(true);
+    expect(
+      (screen.getByRole("button", { name: "Pause rotation" }) as HTMLButtonElement).disabled,
+    ).toBe(true);
     expect(vi.getTimerCount()).toBe(0);
   });
 
   it("stops work when offscreen or the browser tab is hidden", () => {
     let notify: IntersectionObserverCallback;
-    vi.stubGlobal("IntersectionObserver", class {
-      constructor(callback: IntersectionObserverCallback) { notify = callback; }
-      observe() {}
-      disconnect() {}
-    });
+    vi.stubGlobal(
+      "IntersectionObserver",
+      class {
+        constructor(callback: IntersectionObserverCallback) {
+          notify = callback;
+        }
+        observe() {}
+        disconnect() {}
+      },
+    );
     render(<TravelGlobe />);
     expect(vi.getTimerCount()).toBe(0);
-    act(() => notify([{ isIntersecting: true } as IntersectionObserverEntry], {} as IntersectionObserver));
+    act(() =>
+      notify([{ isIntersecting: true } as IntersectionObserverEntry], {} as IntersectionObserver),
+    );
     expect(vi.getTimerCount()).toBe(1);
-    act(() => notify([{ isIntersecting: false } as IntersectionObserverEntry], {} as IntersectionObserver));
+    act(() =>
+      notify([{ isIntersecting: false } as IntersectionObserverEntry], {} as IntersectionObserver),
+    );
     expect(vi.getTimerCount()).toBe(0);
-    act(() => notify([{ isIntersecting: true } as IntersectionObserverEntry], {} as IntersectionObserver));
+    act(() =>
+      notify([{ isIntersecting: true } as IntersectionObserverEntry], {} as IntersectionObserver),
+    );
     vi.spyOn(document, "visibilityState", "get").mockReturnValue("hidden");
     act(() => document.dispatchEvent(new Event("visibilitychange")));
     expect(vi.getTimerCount()).toBe(0);
@@ -70,17 +96,21 @@ describe("globe animation lifecycle", () => {
   it("uses every high-refresh frame and supports keyboard rotation while paused", () => {
     let frame: FrameRequestCallback;
     let sequence = 0;
-    vi.stubGlobal("requestAnimationFrame", (callback: FrameRequestCallback) => { frame = callback; return ++sequence; });
+    vi.stubGlobal("requestAnimationFrame", (callback: FrameRequestCallback) => {
+      frame = callback;
+      return ++sequence;
+    });
     vi.stubGlobal("cancelAnimationFrame", vi.fn());
     render(<TravelGlobe />);
     const start = performance.now();
     vi.mocked(paintGlobe).mockClear();
-    for (let i = 1; i <= 12; i++) act(() => frame(start + i * 1000 / 120));
+    for (let i = 1; i <= 12; i++) act(() => frame(start + (i * 1000) / 120));
     expect(vi.mocked(paintGlobe).mock.calls.length).toBe(12);
     expect(screen.queryByRole("combobox")).toBeNull();
     fireEvent.click(screen.getByRole("button", { name: "Pause rotation" }));
-    const before = vi.mocked(paintGlobe).mock.calls.at(-1)![2];
+    const before = vi.mocked(paintGlobe).mock.calls.at(-1)?.[1];
+    if (before === undefined) throw new Error("Missing painted frame");
     fireEvent.keyDown(screen.getByRole("img"), { key: "ArrowRight" });
-    expect(vi.mocked(paintGlobe).mock.calls.at(-1)![2]).toBeCloseTo(before + 0.12);
+    expect(vi.mocked(paintGlobe).mock.calls.at(-1)?.[1]).toBeCloseTo(before + 0.12);
   });
 });

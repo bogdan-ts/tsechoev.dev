@@ -10,7 +10,9 @@ export function TravelCommand({ view, onCommand }: TravelCommandProps) {
     <>
       <h2>Travel</h2>
       <ul>
-        {countries.map(({ code, name }) => <li key={code}>{name}</li>)}
+        {countries.map(({ code, name }) => (
+          <li key={code}>{name}</li>
+        ))}
       </ul>
     </>
   );

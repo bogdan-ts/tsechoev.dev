@@ -102,6 +102,7 @@ density with quantized brightness. Visited areas retain their green material but
 must not bypass shading. Use a denser responsive grid while preserving the
 displayed physical size and circular proportions. Cache geometry/light samples
 per resolution so animation frames only rotate and sample the geographic masks.
+
 # Simple version
 
 - Header links between Terminal (`/`) and Simple (`/simple/`), identifying the current version.
@@ -127,3 +128,13 @@ per resolution so animation frames only rotate and sample the geographic masks.
 - Randomize direction, crossing angle, warm/cool tint and foreground/background depth. Draw a short-lived ASCII head, fading tail and twinkling sparks.
 - Background trails are occluded by the full sphere silhouette, not visible through gaps between ASCII characters. Foreground trails cross in front.
 - Use the existing Canvas clock/FPS/lifecycle: freeze on pause, reduced motion, offscreen and hidden tabs. No extra timers, React frame updates or network assets.
+
+## Repository quality contract
+
+- Preserve published commands, content, URLs, static export, native display cadence and comet behavior.
+- Command transitions must be pure and safe when multiple commands are dispatched in one React batch. IME composition must not trigger terminal shortcuts or command execution.
+- Separate terminal domain transitions, caret/scroll DOM synchronization and rendering. Keep stable callbacks so typing does not re-render historical content.
+- Separate globe environment observation, pointer control and Canvas resource ownership. Dispose all observers/frames; handle unavailable Canvas contexts without throwing or displaying an empty interactive surface.
+- Cache Canvas font metrics outside the frame loop; bound sprite caches and avoid non-null assertions around browser resources.
+- Each static page must have matching canonical and Open Graph URLs. Keyboard focus, no-JavaScript profile/list content and mobile scrolling must remain usable.
+- Enforce formatting, lint, strict TypeScript (including e2e), unit tests, static build and browser/accessibility checks in CI. Pin installed dependency versions and document local quality checks.

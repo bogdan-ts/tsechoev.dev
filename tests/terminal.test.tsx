@@ -1,6 +1,5 @@
-import React from "react";
 import { afterEach, describe, expect, it } from "vitest";
-import { cleanup, render, screen, within } from "@testing-library/react";
+import { cleanup, fireEvent, render, screen, within } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { Terminal } from "../src/components/terminal";
 
@@ -38,7 +37,11 @@ describe("interactive terminal", () => {
     expect(screen.getByText("ABOUT ME")).toBeTruthy();
     expect(screen.getAllByRole("heading", { name: /Skills/ })).toHaveLength(2);
     await user.type(input, "history{Enter}");
-    expect(within(document.querySelector(".history-list") as HTMLElement).getAllByRole("listitem").map((entry) => entry.textContent)).toEqual(["whoami", "skills", "history"]);
+    expect(
+      within(screen.getByRole("list", { name: "Command history" }))
+        .getAllByRole("listitem")
+        .map((entry) => entry.textContent),
+    ).toEqual(["whoami", "skills", "history"]);
   });
 
   it("cycles Tab completions and keeps session history after clearing", async () => {
@@ -56,7 +59,11 @@ describe("interactive terminal", () => {
     expect(screen.queryByRole("heading", { level: 1 })).toBeNull();
     expect(screen.queryByRole("link", { name: /Download CV PDF/ })).toBeNull();
     await user.type(input, "history{Enter}");
-    expect(screen.getAllByRole("listitem").map((item) => item.textContent)).toEqual(["cv", "clear", "history"]);
+    expect(screen.getAllByRole("listitem").map((item) => item.textContent)).toEqual([
+      "cv",
+      "clear",
+      "history",
+    ]);
   });
 
   it("supports quick commands, theme changes, safe text errors and Ctrl+L", async () => {
@@ -86,7 +93,11 @@ describe("interactive terminal", () => {
     expect(screen.getByText("whoami^C")).toBeTruthy();
     expect(screen.queryByText("ABOUT ME")).toBeNull();
     await user.type(input, "history{Enter}");
-    expect(within(document.querySelector(".history-list") as HTMLElement).getAllByRole("listitem").map((entry) => entry.textContent)).toEqual(["history"]);
+    expect(
+      within(screen.getByRole("list", { name: "Command history" }))
+        .getAllByRole("listitem")
+        .map((entry) => entry.textContent),
+    ).toEqual(["history"]);
     await user.type(input, "hello world");
     input.setSelectionRange(6, 6);
     await user.keyboard("{Control>}u{/Control}");
@@ -94,5 +105,21 @@ describe("interactive terminal", () => {
     input.setSelectionRange(2, 2);
     await user.keyboard("{Control>}k{/Control}");
     expect(input.value).toBe("wo");
+  });
+  it("leaves composition input and shortcuts to the IME", async () => {
+    const user = userEvent.setup();
+    const { container } = render(<Terminal />);
+    const input = screen.getByRole("textbox") as HTMLInputElement;
+    await user.type(input, "skills{Enter}whoami");
+    fireEvent.compositionStart(input);
+    fireEvent.keyDown(input, { key: "ArrowUp", isComposing: true });
+    expect(input.value).toBe("whoami");
+    const form = container.querySelector("form");
+    if (!form) throw new Error("Missing prompt form");
+    fireEvent.submit(form);
+    expect(screen.queryByText("ABOUT ME")).toBeNull();
+    fireEvent.compositionEnd(input);
+    fireEvent.submit(form);
+    expect(screen.getByText("ABOUT ME")).toBeTruthy();
   });
 });

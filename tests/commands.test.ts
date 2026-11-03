@@ -18,7 +18,10 @@ describe("terminal command contract", () => {
     expect(executeCommand("theme light")).toEqual({ kind: "theme", theme: "light" });
   });
   it("retains history independently of clear", () => {
-    expect(executeCommand("history", ["whoami", "history"])).toEqual({ kind: "history", entries: ["whoami", "history"] });
+    expect(executeCommand("history", ["whoami", "history"])).toEqual({
+      kind: "history",
+      entries: ["whoami", "history"],
+    });
     expect(executeCommand("clear")).toEqual({ kind: "clear" });
   });
   it("completes command names and the travel flag", () => {
@@ -29,12 +32,19 @@ describe("terminal command contract", () => {
     expect(completeCommand("countries ")).toEqual(["countries --globe"]);
   });
   it("treats the globe as a travel view, not a separate command", () => {
-    expect(executeCommand("travel --globe")).toEqual({ kind: "content", command: "travel", view: "globe" });
+    expect(executeCommand("travel --globe")).toEqual({
+      kind: "content",
+      command: "travel",
+      view: "globe",
+    });
     expect(executeCommand("countries --globe")).toEqual(executeCommand("travel --globe"));
     expect(executeCommand("globe")?.kind).toBe("error");
-    expect(executeCommand("travel --unknown")).toEqual({ kind: "error", message: "Usage: travel [--globe]" });
+    expect(executeCommand("travel --unknown")).toEqual({
+      kind: "error",
+      message: "Usage: travel [--globe]",
+    });
     expect(executeCommand("travel --globe --globe")?.kind).toBe("error");
-    expect(commands.some(command => String(command.name) === "globe")).toBe(false);
+    expect(commands.some((command) => String(command.name) === "globe")).toBe(false);
   });
   it("uses the supplied CV and travel list", () => {
     expect(profile.email).toBe("bogdan.tsechoev@gmail.com");
@@ -46,6 +56,6 @@ describe("terminal command contract", () => {
       "https://github.com/postgres-ai/database-lab-engine",
     ]);
     expect(countries).toHaveLength(19);
-    expect(new Set(countries.map(country => country.code)).size).toBe(19);
+    expect(new Set(countries.map((country) => country.code)).size).toBe(19);
   });
 });

@@ -6,39 +6,57 @@ import { PromptPrefix } from "./prompt-prefix";
 import { Welcome } from "./welcome";
 
 export function Terminal() {
-  const terminal = useTerminal();
-  const { input, entries, cursor } = terminal;
+  const {
+    input,
+    entries,
+    cursor,
+    theme,
+    focusPrompt,
+    screenRef,
+    showWelcome,
+    run,
+    latestEntryRef,
+    submit,
+    inputRef,
+    changeInput,
+    keyDown,
+    startComposition,
+    endComposition,
+    syncCursor,
+    suggestions,
+    status,
+  } = useTerminal();
 
   return (
-    <main className="workspace" data-theme={terminal.theme} onClick={terminal.focusPrompt}>
+    <main className="workspace" data-theme={theme} onClick={focusPrompt}>
       <section className="terminal-window" aria-label="Interactive portfolio terminal">
         <div className="terminal-body">
           <div
             className="terminal-screen"
-            ref={terminal.screenRef}
+            ref={screenRef}
             role="region"
             aria-label="Command output"
             tabIndex={0}
           >
-            {terminal.showWelcome && <Welcome onCommand={terminal.run} />}
+            {showWelcome && <Welcome onCommand={run} />}
             {entries.map((entry, index) => (
               <div
                 className="transcript-entry"
                 key={entry.id}
-                ref={index === entries.length - 1 ? terminal.latestEntryRef : undefined}
+                ref={index === entries.length - 1 ? latestEntryRef : undefined}
               >
                 <p className="executed-command">
                   <PromptPrefix /> <span>{entry.input}</span>
                 </p>
                 {entry.result && (
                   <div className="command-output">
-                    <Output result={entry.result} onCommand={terminal.run} />
+                    <Output result={entry.result} onCommand={run} />
                   </div>
                 )}
               </div>
             ))}
           </div>
-          <form className="prompt" onSubmit={terminal.submit}>
+          <form className="prompt" onSubmit={submit}>
             <label htmlFor="command" className="prompt-prefix">
               <PromptPrefix />
               <span className="sr-only"> Enter a portfolio command</span>
@@ -46,12 +64,14 @@ export function Terminal() {
             <div className="command-input">
               <input
                 id="command"
-                ref={terminal.inputRef}
+                ref={inputRef}
                 value={input}
-                onChange={terminal.changeInput}
-                onKeyDown={terminal.keyDown}
-                onSelect={terminal.syncCursor}
-                onScroll={terminal.syncCursor}
+                onChange={changeInput}
+                onKeyDown={keyDown}
+                onCompositionStart={startComposition}
+                onCompositionEnd={endComposition}
+                onSelect={syncCursor}
+                onScroll={syncCursor}
                 autoComplete="off"
                 autoCapitalize="off"
                 autoCorrect="off"
@@ -69,14 +89,18 @@ export function Terminal() {
                 <span className="block-cursor" />
               </span>
             </div>
-            <button className="enter-button" type="submit" aria-label="Run command">↵</button>
+            <button className="enter-button" type="submit" aria-label="Run command">
+              ↵
+            </button>
           </form>
-          {terminal.suggestions.length > 0 && (
+          {suggestions.length > 0 && (
             <p className="completions" aria-label="Command completions">
-              {terminal.suggestions.join("   ")}
+              {suggestions.join("   ")}
             </p>
           )}
-          <p className="sr-only" role="status" aria-live="polite">{terminal.status}</p>
+          <p className="sr-only" role="status" aria-live="polite">
+            {status}
+          </p>
         </div>
       </section>
     </main>

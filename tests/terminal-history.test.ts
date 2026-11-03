@@ -13,7 +13,7 @@ describe("terminal scrollback", () => {
     expect(result.current.entries).toHaveLength(100);
     expect(result.current.entries[0].input).toBe("unknown-1");
     expect(result.current.entries.at(-1)?.input).toBe("unknown-100");
-    expect(new Set(result.current.entries.map(entry => entry.id)).size).toBe(100);
+    expect(new Set(result.current.entries.map((entry) => entry.id)).size).toBe(100);
 
     act(() => result.current.run("history"));
     const history = result.current.entries.at(-1)?.result;
@@ -21,5 +21,17 @@ describe("terminal scrollback", () => {
     if (history?.kind !== "history") throw new Error("Expected command history");
     expect(history.entries).toHaveLength(102);
     expect(history.entries[0]).toBe("unknown-0");
+  });
+  it("preserves command history when commands run in one React batch", () => {
+    const { result } = renderHook(() => useTerminal());
+    act(() => {
+      result.current.run("whoami");
+      result.current.run("skills");
+      result.current.run("history");
+    });
+    expect(result.current.entries.at(-1)?.result).toEqual({
+      kind: "history",
+      entries: ["whoami", "skills", "history"],
+    });
   });
 });

@@ -5,7 +5,9 @@ export function Welcome({ onCommand }: CommandActionProps) {
   return (
     <div className="welcome">
       <div className="intro">
-        <h1>I’m Bogdan<span className="accent">.</span></h1>
+        <h1>
+          I’m Bogdan<span className="accent">.</span>
+        </h1>
         <p className="intro-role">Senior Full-Stack Engineer · 7+ years</p>
         <p className="intro-description">
           I build SaaS products and AI tools with React, TypeScript, Python and PostgreSQL.

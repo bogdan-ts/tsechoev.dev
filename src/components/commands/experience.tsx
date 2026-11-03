@@ -7,12 +7,16 @@ export function ExperienceCommand() {
       <div className="timeline">
         {profile.experience.map(({ company, period, location, role, summary, bullets }) => (
           <article key={company}>
-            <p className="eyebrow">{period} · {location}</p>
+            <p className="eyebrow">
+              {period} · {location}
+            </p>
             <h3>{company}</h3>
             <p className="accent">{role}</p>
             <p>{summary}</p>
             <ul>
-              {bullets.map((bullet) => <li key={bullet}>{bullet}</li>)}
+              {bullets.map((bullet) => (
+                <li key={bullet}>{bullet}</li>
+              ))}
             </ul>
           </article>
         ))}

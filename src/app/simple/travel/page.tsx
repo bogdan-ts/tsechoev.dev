@@ -1,12 +1,9 @@
-import type { Metadata } from "next";
+import { siteMetadata } from "../../../lib/site-metadata";
 import { SimpleNavigation } from "../../../components/simple-navigation";
 import { LazyGlobe } from "../../../components/lazy-globe";
 import { countries } from "../../../lib/profile";
 
-export const metadata: Metadata = {
-  title: "Travel | Bogdan Tsechoev",
-  alternates: { canonical: "https://tsechoev.dev/simple/travel/" },
-};
+export const metadata = siteMetadata("Travel | Bogdan Tsechoev", "/simple/travel/");
 
 export default function TravelPage() {
   return (
@@ -16,7 +13,9 @@ export default function TravelPage() {
         <h1 id="travel-heading">Travel</h1>
         <LazyGlobe />
         <ul>
-          {countries.map(({ code, name }) => <li key={code}>{name}</li>)}
+          {countries.map(({ code, name }) => (
+            <li key={code}>{name}</li>
+          ))}
         </ul>
       </section>
     </>
