@@ -1,12 +1,12 @@
 import Link from "next/link";
 
-export function SimpleNavigation({ section }: { section: "whoami" | "travel" }) {
+export function SimpleNavigation({ section }: { section: "whoami" | "atlas" }) {
   return (
     <nav className="section-nav" aria-label="Profile sections">
       <Link href="/simple/" aria-current={section === "whoami" ? "page" : undefined}>
         Whoami
       </Link>
-      <Link href="/simple/travel/" aria-current={section === "travel" ? "page" : undefined}>
+      <Link href="/simple/atlas/" aria-current={section === "atlas" ? "page" : undefined}>
         Atlas
       </Link>
     </nav>

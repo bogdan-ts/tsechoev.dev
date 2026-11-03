@@ -1,26 +1,18 @@
+import Link from "next/link";
 import { siteMetadata } from "../../../lib/site-metadata";
-import { SimpleNavigation } from "../../../components/simple-navigation";
-import { GlobeView } from "../../../components/globe-view";
-import { countries } from "../../../lib/profile";
 
-const description = `I’ve visited ${countries.length} countries and territories so far. You can explore them on the globe or browse the list below.`;
+export const metadata = {
+  ...siteMetadata("Atlas | Bogdan Tsechoev", "/simple/atlas/"),
+  robots: { index: false, follow: true },
+};
 
-export const metadata = siteMetadata("Atlas | Bogdan Tsechoev", "/simple/travel/", description);
-
-export default function TravelPage() {
+export default function AtlasRedirectPage() {
   return (
     <>
-      <SimpleNavigation section="travel" />
-      <section id="travel" aria-labelledby="travel-heading">
-        <h1 id="travel-heading">Atlas</h1>
-        <p className="prose muted">{description}</p>
-        <GlobeView showHeading={false} />
-        <ul>
-          {countries.map(({ code, name }) => (
-            <li key={code}>{name}</li>
-          ))}
-        </ul>
-      </section>
+      <meta httpEquiv="refresh" content="0;url=/simple/atlas/" />
+      <p>
+        This page has moved to <Link href="/simple/atlas/">Atlas</Link>.
+      </p>
     </>
   );
 }

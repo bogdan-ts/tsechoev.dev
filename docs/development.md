@@ -34,7 +34,7 @@ The globe hook coordinates environment observation, pointer input and Canvas
 resource ownership. The renderer measures fonts only during setup/refresh and
 owns a bounded sprite cache that is cleared on disposal. Animation data stays
 in refs rather than React state. A local error boundary isolates renderer errors; a missing
-Canvas context falls back to readable content and the travel list.
+Canvas context falls back to readable content and the atlas list.
 
 Dependency versions are exact and recorded in the lockfile. ESLint 9 is retained
 because the React/import/accessibility plugins shipped by Next's ESLint preset

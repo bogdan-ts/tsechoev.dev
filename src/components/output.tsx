@@ -9,7 +9,7 @@ import { ExperienceCommand } from "./commands/experience";
 import { HelpCommand } from "./commands/help";
 import { OpenSourceCommand } from "./commands/opensource";
 import { SkillsCommand } from "./commands/skills";
-import { TravelCommand } from "./commands/travel";
+import { AtlasCommand } from "./commands/atlas";
 
 type ContentViewProps = CommandActionProps & { view?: "globe" };
 
@@ -21,7 +21,7 @@ const commandViews: Record<ContentCommand, ComponentType<ContentViewProps>> = {
   education: EducationCommand,
   contact: ContactCommand,
   cv: CvCommand,
-  travel: TravelCommand,
+  atlas: AtlasCommand,
   help: HelpCommand,
 };
 
@@ -34,7 +34,7 @@ function OutputView({ result, onCommand }: OutputProps) {
       return (
         <CommandView
           onCommand={onCommand}
-          view={result.command === "travel" ? result.view : undefined}
+          view={result.command === "atlas" ? result.view : undefined}
         />
       );
     }

@@ -6,7 +6,7 @@ export function HelpCommand({ onCommand }: CommandActionProps) {
       <h2>Commands</h2>
       <CommandList onCommand={onCommand} />
       <p className="muted small">
-        Aliases: about → whoami · oss → opensource · resume → cv · countries → travel · ls → help
+        Aliases: about → whoami · oss → opensource · resume → cv · countries → atlas · ls → help
       </p>
     </>
   );

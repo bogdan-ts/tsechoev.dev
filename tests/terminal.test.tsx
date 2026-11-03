@@ -10,7 +10,7 @@ describe("interactive terminal", () => {
     render(<Terminal />);
     expect(screen.getByRole("heading", { level: 1 }).textContent).toBe("I’m Bogdan.");
     expect(screen.getByRole("button", { name: /whoami/ })).toBeTruthy();
-    expect(screen.getByRole("button", { name: /travel/ })).toBeTruthy();
+    expect(screen.getByRole("button", { name: /atlas/ })).toBeTruthy();
     expect(screen.queryByText("ABOUT ME")).toBeNull();
   });
 
@@ -69,7 +69,7 @@ describe("interactive terminal", () => {
   it("supports quick commands, theme changes, safe text errors and Ctrl+L", async () => {
     const user = userEvent.setup();
     const { container } = render(<Terminal />);
-    await user.click(screen.getByRole("button", { name: /travel/ }));
+    await user.click(screen.getByRole("button", { name: /atlas/ }));
     expect(screen.getAllByRole("listitem")).toHaveLength(19);
     expect(screen.getByText("Hong Kong")).toBeTruthy();
     expect(screen.getByText("Macau")).toBeTruthy();

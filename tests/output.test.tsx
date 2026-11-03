@@ -3,7 +3,7 @@ import { cleanup, render, screen } from "@testing-library/react";
 import { Output } from "../src/components/output";
 import { executeCommand } from "../src/lib/commands";
 
-vi.mock("../src/components/globe-view", () => ({ GlobeView: () => <h2>Travel globe</h2> }));
+vi.mock("../src/components/globe-view", () => ({ GlobeView: () => <h2>Atlas globe</h2> }));
 
 afterEach(cleanup);
 
@@ -16,8 +16,8 @@ describe("portfolio content commands", () => {
     ["education", "Education"],
     ["contact", "Contact"],
     ["cv", "CV"],
-    ["travel", "Travel"],
-    ["travel --globe", "Travel globe"],
+    ["atlas", "Atlas"],
+    ["atlas --globe", "Atlas globe"],
     ["help", "Commands"],
   ])("renders the %s view", (command, heading) => {
     const result = executeCommand(command);

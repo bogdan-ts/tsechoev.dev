@@ -1,10 +1,10 @@
 import AxeBuilder from "@axe-core/playwright";
 import { expect, test } from "@playwright/test";
 
-for (const path of ["/", "/simple/", "/simple/travel/"]) {
+for (const path of ["/", "/simple/", "/simple/atlas/"]) {
   test(`accessible static page and matching metadata: ${path}`, async ({ page, baseURL }) => {
     await page.goto(path);
-    if (path === "/simple/travel/") {
+    if (path === "/simple/atlas/") {
       await expect(page.locator("canvas")).toBeVisible();
       await page.getByRole("button", { name: "Pause rotation" }).click();
     }
@@ -22,9 +22,9 @@ test("unavailable Canvas has a readable fallback instead of throwing", async ({ 
   await page.addInitScript(() => {
     HTMLCanvasElement.prototype.getContext = () => null;
   });
-  await page.goto("/simple/travel/");
+  await page.goto("/simple/atlas/");
   await expect(page.getByRole("status")).toHaveText(/Canvas is unavailable/);
-  await expect(page.locator("#travel li")).toHaveCount(19);
+  await expect(page.locator("#atlas li")).toHaveCount(19);
   await expect(page.getByRole("button", { name: "Pause rotation" })).toHaveCount(0);
   expect(errors).toEqual([]);
 });

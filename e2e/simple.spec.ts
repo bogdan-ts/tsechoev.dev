@@ -28,15 +28,15 @@ test("switch versions and read the complete profile without commands", async ({
   await expect(
     page.locator("#whoami").getByRole("heading", { name: "Atlas", exact: true }),
   ).toHaveCount(0);
-  await expect(page.locator("#travel")).toHaveCount(0);
+  await expect(page.locator("#atlas")).toHaveCount(0);
   expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth)).toBe(true);
   await page.screenshot({ path: testInfo.outputPath("simple.png"), fullPage: true });
   await page
     .getByRole("navigation", { name: "Profile sections" })
     .getByRole("link", { name: "Atlas" })
     .click();
-  await expect(page).toHaveURL(/\/simple\/travel\//);
-  await expect(page.locator("#travel li")).toHaveCount(19);
+  await expect(page).toHaveURL(/\/simple\/atlas\//);
+  await expect(page.locator("#atlas li")).toHaveCount(19);
   await expect(page.locator("canvas")).toHaveCount(1);
   await page.reload();
   await expect(page.getByRole("heading", { level: 1, name: "Atlas" })).toBeVisible();
@@ -50,7 +50,7 @@ test("simple profile is statically available without JavaScript", async ({ brows
   const page = await context.newPage();
   await page.goto(`${baseURL}/simple/`);
   await expect(page.getByRole("heading", { name: "Experience", exact: true })).toHaveCount(1);
-  await expect(page.locator("#travel")).toHaveCount(0);
+  await expect(page.locator("#atlas")).toHaveCount(0);
   await expect(page.getByRole("link", { name: /Download CV/ })).toHaveAttribute(
     "href",
     "/bogdan-tsechoev-resume.pdf",
@@ -59,11 +59,21 @@ test("simple profile is statically available without JavaScript", async ({ brows
     .getByRole("navigation", { name: "Profile sections" })
     .getByRole("link", { name: "Atlas" })
     .click();
-  await expect(page.locator("#travel li")).toHaveCount(19);
+  await expect(page.locator("#atlas li")).toHaveCount(19);
   await expect(page.locator("canvas")).toHaveCount(1);
   await page.getByRole("link", { name: "Whoami", exact: true }).click();
   await expect(page.getByRole("heading", { name: "Experience", exact: true })).toHaveCount(1);
   await page.getByRole("link", { name: "Terminal", exact: true }).click();
   await expect(page.getByRole("heading", { level: 1 })).toBeVisible();
+  await context.close();
+});
+
+test("legacy globe URL redirects to Atlas without JavaScript", async ({ browser, baseURL }) => {
+  const context = await browser.newContext({ javaScriptEnabled: false });
+  const page = await context.newPage();
+  await page.goto(`${baseURL}/simple/travel/`);
+  await expect(page).toHaveURL(/\/simple\/atlas\//);
+  await expect(page.getByRole("heading", { level: 1, name: "Atlas" })).toBeVisible();
+  await expect(page.locator("#atlas li")).toHaveCount(19);
   await context.close();
 });

@@ -33,7 +33,7 @@ behavior are preserved. Binary CV/image assets were not rewritten.
   intentionally skipped; the touch scenario runs in the mobile project.
 - axe reports no violations on the three tested pages in both viewport projects.
 - A clean `npm ci` passes. Regenerated geographic masks and their license are
-  byte-identical; evaluated profile/travel data is unchanged.
+  byte-identical; evaluated profile/atlas data is unchanged.
 - Runtime dependency audit reports zero known advisories at review time.
 - Browser automation and automated accessibility checks do not replace testing
   on physical devices or a manual screen-reader audit.

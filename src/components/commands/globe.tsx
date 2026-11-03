@@ -12,9 +12,9 @@ const arrowAxes: Record<string, Vector3 | undefined> = {
   ArrowDown: { x: -1, y: 0, z: 0 },
 };
 
-export type TravelGlobeProps = CommandActionProps & { showHeading?: boolean };
+export type AtlasGlobeProps = CommandActionProps & { showHeading?: boolean };
 
-export function TravelGlobe({ onCommand, showHeading = true }: TravelGlobeProps) {
+export function AtlasGlobe({ onCommand, showHeading = true }: AtlasGlobeProps) {
   const {
     containerRef,
     canvasRef,
@@ -31,7 +31,7 @@ export function TravelGlobe({ onCommand, showHeading = true }: TravelGlobeProps)
 
   return (
     <div className="globe-command" ref={containerRef}>
-      {showHeading && <h2>Travel globe</h2>}
+      {showHeading && <h2>Atlas globe</h2>}
       <figure className="globe-figure">
         {available ? (
           <canvas
@@ -53,7 +53,7 @@ export function TravelGlobe({ onCommand, showHeading = true }: TravelGlobeProps)
               rotateBy(axis, 0.12);
             }}
           >
-            Visited countries and territories are listed by the travel command.
+            Visited countries and territories are listed by the atlas command.
           </canvas>
         ) : (
           <p role="status">
@@ -77,7 +77,7 @@ export function TravelGlobe({ onCommand, showHeading = true }: TravelGlobeProps)
           </button>
         )}
         {onCommand && (
-          <button type="button" onClick={() => onCommand("travel")}>
+          <button type="button" onClick={() => onCommand("atlas")}>
             Show visited places
           </button>
         )}

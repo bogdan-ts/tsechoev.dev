@@ -7,6 +7,8 @@ describe("terminal command contract", () => {
     expect(executeCommand("   ")).toBeNull();
     expect(executeCommand("  WHOAMI ")).toEqual(executeCommand("about"));
     expect(executeCommand("oss")).toEqual(executeCommand("opensource"));
+    expect(executeCommand("travel")).toEqual(executeCommand("atlas"));
+    expect(executeCommand("travel --globe")).toEqual(executeCommand("atlas --globe"));
   });
   it("has a result for every documented command", () => {
     for (const command of commands) expect(executeCommand(command.name)).not.toBeNull();
@@ -24,29 +26,29 @@ describe("terminal command contract", () => {
     });
     expect(executeCommand("clear")).toEqual({ kind: "clear" });
   });
-  it("completes command names and the travel flag", () => {
+  it("completes command names and the atlas flag", () => {
     expect(completeCommand("who")).toEqual(["whoami"]);
     expect(completeCommand("c")).toEqual(["contact", "cv", "clear"]);
     expect(completeCommand("whoami arg")).toEqual([]);
-    expect(completeCommand("travel --g")).toEqual(["travel --globe"]);
+    expect(completeCommand("atlas --g")).toEqual(["atlas --globe"]);
     expect(completeCommand("countries ")).toEqual(["countries --globe"]);
   });
-  it("treats the globe as a travel view, not a separate command", () => {
-    expect(executeCommand("travel --globe")).toEqual({
+  it("treats the globe as a atlas view, not a separate command", () => {
+    expect(executeCommand("atlas --globe")).toEqual({
       kind: "content",
-      command: "travel",
+      command: "atlas",
       view: "globe",
     });
-    expect(executeCommand("countries --globe")).toEqual(executeCommand("travel --globe"));
+    expect(executeCommand("countries --globe")).toEqual(executeCommand("atlas --globe"));
     expect(executeCommand("globe")?.kind).toBe("error");
-    expect(executeCommand("travel --unknown")).toEqual({
+    expect(executeCommand("atlas --unknown")).toEqual({
       kind: "error",
-      message: "Usage: travel [--globe]",
+      message: "Usage: atlas [--globe]",
     });
-    expect(executeCommand("travel --globe --globe")?.kind).toBe("error");
+    expect(executeCommand("atlas --globe --globe")?.kind).toBe("error");
     expect(commands.some((command) => String(command.name) === "globe")).toBe(false);
   });
-  it("uses the supplied CV and travel list", () => {
+  it("uses the supplied CV and atlas list", () => {
     expect(profile.email).toBe("bogdan.tsechoev@gmail.com");
     expect(profile.location).toBe("Manila, Philippines");
     expect(profile.experience[0].period).toBe("Apr 2024 – Feb 2026");

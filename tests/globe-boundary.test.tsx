@@ -14,7 +14,7 @@ it("isolates renderer errors without removing surrounding content", () => {
   }
   render(
     <>
-      <h1>Travel</h1>
+      <h1>Atlas</h1>
       <GlobeBoundary>
         <BrokenGlobe />
       </GlobeBoundary>

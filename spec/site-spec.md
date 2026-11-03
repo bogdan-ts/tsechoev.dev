@@ -12,8 +12,8 @@ contact/CV links. Show detailed `whoami` output only when requested.
 Use the November 2026 supplied CV: Senior Full-Stack Engineer, Manila, Philippines,
 open to any time zone, bogdan.tsechoev@gmail.com. Postgres.ai ended February 2026.
 Do not infer current employment or hiring availability. Open source links to the
-two CV repositories with contribution context, not invented PRs or counts. Travel
-uses the 19 entries in Bogdan's supplied travel screenshots, including Hong Kong
+two CV repositories with contribution context, not invented PRs or counts. Atlas
+uses the 19 entries in Bogdan's supplied atlas screenshots, including Hong Kong
 and Macau as separate territories. Render one alphabetical list of names, without
 regional groups, cities, notes or visit statistics. Replace the PDF.
 
@@ -27,10 +27,10 @@ regional groups, cities, notes or visit statistics. Replace the PDF.
 - `education`: both degrees.
 - `contact`: email, GitHub, LinkedIn; no automatic navigation.
 - `cv` / `resume`: download link to the new PDF.
-- `travel` / `countries`: supplied countries and territories in one list.
-- `travel --globe` / `countries --globe`: rotating ASCII Earth with visited areas filled.
-  `globe` is not a standalone command. Reject unknown or repeated travel flags
-  with `Usage: travel [--globe]`; Tab completes the travel flag.
+- `atlas` / `countries`: supplied countries and territories in one list.
+- `atlas --globe` / `countries --globe`: rotating ASCII Earth with visited areas filled.
+  `globe` is not a standalone command. Reject unknown or repeated atlas flags
+  with `Usage: atlas [--globe]`; Tab completes the atlas flag.
 - `history`: session commands including itself.
 - `clear`: clear output, retain history.
 - `theme [dark|light]`: toggle or select theme.
@@ -80,8 +80,8 @@ Review all site copy with stop-slop; preserve CV facts and numerical claims.
 Render an orthographic sphere using bundled Natural Earth masks, not random
 characters or network maps. Fill visited country/territory polygons in the accent
 colour; leave other land neutral. Do not use point markers or enlarge small
-territories. Derive the visited mask from the same 19 travel entries. The raster
-and ASCII resolutions limit small-border detail. Link to `travel` for names.
+territories. Derive the visited mask from the same 19 atlas entries. The raster
+and ASCII resolutions limit small-border detail. Link to `atlas` for names.
 Start facing Asia.
 
 Use responsive character dimensions, retaining a circular appearance and no
@@ -106,7 +106,7 @@ per resolution so animation frames only rotate and sample the geographic masks.
 # Simple version
 
 - Header links between Terminal (`/`) and Simple (`/simple/`), identifying the current version.
-- Simple is statically rendered, usable without JavaScript, with Whoami (`/simple/`) and Atlas (`/simple/travel/`) on separate pages.
+- Simple is statically rendered, usable without JavaScript, with Whoami (`/simple/`) and Atlas (`/simple/atlas/`) on separate pages.
 - Whoami includes description, experience, skills, open source, education, contact and CV, shared with the terminal command.
 - Atlas stays separate, with 19 places, no cities or regions, and an automatically displayed globe above the list.
 - Preserve terminal keyboard and scrollback behavior; both versions fit mobile widths.
@@ -150,4 +150,4 @@ per resolution so animation frames only rotate and sample the geographic masks.
 
 ## Atlas page naming
 
-The simple-mode globe page is named Atlas in navigation, its heading and metadata. Keep `/simple/travel/` and terminal `travel` commands unchanged.
+The simple-mode globe page is named Atlas in navigation, its heading and metadata. The canonical URL is `/simple/atlas/` and the primary terminal command is `atlas [--globe]`. Keep legacy `/simple/travel/` as an immediate static redirect and `travel` as an undocumented compatibility alias; `countries` also remains an alias. Only the canonical route belongs in the sitemap.

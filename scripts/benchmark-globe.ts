@@ -5,7 +5,7 @@ try {
   const page = await browser.newPage({ viewport: { width: 1280, height: 720 } });
   await page.goto(process.argv[2] ?? "http://127.0.0.1:3000/");
   const input = page.getByRole("textbox");
-  await input.fill("travel --globe");
+  await input.fill("atlas --globe");
   await input.press("Enter");
   const globe = page.locator(".globe-command");
   await globe.waitFor();

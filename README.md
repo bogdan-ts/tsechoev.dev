@@ -35,7 +35,7 @@ and [code review](docs/code-review.md).
 ## Commands and controls
 
 `whoami`, `experience`, `skills`, `opensource`, `education`, `contact`, `cv`,
-`travel [--globe]`, `help`, `history`, `clear`, `theme [dark|light]`, `pwd`.
+`atlas [--globe]`, `help`, `history`, `clear`, `theme [dark|light]`, `pwd`.
 
 Aliases: `about`, `oss`, `resume`, `countries`, `ls`.
 
@@ -69,20 +69,20 @@ through `next/font/local`, with local WOFF2 files and no Google Fonts requests.
 - `public/bogdan-tsechoev-resume.pdf`: supplied CV.
 - `public/og.svg`: editable social-image source; `public/og.png` is the shared asset.
 
-Travel entries use `{ name, code }` in `countries`, ordered alphabetically.
-The 19 entries come from Bogdan's travel screenshots; the output has no regional
+Atlas entries use `{ name, code }` in `countries`, ordered alphabetically.
+The 19 entries come from Bogdan's atlas screenshots; the output has no regional
 groups, cities or visit statistics. No entries are inferred from residence or
 employment. Open-source entries link to the CV's two
 repositories, not fabricated individual PRs or live contribution counts.
 
 ## ASCII globe
 
-`travel --globe` renders a rotating ASCII sphere with visited country/territory
+`atlas --globe` renders a rotating ASCII sphere with visited country/territory
 polygons filled in green. `countries --globe` works through the existing alias;
-`travel` without a flag shows the list. There is no standalone `globe` command.
+`atlas` without a flag shows the list. There is no standalone `globe` command.
 Small territories can be below the raster or ASCII resolution; no point markers
 or enlarged borders stand in for them. The view has pause/resume and a link to
-the full `travel` list. The renderer and masks use ordinary imports; there is no dynamic globe loader.
+the full `atlas` list. The renderer and masks use ordinary imports; there is no dynamic globe loader.
 Canvas draws cached glyph sprites without per-frame React/DOM changes.
 Drag in any direction or use all four arrow keys to position the sphere; release
 adds decaying multi-axis inertia. The quaternion trackball supports pole crossings
@@ -105,7 +105,7 @@ and visited polygon mask total about 54 KB; geometry tools are development-only.
 No map service, external request or backend is needed at runtime. Attribution and
 the redistribution license ship in `public/world-atlas-license.txt`.
 
-After changing the travel list, regenerate geometry with Node.js 22.18+:
+After changing the atlas list, regenerate geometry with Node.js 22.18+:
 
 ```sh
 npm run generate:globe
@@ -147,3 +147,6 @@ seconds of active animation, with another quiet interval after it ends. Directio
 angle, tint and front/back depth vary; the sphere fully occludes background
 sparks. Comets share the existing pause, reduced-motion and visibility lifecycle.
 There are no comet timers or additional network assets.
+
+The canonical globe page is `/simple/atlas/`. The old `/simple/travel/` URL
+redirects there without JavaScript; `travel` remains a compatibility command alias.

@@ -9,9 +9,9 @@ export const commands = [
   { name: "contact", description: "Email, GitHub and LinkedIn", aliases: [] },
   { name: "cv", description: "Download CV (PDF)", aliases: ["resume"] },
   {
-    name: "travel",
+    name: "atlas",
     description: "Visited places; --globe for ASCII Earth",
-    aliases: ["countries"],
+    aliases: ["countries", "travel"],
   },
   { name: "help", description: "List commands", aliases: ["ls"] },
   { name: "history", description: "Command history", aliases: [] },
@@ -23,8 +23,8 @@ export const commands = [
 type CommandName = (typeof commands)[number]["name"];
 export type ContentCommand = Exclude<CommandName, "history" | "clear" | "theme" | "pwd">;
 export type CommandResult =
-  | { kind: "content"; command: Exclude<ContentCommand, "travel"> }
-  | { kind: "content"; command: "travel"; view?: "globe" }
+  | { kind: "content"; command: Exclude<ContentCommand, "atlas"> }
+  | { kind: "content"; command: "atlas"; view?: "globe" }
   | { kind: "error"; message: string }
   | { kind: "history"; entries: string[] }
   | { kind: "clear" }
@@ -43,11 +43,11 @@ export function executeCommand(input: string, history: string[] = []): CommandRe
       kind: "error",
       message: `Command not found: ${input.trim()}. Type help for commands.`,
     };
-  if (command.name === "travel") {
-    if (!args.length) return { kind: "content", command: "travel" };
+  if (command.name === "atlas") {
+    if (!args.length) return { kind: "content", command: "atlas" };
     if (args.length === 1 && args[0] === "--globe")
-      return { kind: "content", command: "travel", view: "globe" };
-    return { kind: "error", message: "Usage: travel [--globe]" };
+      return { kind: "content", command: "atlas", view: "globe" };
+    return { kind: "error", message: "Usage: atlas [--globe]" };
   }
   if (command.name === "theme") {
     const theme = args[0];
@@ -69,7 +69,7 @@ export function executeCommand(input: string, history: string[] = []): CommandRe
 export function completeCommand(input: string): string[] {
   if (!input) return [];
   if (/\s/.test(input)) {
-    return ["travel --globe", "countries --globe"].filter((command) =>
+    return ["atlas --globe", "countries --globe", "travel --globe"].filter((command) =>
       command.startsWith(input.toLowerCase()),
     );
   }

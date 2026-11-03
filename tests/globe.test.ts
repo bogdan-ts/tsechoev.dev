@@ -6,7 +6,7 @@ import { countries } from "../src/lib/profile";
 import { surfaceBrightness } from "../src/lib/globe-lighting";
 
 describe("ASCII globe geography", () => {
-  it("generates visited polygons for the supplied travel entries", () => {
+  it("generates visited polygons for the supplied atlas entries", () => {
     expect([...visited.codes].sort()).toEqual(countries.map((country) => country.code).sort());
   });
   it("colours visited interiors without marking unvisited land or ocean", () => {

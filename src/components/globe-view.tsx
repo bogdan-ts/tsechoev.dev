@@ -1,11 +1,11 @@
-import { TravelGlobe } from "./commands/globe";
+import { AtlasGlobe } from "./commands/globe";
 import { GlobeBoundary } from "./globe-boundary";
-import type { TravelGlobeProps } from "./commands/globe";
+import type { AtlasGlobeProps } from "./commands/globe";
 
-export function GlobeView(props: TravelGlobeProps) {
+export function GlobeView(props: AtlasGlobeProps) {
   return (
     <GlobeBoundary>
-      <TravelGlobe {...props} />
+      <AtlasGlobe {...props} />
     </GlobeBoundary>
   );
 }

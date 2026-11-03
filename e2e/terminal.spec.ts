@@ -70,11 +70,11 @@ test("portfolio discovery, command execution and keyboard controls", async ({ pa
     await page.locator(".terminal-screen").evaluate((element) => element.scrollTop),
   ).toBeGreaterThan(0);
   await page.screenshot({ path: testInfo.outputPath("light-output.png"), fullPage: true });
-  await input.fill("travel");
+  await input.fill("atlas");
   await input.press("Enter");
-  const travelOutput = page.locator(".command-output").last();
-  await expect(travelOutput.getByRole("listitem")).toHaveCount(19);
-  await expect(travelOutput.getByRole("heading", { name: "Travel", exact: true })).toBeVisible();
+  const atlasOutput = page.locator(".command-output").last();
+  await expect(atlasOutput.getByRole("listitem")).toHaveCount(19);
+  await expect(atlasOutput.getByRole("heading", { name: "Atlas", exact: true })).toBeVisible();
   await input.fill("clear");
   await input.press("Enter");
   await expect(page.getByRole("heading", { level: 1 })).toHaveCount(0);

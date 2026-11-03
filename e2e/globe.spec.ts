@@ -3,7 +3,7 @@ import { expect, test } from "@playwright/test";
 test("ASCII globe animates, pauses and fits the terminal", async ({ page }, testInfo) => {
   await page.goto("/");
   const input = page.getByRole("textbox");
-  await input.fill("travel --globe");
+  await input.fill("atlas --globe");
   await input.press("Enter");
   const globe = page.locator(".globe-command");
   const frame = globe.locator("canvas");
@@ -52,7 +52,7 @@ test("reduced motion keeps the globe static", async ({ page }) => {
   await page.emulateMedia({ reducedMotion: "reduce" });
   await page.goto("/");
   const input = page.getByRole("textbox");
-  await input.fill("travel --globe");
+  await input.fill("atlas --globe");
   await input.press("Enter");
   const globe = page.locator(".globe-command");
   await expect(globe.getByText("Rotation off: reduced motion.")).toBeVisible();
@@ -65,7 +65,7 @@ test("reduced motion keeps the globe static", async ({ page }) => {
   ).toBe(frame);
 });
 
-test("travel loads the globe automatically and supports pointer dragging", async ({ page }) => {
+test("atlas loads the globe automatically and supports pointer dragging", async ({ page }) => {
   await page.goto("/simple/");
   await page.waitForLoadState("networkidle");
   await expect(page.locator("canvas")).toHaveCount(0);
@@ -90,7 +90,7 @@ test("travel loads the globe automatically and supports pointer dragging", async
 test("globe controls keep focus and repaint correctly after a theme change", async ({ page }) => {
   await page.goto("/");
   const input = page.getByRole("textbox");
-  await input.fill("travel --globe");
+  await input.fill("atlas --globe");
   await input.press("Enter");
   const canvas = page.locator("canvas");
   await expect(canvas).toBeVisible();
@@ -117,7 +117,7 @@ test("touch dragging works with reduced motion without starting inertia", async 
     "Touch interaction is exercised in the mobile project.",
   );
   await page.emulateMedia({ reducedMotion: "reduce" });
-  await page.goto("/simple/travel/");
+  await page.goto("/simple/atlas/");
   const canvas = page.locator("canvas");
   await expect(canvas).toBeVisible();
   await expect(page.getByText("Rotation off: reduced motion.")).toBeVisible();
@@ -140,7 +140,7 @@ test("touch dragging works with reduced motion without starting inertia", async 
 });
 
 test("vertical arrow keys and vertical dragging rotate a paused globe", async ({ page }) => {
-  await page.goto("/simple/travel/");
+  await page.goto("/simple/atlas/");
   const canvas = page.locator("canvas");
   await expect(canvas).toBeVisible();
   await page.getByRole("button", { name: "Pause rotation" }).click();

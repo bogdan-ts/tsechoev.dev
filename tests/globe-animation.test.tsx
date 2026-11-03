@@ -5,7 +5,7 @@ const paintGlobe = vi.fn<GlobeRenderer["draw"]>();
 
 vi.mock("../src/lib/globe-canvas", () => ({ createGlobeRenderer: vi.fn() }));
 
-import { TravelGlobe } from "../src/components/commands/globe";
+import { AtlasGlobe } from "../src/components/commands/globe";
 
 beforeEach(() => {
   paintGlobe.mockClear();
@@ -32,7 +32,7 @@ afterEach(() => {
 
 describe("globe animation lifecycle", () => {
   it("rotates, pauses, resumes and releases timers when cleared", () => {
-    const { unmount } = render(<TravelGlobe />);
+    const { unmount } = render(<AtlasGlobe />);
     const frame = () => vi.mocked(paintGlobe).mock.calls.at(-1)?.[1];
     const initial = frame();
     act(() => vi.advanceTimersByTime(500));
@@ -54,7 +54,7 @@ describe("globe animation lifecycle", () => {
       addEventListener: vi.fn(),
       removeEventListener: vi.fn(),
     }));
-    render(<TravelGlobe />);
+    render(<AtlasGlobe />);
     const draws = vi.mocked(paintGlobe).mock.calls.length;
     act(() => vi.advanceTimersByTime(3000));
     expect(vi.mocked(paintGlobe).mock.calls.length).toBe(draws);
@@ -76,7 +76,7 @@ describe("globe animation lifecycle", () => {
         disconnect() {}
       },
     );
-    render(<TravelGlobe />);
+    render(<AtlasGlobe />);
     expect(vi.getTimerCount()).toBe(0);
     act(() =>
       notify([{ isIntersecting: true } as IntersectionObserverEntry], {} as IntersectionObserver),
@@ -101,7 +101,7 @@ describe("globe animation lifecycle", () => {
       return ++sequence;
     });
     vi.stubGlobal("cancelAnimationFrame", vi.fn());
-    render(<TravelGlobe />);
+    render(<AtlasGlobe />);
     const start = performance.now();
     vi.mocked(paintGlobe).mockClear();
     for (let i = 1; i <= 12; i++) act(() => frame(start + (i * 1000) / 120));
