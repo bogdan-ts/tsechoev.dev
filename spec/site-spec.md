@@ -105,7 +105,7 @@ per resolution so animation frames only rotate and sample the geographic masks.
 # Simple version
 
 - Header links between Terminal (`/`) and Simple (`/simple/`), identifying the current version.
-- Simple is statically rendered, usable without JavaScript, with Whoami and Travel anchors.
+- Simple is statically rendered, usable without JavaScript, with Whoami (`/simple/`) and Travel (`/simple/travel/`) on separate pages.
 - Whoami includes description, experience, skills, open source, education, contact and CV, shared with the terminal command.
 - Travel stays separate, with 19 places, no cities or regions, and an optional expandable globe.
 - Preserve terminal keyboard and scrollback behavior; both versions fit mobile widths.
