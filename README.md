@@ -33,7 +33,7 @@ JavaScript enables command execution; CV and email links also work without it.
 ## Commands and controls
 
 `whoami`, `experience`, `skills`, `opensource`, `education`, `contact`, `cv`,
-`travel`, `globe`, `help`, `history`, `clear`, `theme [dark|light]`, `pwd`.
+`travel [--globe]`, `help`, `history`, `clear`, `theme [dark|light]`, `pwd`.
 
 Aliases: `about`, `oss`, `resume`, `countries`, `ls`.
 
@@ -75,15 +75,18 @@ repositories, not fabricated individual PRs or live contribution counts.
 
 ## ASCII globe
 
-`globe` renders a rotating ASCII sphere with star markers for the same 19 travel
-entries. Positions use approximate geographic centres, not city visits or borders.
-Hover a star for its place names; nearby places can share a character cell.
-The command has pause/resume and a link to the full `travel` list. Rotation stops
+`travel --globe` renders a rotating ASCII sphere with visited country/territory
+polygons filled in green. `countries --globe` works through the existing alias;
+`travel` without a flag shows the list. There is no standalone `globe` command.
+Small territories can be below the raster or ASCII resolution; no point markers
+or enlarged borders stand in for them. The view has pause/resume and a link to
+the full `travel` list. Rotation follows requestAnimationFrame with elapsed-time
+angular movement, so speed does not depend on refresh rate. Rotation stops
 for reduced motion, offscreen output, hidden tabs and unmounted history entries.
 
 Geography comes from [Natural Earth](https://www.naturalearthdata.com/), distributed
 by [world-atlas](https://github.com/topojson/world-atlas). The checked-in land mask
-and reference points total about 12 KB; geometry tools are development-only.
+and visited polygon mask total about 54 KB; geometry tools are development-only.
 No map service, external request or backend is needed at runtime. Attribution and
 the redistribution license ship in `public/world-atlas-license.txt`.
 
@@ -93,8 +96,8 @@ After changing the travel list, regenerate geometry with Node.js 22.18+:
 npm run generate:globe
 ```
 
-`scripts/generate-globe-data.ts` samples land outlines and derives centres from
-the matching country shapes. Projection and ASCII rendering live in
+`scripts/generate-globe-data.ts` samples land outlines and fills the selected
+country shapes. Projection and ASCII rendering live in
 `src/lib/globe.ts`; animation lifecycle lives in `src/hooks/use-globe.ts`.
 
 ## Deployment

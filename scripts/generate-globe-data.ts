@@ -1,5 +1,5 @@
 import { copyFileSync, mkdirSync, readFileSync, writeFileSync } from "node:fs";
-import { geoCentroid, geoContains } from "d3-geo";
+import { geoBounds, geoContains } from "d3-geo";
 import { feature } from "topojson-client";
 import type { GeometryCollection, Topology } from "topojson-specification";
 import { countries } from "../src/lib/profile.ts";
@@ -26,18 +26,38 @@ for (let row = 0; row < height; row += 1) {
   }
 }
 
-const locations = Object.fromEntries(countries.map(({ code, name }) => {
+const visitedWidth = 720;
+const visitedHeight = 360;
+const visitedBits = Buffer.alloc(Math.ceil(visitedWidth * visitedHeight / 8));
+
+for (const { name } of countries) {
   const atlasName = name === "Macau" ? "Macao" : name;
   const shape = shapes.find(shape => shape.properties?.name === atlasName);
   if (!shape) throw new Error(`Missing geography for ${name}`);
-  const [longitude, latitude] = geoCentroid(shape);
-  if (!Number.isFinite(latitude) || !Number.isFinite(longitude)) throw new Error(`Invalid coordinates for ${name}`);
-  return [code, { latitude: Number(latitude.toFixed(3)), longitude: Number(longitude.toFixed(3)) }];
-}));
+  const [[west, south], [east, north]] = geoBounds(shape);
+  for (let row = 0; row < visitedHeight; row += 1) {
+    const latitude = 90 - (row + 0.5) / visitedHeight * 180;
+    if (latitude < south || latitude > north) continue;
+    for (let column = 0; column < visitedWidth; column += 1) {
+      const longitude = (column + 0.5) / visitedWidth * 360 - 180;
+      const withinLongitude = west <= east
+        ? longitude >= west && longitude <= east
+        : longitude >= west || longitude <= east;
+      if (!withinLongitude) continue;
+      const index = row * visitedWidth + column;
+      if (geoContains(shape, [longitude, latitude])) visitedBits[index >> 3] |= 1 << (index & 7);
+    }
+  }
+}
 
 const dataPath = new URL("../src/lib/data/", import.meta.url);
 mkdirSync(dataPath, { recursive: true });
 writeFileSync(new URL("globe-land.json", dataPath), JSON.stringify({ width, height, data: bits.toString("base64") }) + "\n");
-writeFileSync(new URL("globe-locations.json", dataPath), JSON.stringify(locations, null, 2) + "\n");
+writeFileSync(new URL("globe-visited.json", dataPath), JSON.stringify({
+  width: visitedWidth,
+  height: visitedHeight,
+  data: visitedBits.toString("base64"),
+  codes: countries.map(country => country.code),
+}) + "\n");
 copyFileSync(new URL("LICENSE", atlasPath), new URL("../public/world-atlas-license.txt", import.meta.url));
-console.log(`Generated ${width}x${height} land mask and ${countries.length} reference points.`);
+console.log(`Generated land mask and visited polygon mask for ${countries.length} places.`);

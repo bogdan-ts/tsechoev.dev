@@ -7,12 +7,13 @@ import { CvCommand } from "./commands/cv";
 import { EducationCommand } from "./commands/education";
 import { ExperienceCommand } from "./commands/experience";
 import { HelpCommand } from "./commands/help";
-import { GlobeCommand } from "./commands/globe";
 import { OpenSourceCommand } from "./commands/opensource";
 import { SkillsCommand } from "./commands/skills";
 import { TravelCommand } from "./commands/travel";
 
-const commandViews = {
+type ContentViewProps = CommandActionProps & { view?: "globe" };
+
+const commandViews: Record<ContentCommand, ComponentType<ContentViewProps>> = {
   whoami: AboutCommand,
   experience: ExperienceCommand,
   skills: SkillsCommand,
@@ -21,9 +22,8 @@ const commandViews = {
   contact: ContactCommand,
   cv: CvCommand,
   travel: TravelCommand,
-  globe: GlobeCommand,
   help: HelpCommand,
-} satisfies Record<ContentCommand, ComponentType<CommandActionProps>>;
+};
 
 type OutputProps = CommandActionProps & { result: CommandResult };
 
@@ -31,7 +31,7 @@ export function Output({ result, onCommand }: OutputProps) {
   switch (result.kind) {
     case "content": {
       const CommandView = commandViews[result.command];
-      return <CommandView onCommand={onCommand} />;
+      return <CommandView onCommand={onCommand} view={result.command === "travel" ? result.view : undefined} />;
     }
     case "error":
       return <p className="error">{result.message}</p>;

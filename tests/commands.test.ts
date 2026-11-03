@@ -21,10 +21,20 @@ describe("terminal command contract", () => {
     expect(executeCommand("history", ["whoami", "history"])).toEqual({ kind: "history", entries: ["whoami", "history"] });
     expect(executeCommand("clear")).toEqual({ kind: "clear" });
   });
-  it("completes command names only", () => {
+  it("completes command names and the travel flag", () => {
     expect(completeCommand("who")).toEqual(["whoami"]);
     expect(completeCommand("c")).toEqual(["contact", "cv", "clear"]);
     expect(completeCommand("whoami arg")).toEqual([]);
+    expect(completeCommand("travel --g")).toEqual(["travel --globe"]);
+    expect(completeCommand("countries ")).toEqual(["countries --globe"]);
+  });
+  it("treats the globe as a travel view, not a separate command", () => {
+    expect(executeCommand("travel --globe")).toEqual({ kind: "content", command: "travel", view: "globe" });
+    expect(executeCommand("countries --globe")).toEqual(executeCommand("travel --globe"));
+    expect(executeCommand("globe")?.kind).toBe("error");
+    expect(executeCommand("travel --unknown")).toEqual({ kind: "error", message: "Usage: travel [--globe]" });
+    expect(executeCommand("travel --globe --globe")?.kind).toBe("error");
+    expect(commands.some(command => String(command.name) === "globe")).toBe(false);
   });
   it("uses the supplied CV and travel list", () => {
     expect(profile.email).toBe("bogdan.tsechoev@gmail.com");

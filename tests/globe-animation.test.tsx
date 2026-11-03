@@ -1,7 +1,7 @@
 import React from "react";
 import { act, cleanup, fireEvent, render, screen } from "@testing-library/react";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
-import { GlobeCommand } from "../src/components/commands/globe";
+import { TravelGlobe } from "../src/components/commands/globe";
 
 beforeEach(() => {
   vi.useFakeTimers();
@@ -18,7 +18,7 @@ afterEach(() => {
 
 describe("globe animation lifecycle", () => {
   it("rotates, pauses, resumes and releases timers when cleared", () => {
-    const { container, unmount } = render(<GlobeCommand />);
+    const { container, unmount } = render(<TravelGlobe />);
     const frame = () => container.querySelector("pre")!.textContent;
     const initial = frame();
     act(() => vi.advanceTimersByTime(500));
@@ -36,7 +36,7 @@ describe("globe animation lifecycle", () => {
 
   it("does not animate for reduced-motion users", () => {
     vi.stubGlobal("matchMedia", () => ({ matches: true, addEventListener: vi.fn(), removeEventListener: vi.fn() }));
-    const { container } = render(<GlobeCommand />);
+    const { container } = render(<TravelGlobe />);
     const initial = container.querySelector("pre")!.textContent;
     act(() => vi.advanceTimersByTime(3000));
     expect(container.querySelector("pre")!.textContent).toBe(initial);
@@ -51,7 +51,7 @@ describe("globe animation lifecycle", () => {
       observe() {}
       disconnect() {}
     });
-    render(<GlobeCommand />);
+    render(<TravelGlobe />);
     expect(vi.getTimerCount()).toBe(0);
     act(() => notify([{ isIntersecting: true } as IntersectionObserverEntry], {} as IntersectionObserver));
     expect(vi.getTimerCount()).toBe(1);

@@ -3,7 +3,7 @@ import { expect, test } from "@playwright/test";
 test("ASCII globe animates, pauses and fits the terminal", async ({ page }, testInfo) => {
   await page.goto("/");
   const input = page.getByRole("textbox");
-  await input.fill("globe");
+  await input.fill("travel --globe");
   await input.press("Enter");
   const globe = page.locator(".globe-command");
   const frame = globe.locator("pre");
@@ -29,7 +29,7 @@ test("reduced motion keeps the globe static", async ({ page }) => {
   await page.emulateMedia({ reducedMotion: "reduce" });
   await page.goto("/");
   const input = page.getByRole("textbox");
-  await input.fill("globe");
+  await input.fill("travel --globe");
   await input.press("Enter");
   const globe = page.locator(".globe-command");
   await expect(globe.getByText("Rotation off: reduced motion.")).toBeVisible();

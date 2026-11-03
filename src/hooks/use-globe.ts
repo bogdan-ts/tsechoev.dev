@@ -50,8 +50,16 @@ export function useGlobe() {
 
   useEffect(() => {
     if (paused || reducedMotion || !visible || !documentVisible) return;
-    const timer = window.setInterval(() => setRotation(angle => (angle + 0.025) % (Math.PI * 2)), 100);
-    return () => window.clearInterval(timer);
+    let previousTime = performance.now();
+    let animationFrame: number;
+    const tick = (time: number) => {
+      const elapsed = Math.min(time - previousTime, 100);
+      previousTime = time;
+      setRotation(angle => (angle + elapsed * 0.00018) % (Math.PI * 2));
+      animationFrame = window.requestAnimationFrame(tick);
+    };
+    animationFrame = window.requestAnimationFrame(tick);
+    return () => window.cancelAnimationFrame(animationFrame);
   }, [paused, reducedMotion, visible, documentVisible]);
 
   return { containerRef, columns, rotation, paused, reducedMotion, togglePause: () => setPaused(current => !current) };

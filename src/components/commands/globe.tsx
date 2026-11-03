@@ -4,26 +4,26 @@ import { useGlobe } from "../../hooks/use-globe";
 import { renderGlobe } from "../../lib/globe";
 import type { CommandActionProps } from "../command-list";
 
-export function GlobeCommand({ onCommand }: CommandActionProps) {
+export function TravelGlobe({ onCommand }: CommandActionProps) {
   const globe = useGlobe();
   const frame = renderGlobe(globe.columns, globe.columns / 2, globe.rotation);
 
   return (
     <div className="globe-command" ref={globe.containerRef}>
-      <h2>Globe</h2>
+      <h2>Travel globe</h2>
       <figure className="globe-figure">
         <pre className="globe-ascii" aria-hidden="true">
           {frame.rows.map((row, rowIndex) => (
             <span key={rowIndex}>
               {row.map((run, runIndex) => (
-                <span className={`globe-${run.kind}`} title={run.label} key={runIndex}>{run.text}</span>
+                <span className={`globe-${run.kind}`} key={runIndex}>{run.text}</span>
               ))}
               {rowIndex < frame.rows.length - 1 ? "\n" : null}
             </span>
           ))}
         </pre>
         <figcaption className="muted small">
-          <span className="accent">*</span> Visited place (approximate position).
+          <span className="accent">Green</span>: visited countries and territories.
         </figcaption>
       </figure>
       <div className="globe-controls">

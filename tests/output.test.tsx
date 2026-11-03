@@ -16,7 +16,7 @@ describe("portfolio content commands", () => {
     ["contact", "Contact"],
     ["cv", "CV"],
     ["travel", "Travel"],
-    ["globe", "Globe"],
+    ["travel --globe", "Travel globe"],
     ["help", "Commands"],
   ])("renders the %s view", (command, heading) => {
     const result = executeCommand(command);

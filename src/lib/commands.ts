@@ -6,8 +6,7 @@ export const commands = [
   { name: "education", description: "Degrees and university", aliases: [] },
   { name: "contact", description: "Email, GitHub and LinkedIn", aliases: [] },
   { name: "cv", description: "Download CV (PDF)", aliases: ["resume"] },
-  { name: "travel", description: "Countries and territories I’ve visited", aliases: ["countries"] },
-  { name: "globe", description: "Rotating ASCII globe with visited places", aliases: [] },
+  { name: "travel", description: "Visited places; --globe for ASCII Earth", aliases: ["countries"] },
   { name: "help", description: "List commands", aliases: ["ls"] },
   { name: "history", description: "Command history", aliases: [] },
   { name: "clear", description: "Clear the screen", aliases: [] },
@@ -15,9 +14,10 @@ export const commands = [
   { name: "pwd", description: "Print the current directory", aliases: [] },
 ] as const;
 
-export type ContentCommand = "whoami" | "experience" | "skills" | "opensource" | "education" | "contact" | "cv" | "travel" | "globe" | "help";
+export type ContentCommand = "whoami" | "experience" | "skills" | "opensource" | "education" | "contact" | "cv" | "travel" | "help";
 export type CommandResult =
-  | { kind: "content"; command: ContentCommand }
+  | { kind: "content"; command: Exclude<ContentCommand, "travel"> }
+  | { kind: "content"; command: "travel"; view?: "globe" }
   | { kind: "error"; message: string }
   | { kind: "history"; entries: string[] }
   | { kind: "clear" }
@@ -30,6 +30,11 @@ export function executeCommand(input: string, history: string[] = []): CommandRe
   const [name, ...args] = normalized.split(/\s+/);
   const command = commands.find((entry) => entry.name === name || (entry.aliases as readonly string[]).includes(name));
   if (!command) return { kind: "error", message: `Command not found: ${input.trim()}. Type help for commands.` };
+  if (command.name === "travel") {
+    if (!args.length) return { kind: "content", command: "travel" };
+    if (args.length === 1 && args[0] === "--globe") return { kind: "content", command: "travel", view: "globe" };
+    return { kind: "error", message: "Usage: travel [--globe]" };
+  }
   if (command.name === "theme") {
     if (args.length > 1 || (args.length === 1 && args[0] !== "dark" && args[0] !== "light")) return { kind: "error", message: "Usage: theme [dark|light]" };
     return args.length ? { kind: "theme", theme: args[0] as "dark" | "light" } : { kind: "theme" };
@@ -42,6 +47,9 @@ export function executeCommand(input: string, history: string[] = []): CommandRe
 }
 
 export function completeCommand(input: string): string[] {
-  if (!input || /\s/.test(input)) return [];
+  if (!input) return [];
+  if (/\s/.test(input)) {
+    return ["travel --globe", "countries --globe"].filter(command => command.startsWith(input.toLowerCase()));
+  }
   return commands.map((entry) => entry.name).filter((name) => name.startsWith(input.toLowerCase()));
 }
