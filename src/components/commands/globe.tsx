@@ -12,7 +12,9 @@ const arrowAxes: Record<string, Vector3 | undefined> = {
   ArrowDown: { x: -1, y: 0, z: 0 },
 };
 
-export function TravelGlobe({ onCommand }: CommandActionProps) {
+export type TravelGlobeProps = CommandActionProps & { showHeading?: boolean };
+
+export function TravelGlobe({ onCommand, showHeading = true }: TravelGlobeProps) {
   const {
     containerRef,
     canvasRef,
@@ -29,7 +31,7 @@ export function TravelGlobe({ onCommand }: CommandActionProps) {
 
   return (
     <div className="globe-command" ref={containerRef}>
-      <h2>Travel globe</h2>
+      {showHeading && <h2>Travel globe</h2>}
       <figure className="globe-figure">
         {available ? (
           <canvas

@@ -2,10 +2,14 @@ import type { Metadata } from "next";
 
 export const SITE_URL = "https://tsechoev.dev";
 export const SITE_TITLE = "Bogdan Tsechoev | Senior Full-Stack Engineer";
-const description =
+const defaultDescription =
   "Full-stack engineer with 7+ years in SaaS, AI, e-commerce and mobile apps. Work experience, technical skills, open-source contributions and CV.";
 
-export function siteMetadata(title = SITE_TITLE, path = "/"): Metadata {
+export function siteMetadata(
+  title = SITE_TITLE,
+  path = "/",
+  description = defaultDescription,
+): Metadata {
   const url = new URL(path, SITE_URL).href;
   return {
     title,
