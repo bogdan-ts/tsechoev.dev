@@ -183,7 +183,7 @@ export const profile = {
     { label: "GitHub", href: "https://github.com/bogdan-ts", text: "github.com/bogdan-ts" },
     {
       label: "LinkedIn",
-      href: "https://www.linkedin.com/in/bogdan-tsechoev-b7b81b182",
+      href: "https://www.linkedin.com/in/bogdan-tsechoev/",
       text: "bogdan-tsechoev-b7b81b182",
     },
   ],
