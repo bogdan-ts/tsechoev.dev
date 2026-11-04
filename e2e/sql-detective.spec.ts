@@ -15,6 +15,10 @@ test("complete a real local PostgreSQL case from static export", async ({ page }
   const run = page.getByRole("button", { name: "Run & explain", exact: true });
   await expect(run).toBeEnabled({ timeout: 60000 });
   await run.click();
+  await expect(page.getByRole("radio", { name: /Customer \+ latest orders/ })).toBeHidden();
+  await page
+    .getByRole("button", { name: "Inspect measurements and attempts", exact: true })
+    .click({ timeout: 20000 });
   await expect(page.getByText("Execution time (median of three):", { exact: false })).toBeVisible({
     timeout: 20000,
   });
@@ -23,6 +27,7 @@ test("complete a real local PostgreSQL case from static export", async ({ page }
   ).toBeVisible();
   await page.locator(".detective-pipeline").getByRole("button", { name: /Sort/ }).click();
   await expect(page.locator(".detective-stage-detail")).toContainText("Rows passed to sort");
+  await page.getByRole("button", { name: "Choose your next index", exact: true }).click();
   const card = page.getByRole("radio", { name: /Customer \+ latest orders/ });
   if (testInfo.project.name === "desktop") {
     await card.locator("..").evaluate((element) => element.scrollIntoView({ block: "center" }));
@@ -42,6 +47,9 @@ test("complete a real local PostgreSQL case from static export", async ({ page }
   await expect(
     page.locator(".detective-pipeline").getByRole("button", { name: /Sort/ }),
   ).toHaveCount(0);
+  await page
+    .getByRole("button", { name: "Inspect measurements and attempts", exact: true })
+    .click();
   await page.getByRole("button", { name: "Plan details", exact: true }).click();
   await expect(page.locator(".detective-plan")).toContainText("Index Scan");
   await page.getByRole("button", { name: "Data flow", exact: true }).click();

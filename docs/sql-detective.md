@@ -239,3 +239,11 @@ The browser scenario also exercises native card drag/drop on desktop, keyboard/t
 index selection, clicking the Sort and Index access stages, switching inspection
 views, and manual stage inspection with reduced motion. A server-render test
 asserts that the Start boundary is disabled before hydration.
+
+## Focused moves
+
+The default flow shows one move at a time. Index choices open only on Choose your
+next index; running an experiment returns to the result board. SQL/schema, measured
+times, previous attempts and detailed views are opt-in inspection, not simultaneous
+default panels. Keyboard selection remains available; changing visibility does not
+change the immutable experiment or measurement protocol.

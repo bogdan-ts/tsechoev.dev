@@ -34,6 +34,8 @@ export function SqlDetectiveLab() {
   const [choice, setChoice] = useState<Configuration>("none");
   const [hint, setHint] = useState(0);
   const [copy, setCopy] = useState("");
+  const [choosing, setChoosing] = useState(false);
+  const [inspecting, setInspecting] = useState(false);
   const run = lab.selected;
   useEffect(() => {
     if (!run) return;
@@ -58,7 +60,13 @@ export function SqlDetectiveLab() {
   const [panel, setPanel] = useState<"story" | "plan" | "results" | "json">("story");
   const raw = run ? JSON.stringify(run.samples, null, 2) : "";
   return (
-    <div className="detective-lab" data-started={!!lab.session || lab.busy} ref={container}>
+    <div
+      className="detective-lab"
+      data-choosing={choosing}
+      data-inspecting={inspecting}
+      data-started={!!lab.session || lab.busy}
+      ref={container}
+    >
       <div className="detective-toolbar">
         <span className="detective-kicker">CASE 001 / QUERY LAB</span>
         <button disabled={!hydrated} onClick={() => setTheme(theme === "dark" ? "light" : "dark")}>
@@ -96,6 +104,8 @@ export function SqlDetectiveLab() {
             disabled={!hydrated}
             onClick={() => {
               setChoice("none");
+              setChoosing(false);
+              setInspecting(false);
               setHint(0);
               void lab.start();
             }}
@@ -177,15 +187,18 @@ export function SqlDetectiveLab() {
       </section>
       <div className="detective-grid" hidden={!lab.session && !lab.busy}>
         <section className="detective-query-panel">
-          <span className="detective-kicker">THE EVIDENCE</span>
-          <h2>The query</h2>
-          <pre tabIndex={0}>{query}</pre>
-          <details>
-            <summary>Schema</summary>
-            <pre tabIndex={0}>{schema}</pre>
+          <details className="detective-query-evidence">
+            <summary>Inspect the SQL and schema</summary>
+            <span className="detective-kicker">THE EVIDENCE</span>
+            <h2>The query</h2>
+            <pre tabIndex={0}>{query}</pre>
+            <details>
+              <summary>Schema</summary>
+              <pre tabIndex={0}>{schema}</pre>
+            </details>
+            <p className="small muted">A fictional learning case.</p>
           </details>
-          <p className="small muted">A fictional learning case.</p>
-          <div hidden={!baseline}>
+          <div hidden={!baseline || !choosing}>
             <h2>Choose your next move</h2>
             <p className="small muted">Drag a card onto the query, or select it and apply.</p>
             <fieldset className="detective-index-options" disabled={lab.busy}>
@@ -245,7 +258,10 @@ export function SqlDetectiveLab() {
               <strong>{configurations[lab.configuration].label}</strong>
             </p>
           </div>
-          <div className="detective-actions detective-main-actions">
+          <div
+            className="detective-actions detective-main-actions"
+            hidden={!!baseline && !choosing}
+          >
             <button
               disabled={!usable || !baseline}
               onClick={() => void lab.operate("apply", choice)}
@@ -257,6 +273,8 @@ export function SqlDetectiveLab() {
               disabled={!usable}
               onClick={() => {
                 setPanel("story");
+                setChoosing(false);
+                setInspecting(false);
                 void lab.operate("run");
               }}
             >
@@ -266,6 +284,8 @@ export function SqlDetectiveLab() {
               disabled={lab.busy || lab.phase === "idle"}
               onClick={() => {
                 setChoice("none");
+                setChoosing(false);
+                setInspecting(false);
                 setHint(0);
                 void lab.start();
               }}
@@ -287,7 +307,7 @@ export function SqlDetectiveLab() {
               ))}
             </details>
           )}
-          <section className="detective-hints">
+          <section className="detective-hints" hidden={!choosing}>
             <h2>Hints</h2>
             {hints.slice(0, hint).map((text) => (
               <p key={text}>{text}</p>
@@ -312,11 +332,11 @@ export function SqlDetectiveLab() {
                   index.
                 </p>
               )}
-              <p>
+              <p hidden={!inspecting}>
                 Execution time (median of three):{" "}
                 <strong>{time(run.median["Execution Time"])}</strong>
               </p>
-              <p className="small muted">
+              <p hidden={!inspecting} className="small muted">
                 Measured locally in your browser; results vary by device and cache state.
               </p>
               <p>
@@ -331,16 +351,34 @@ export function SqlDetectiveLab() {
                 className="detective-next-move"
                 disabled={lab.busy}
                 onClick={() => {
+                  setChoosing(true);
                   const input = container.current?.querySelector<HTMLInputElement>(
                     ".detective-index-options input:checked",
                   );
-                  input?.focus();
-                  input?.scrollIntoView({ block: "center" });
+                  requestAnimationFrame(() => {
+                    input?.focus();
+                    input?.scrollIntoView({ block: "center" });
+                  });
                 }}
               >
                 {won ? "Try another index" : "Choose your next index"}
               </button>
-              <div className="detective-run-picker" role="group" aria-label="Compare experiments">
+              <button
+                className="detective-inspect-toggle"
+                aria-expanded={inspecting}
+                onClick={() => {
+                  setInspecting(!inspecting);
+                  setPanel("story");
+                }}
+              >
+                {inspecting ? "Close inspection" : "Inspect measurements and attempts"}
+              </button>
+              <div
+                hidden={!inspecting}
+                className="detective-run-picker"
+                role="group"
+                aria-label="Compare experiments"
+              >
                 {lab.history.map((experiment, i) => (
                   <button
                     key={experiment.id}
@@ -355,7 +393,12 @@ export function SqlDetectiveLab() {
                   </button>
                 ))}
               </div>
-              <div className="detective-view-switch" role="group" aria-label="Result view">
+              <div
+                hidden={!inspecting}
+                className="detective-view-switch"
+                role="group"
+                aria-label="Result view"
+              >
                 {(
                   [
                     ["story", "Data flow"],
@@ -473,17 +516,20 @@ export function SqlDetectiveLab() {
         <section className="detective-solved" role="status">
           <span className="detective-kicker">INVESTIGATION COMPLETE</span>
           <h2>Case solved</h2>
-          <div className="detective-comparison">
-            <div>
-              <small>Baseline execution</small>
-              <strong>{time(baseline?.median["Execution Time"])}</strong>
+          <details>
+            <summary>Compare measured times</summary>
+            <div className="detective-comparison">
+              <div>
+                <small>Baseline execution</small>
+                <strong>{time(baseline?.median["Execution Time"])}</strong>
+              </div>
+              <span aria-hidden="true">→</span>
+              <div>
+                <small>Winning experiment</small>
+                <strong>{time(winner?.median["Execution Time"])}</strong>
+              </div>
             </div>
-            <span aria-hidden="true">→</span>
-            <div>
-              <small>Winning experiment</small>
-              <strong>{time(winner?.median["Execution Time"])}</strong>
-            </div>
-          </div>
+          </details>
           <details>
             <summary>Why this worked</summary>
             <p>
@@ -502,7 +548,7 @@ export function SqlDetectiveLab() {
         </section>
       )}
       {lab.history.length > 0 && (
-        <details className="detective-history">
+        <details className="detective-history" hidden={!inspecting}>
           <summary>Detailed experiment history · {lab.history.length} runs</summary>
           <h2>Experiment history</h2>
           <div className="detective-scroll">

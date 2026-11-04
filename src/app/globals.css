@@ -1183,3 +1183,20 @@ h1 {
 .detective-next-move {
   margin: 4px 0 10px;
 }
+
+/* Keep each move focused; technical inspection is explicitly opt-in. */
+.detective-lab [hidden] {
+  display: none !important;
+}
+.detective-lab:not([data-choosing="true"]) .detective-grid {
+  grid-template-columns: minmax(0, 1fr);
+}
+.detective-lab:not([data-choosing="true"]) .detective-query-panel {
+  order: 2;
+}
+.detective-lab:not([data-choosing="true"]) .detective-result-panel {
+  order: 1;
+}
+.detective-inspect-toggle {
+  margin: 12px 0;
+}
