@@ -17,8 +17,9 @@ export function ContactDetails() {
     <div className="contact-details">
       <h2>Contact</h2>
       <dl>
-        {profile.links.map(({ label, href }) => {
-          const value = href.replace(/^mailto:/, "");
+        {profile.links.map((link) => {
+          const { label, href } = link;
+          const value = "copyText" in link ? link.copyText : href.replace(/^mailto:/, "");
           return (
             <div className="contact-detail" key={label}>
               <dt>{label}</dt>

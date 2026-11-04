@@ -100,6 +100,12 @@ test("explicit contacts open normally and copy independently", async ({ page }) 
   await expect(
     page.getByRole("link", { name: "bogdan.tsechoev@gmail.com", exact: true }),
   ).toHaveAttribute("href", "mailto:bogdan.tsechoev@gmail.com");
+  await page.getByRole("button", { name: "Copy Telegram", exact: true }).click();
+  await expect(page.locator("html")).toHaveAttribute("data-copied", "@tsechoevb");
+  await expect(page.getByRole("link", { name: "@tsechoev", exact: true })).toHaveAttribute(
+    "href",
+    "https://line.me/R/ti/p/%40tsechoev",
+  );
   await page.evaluate(() => {
     Object.defineProperty(navigator, "clipboard", {
       value: {

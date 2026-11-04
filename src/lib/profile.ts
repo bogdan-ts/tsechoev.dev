@@ -186,6 +186,18 @@ export const profile = {
       href: "https://www.linkedin.com/in/bogdan-tsechoev/",
       text: "bogdan-tsechoev",
     },
+    {
+      label: "Telegram",
+      href: "https://t.me/tsechoevb",
+      text: "@tsechoevb",
+      copyText: "@tsechoevb",
+    },
+    {
+      label: "LINE",
+      href: "https://line.me/R/ti/p/%40tsechoev",
+      text: "@tsechoev",
+      copyText: "@tsechoev",
+    },
   ],
   resumeHref: "/bogdan-tsechoev-resume.pdf",
 } as const;
