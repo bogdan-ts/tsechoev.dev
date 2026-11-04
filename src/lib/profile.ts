@@ -184,7 +184,7 @@ export const profile = {
     {
       label: "LinkedIn",
       href: "https://www.linkedin.com/in/bogdan-tsechoev/",
-      text: "bogdan-tsechoev-b7b81b182",
+      text: "bogdan-tsechoev",
     },
   ],
   resumeHref: "/bogdan-tsechoev-resume.pdf",

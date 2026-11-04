@@ -20,7 +20,6 @@ test("switch versions and read the complete profile without commands", async ({
     "Skills",
     "Open source",
     "Education",
-    "Contact",
     "CV",
   ]) {
     await expect(page.getByRole("heading", { name: heading, exact: true })).toHaveCount(1);
@@ -29,6 +28,11 @@ test("switch versions and read the complete profile without commands", async ({
     page.locator("#whoami").getByRole("heading", { name: "Atlas", exact: true }),
   ).toHaveCount(0);
   await expect(page.locator("#atlas")).toHaveCount(0);
+  await expect(
+    page
+      .getByRole("region", { name: "Contact", exact: true })
+      .getByRole("link", { name: "LinkedIn", exact: true }),
+  ).toHaveAttribute("href", "https://www.linkedin.com/in/bogdan-tsechoev/");
   expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth)).toBe(true);
   await page.screenshot({ path: testInfo.outputPath("simple.png"), fullPage: true });
   await page

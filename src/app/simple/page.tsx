@@ -10,7 +10,7 @@ export default function SimplePage() {
       <SimpleNavigation section="whoami" />
       <section id="whoami" aria-labelledby="profile-heading">
         <h1 id="profile-heading">Bogdan Tsechoev</h1>
-        <WhoamiCommand />
+        <WhoamiCommand contactAtTop />
       </section>
     </>
   );

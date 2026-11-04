@@ -823,3 +823,14 @@ h1 {
     grid-template-columns: 1fr;
   }
 }
+
+.simple-content .full-profile > .profile-contact {
+  margin-top: -24px;
+  padding-top: 0;
+}
+.profile-contact-links {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px 24px;
+  font-size: 15px;
+}
