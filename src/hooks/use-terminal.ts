@@ -67,6 +67,24 @@ export function useTerminal() {
   function keyDown(event: KeyboardEvent<HTMLInputElement>) {
     if (composing.current || event.nativeEvent.isComposing) return;
     const key = event.key.toLowerCase();
+    if (event.ctrlKey && !event.metaKey && ["a", "e", "w"].includes(key)) {
+      event.preventDefault();
+      resetCompletion();
+      historyIndex.current = null;
+      const start = event.currentTarget.selectionStart ?? input.length;
+      const end = event.currentTarget.selectionEnd ?? start;
+      if (key === "a" || key === "e") {
+        const offset = key === "a" ? 0 : input.length;
+        event.currentTarget.setSelectionRange(offset, offset);
+        syncCursor();
+      } else {
+        const boundary =
+          start === end ? input.slice(0, start).replace(/\S+\s*$/, "").length : start;
+        pendingCursorRef.current = boundary;
+        setInput(input.slice(0, boundary) + input.slice(end));
+      }
+      return;
+    }
     if (event.ctrlKey && !event.metaKey && ["c", "u", "k"].includes(key)) {
       const hasSelection =
         Boolean(window.getSelection()?.toString()) ||

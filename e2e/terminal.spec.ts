@@ -35,6 +35,13 @@ test("portfolio discovery, command execution and keyboard controls", async ({ pa
   await input.press("ArrowLeft");
   await expect(page.locator(".cursor-offset")).toHaveText("draf");
   await expect(page.locator(".block-cursor")).toBeVisible();
+  const typography = await page.locator(".terminal-screen").evaluate((screen) => {
+    const base = getComputedStyle(screen).fontSize;
+    return Array.from(screen.querySelectorAll("h1, h2, h3, .eyebrow")).every(
+      (element) => getComputedStyle(element).fontSize === base,
+    );
+  });
+  expect(typography).toBe(true);
   expect(await input.evaluate((element) => getComputedStyle(element).outlineStyle)).toBe("none");
   await input.fill("exp");
   await input.press("Tab");
@@ -44,17 +51,17 @@ test("portfolio discovery, command execution and keyboard controls", async ({ pa
     page.locator(".command-output").last().getByText("Apr 2024 – Feb 2026", { exact: false }),
   ).toBeVisible();
   await expect(page.getByText("ABOUT ME", { exact: true })).toHaveCount(1);
-  const latestOutput = page.locator(".transcript-entry").last();
-  const topOffset = await latestOutput.evaluate((element) => {
-    const screen = element.closest(".terminal-screen");
-    if (!screen) throw new Error("Missing terminal screen");
+  await expect(input).toBeInViewport();
+  const promptFollowsOutput = await page.locator(".prompt").evaluate((element) => {
+    const entries = element.parentElement?.querySelectorAll(".transcript-entry");
+    const entry = entries?.[entries.length - 1];
     return (
-      element.getBoundingClientRect().top -
-      screen.getBoundingClientRect().top -
-      Number.parseFloat(getComputedStyle(screen).paddingTop)
+      !!element.closest(".terminal-screen") &&
+      !!entry &&
+      entry.getBoundingClientRect().bottom <= element.getBoundingClientRect().top
     );
   });
-  expect(Math.abs(topOffset)).toBeLessThan(2);
+  expect(promptFollowsOutput).toBe(true);
   await page.locator(".terminal-screen").evaluate((element) => {
     element.scrollTop = element.scrollHeight;
   });

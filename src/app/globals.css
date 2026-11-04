@@ -572,3 +572,210 @@ h1 {
   outline: 1px solid var(--accent);
   outline-offset: 4px;
 }
+
+/* Terminal is a single transcript, including its active prompt. */
+.terminal-screen {
+  display: block;
+}
+.terminal-screen .prompt {
+  padding: 0 0 max(4px, env(safe-area-inset-bottom));
+  margin-top: 12px;
+}
+.terminal-screen .prompt input {
+  padding: 2px 0;
+}
+.terminal-screen .command-input {
+  font-size: inherit;
+}
+.terminal-screen .completions {
+  margin: 4px 0;
+}
+.terminal-screen .intro {
+  margin-bottom: 16px;
+}
+.terminal-screen .intro h1 {
+  font-size: inherit;
+}
+.terminal-screen .intro-description {
+  max-width: 78ch;
+}
+.terminal-screen .transcript-entry + .transcript-entry {
+  margin-top: 16px;
+}
+.terminal-screen .executed-command {
+  margin-bottom: 10px;
+}
+.terminal-screen .metrics {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px 24px;
+}
+.terminal-screen .metrics strong,
+.terminal-screen .metrics span {
+  display: inline;
+  font-size: inherit;
+}
+.terminal-screen .metrics strong {
+  margin-right: 1ch;
+}
+/* Simple is a readable document, not styled command output. */
+.simple-shell {
+  background: #141614;
+}
+.simple-shell .site-header {
+  border-bottom: 0;
+  padding: 20px 28px;
+}
+.simple-page.workspace {
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  font-size: 17px;
+  line-height: 1.7;
+}
+.simple-content {
+  max-width: 860px;
+  padding: 32px 32px 80px;
+}
+.simple-content .section-nav {
+  font-family: inherit;
+  font-size: 14px;
+  margin-bottom: 56px;
+}
+.simple-content h1 {
+  font:
+    500 34px/1.2 -apple-system,
+    BlinkMacSystemFont,
+    "Segoe UI",
+    sans-serif;
+  letter-spacing: -0.025em;
+  margin-bottom: 20px;
+}
+.simple-content .about-label,
+.simple-content .profile-name,
+.simple-content .metrics {
+  display: none;
+}
+.simple-content .role {
+  font-size: 20px;
+  color: var(--text);
+  margin-top: 0;
+}
+.simple-content .prose {
+  max-width: 64ch;
+}
+.simple-content h2 {
+  font-size: 20px;
+  margin-bottom: 24px;
+}
+.simple-content h3 {
+  font-size: 18px;
+}
+.simple-content .full-profile {
+  gap: 48px;
+}
+.simple-content .full-profile > section + section {
+  padding-top: 8px;
+}
+.simple-content .timeline article {
+  margin: 0 0 36px;
+}
+.simple-content .timeline .eyebrow {
+  font-size: 14px;
+}
+.simple-content .timeline .accent {
+  color: var(--text);
+}
+.simple-content .timeline ul {
+  color: var(--text);
+  padding-left: 20px;
+}
+.simple-content .timeline li {
+  padding: 2px 0;
+}
+.simple-content .skill-groups {
+  gap: 16px;
+}
+.simple-content .skill-groups h3 {
+  color: var(--text);
+}
+.simple-content .contact-links {
+  gap: 8px;
+}
+.simple-content .contact-links a > span:first-child {
+  min-width: 100px;
+}
+.simple-content .globe-command {
+  font-family: var(--font-martian-mono), monospace;
+  font-size: 13px;
+}
+@media (prefers-color-scheme: light) {
+  .simple-page.workspace {
+    --bg: #fafbf5;
+    --text: #252e23;
+    --muted: #58634f;
+    --accent: #3b6421;
+    --border: #cbd2c3;
+  }
+  .simple-shell,
+  .simple-shell .site-header {
+    background: #fafbf5;
+    color: #58634f;
+  }
+  .simple-shell .site-header a {
+    color: #58634f;
+  }
+  .simple-shell .site-header a[aria-current] {
+    color: #3b6421;
+  }
+}
+@media (max-width: 650px) {
+  .simple-content {
+    padding: 24px 20px 56px;
+  }
+  .simple-shell .site-header {
+    padding: 16px 20px;
+  }
+  .simple-page.workspace {
+    font-size: 16px;
+  }
+  .simple-content .section-nav {
+    margin-bottom: 36px;
+  }
+  .simple-content h1 {
+    font-size: 28px;
+  }
+  .terminal-screen .command-input {
+    font-size: 16px;
+  }
+}
+
+/* A terminal has one text cell size; hierarchy comes from weight and spacing. */
+.terminal-screen h1,
+.terminal-screen .command-output h2,
+.terminal-screen .command-output h3,
+.terminal-screen .command-output h2 > span:not(.accent),
+.terminal-screen .eyebrow,
+.terminal-screen .small,
+.terminal-screen .download-link span {
+  font-size: inherit;
+  line-height: inherit;
+}
+.terminal-screen .command-output h2 {
+  margin: 0 0 1lh;
+  font-weight: 700;
+}
+.terminal-screen .command-output h3 {
+  margin: 1lh 0 0;
+  font-weight: 700;
+}
+.terminal-screen .timeline article {
+  margin: 1lh 0 2lh;
+}
+.terminal-screen .skill-groups {
+  gap: 0;
+}
+.terminal-screen .prompt-prefix {
+  display: block;
+}
+.site-content > .workspace {
+  position: relative;
+}
