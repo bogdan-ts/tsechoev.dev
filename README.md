@@ -150,3 +150,12 @@ There are no comet timers or additional network assets.
 
 The canonical globe page is `/simple/atlas/`. The old `/simple/travel/` URL
 redirects there without JavaScript; `travel` remains a compatibility command alias.
+
+## SQL Detective
+
+`investigate` (or `investigate orders`) opens Case 001 at
+`/simple/sql-detective/`. The static case shell works without JavaScript;
+Start investigation creates one dedicated worker with in-memory PGlite.
+No database assets are requested until Start. See
+[SQL Detective engineering notes](docs/sql-detective.md) for measurements,
+asset delivery, cancellation, profiles and the release smoke-test checklist.

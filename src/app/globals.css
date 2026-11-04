@@ -572,3 +572,96 @@ h1 {
   outline: 1px solid var(--accent);
   outline-offset: 4px;
 }
+
+.detective-lab {
+  margin-block: 24px;
+}
+.detective-grid {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+  gap: 24px;
+  margin-block: 24px;
+}
+.detective-grid > section {
+  min-width: 0;
+}
+.detective-lab pre {
+  overflow: auto;
+  max-width: 100%;
+  white-space: pre;
+  padding: 12px;
+  border: 1px solid var(--muted);
+  font-size: 12px;
+}
+.detective-lab select {
+  display: block;
+  max-width: 100%;
+  font: inherit;
+  color: var(--text);
+  background: var(--bg);
+  margin: 12px 0;
+  padding: 8px;
+}
+.detective-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 16px;
+  margin-block: 16px;
+}
+.detective-scroll {
+  overflow: auto;
+  max-width: 100%;
+}
+.detective-lab table {
+  border-collapse: collapse;
+  font-size: 12px;
+  width: 100%;
+}
+.detective-lab th,
+.detective-lab td {
+  text-align: left;
+  vertical-align: top;
+  padding: 8px;
+  border-bottom: 1px solid var(--muted);
+}
+.detective-plan {
+  padding-left: 20px;
+  overflow-wrap: anywhere;
+}
+.detective-plan dl {
+  font-size: 12px;
+}
+.detective-plan dl > div {
+  margin-block: 5px;
+}
+.detective-plan dd {
+  margin-left: 12px;
+}
+.detective-cells {
+  display: grid;
+  grid-template-columns: repeat(20, 1fr);
+  max-width: 360px;
+}
+.detective-lab button:disabled {
+  opacity: 0.5;
+  cursor: default;
+}
+.section-nav {
+  flex-wrap: wrap;
+}
+@media (max-width: 760px) {
+  .detective-grid {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}
+.detective-lab button {
+  background: transparent;
+  color: var(--accent);
+  border: 1px solid var(--border);
+  padding: 8px 12px;
+  min-height: 40px;
+  text-align: left;
+}
+.detective-lab button:hover:not(:disabled) {
+  border-color: var(--accent);
+}

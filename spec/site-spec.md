@@ -151,3 +151,14 @@ per resolution so animation frames only rotate and sample the geographic masks.
 ## Atlas page naming
 
 The simple-mode globe page is named Atlas in navigation, its heading and metadata. The canonical URL is `/simple/atlas/` and the primary terminal command is `atlas [--globe]`. Keep legacy `/simple/travel/` as an immediate static redirect and `travel` as an undocumented compatibility alias; `countries` also remains an alias. Only the canonical route belongs in the sitemap.
+
+## SQL Detective v1
+
+- One fixed, fictional slow-orders case at `/simple/sql-detective/`; `investigate [orders]` renders a link card only. No engine in terminal scrollback.
+- Explicit Start is the sole engine-load boundary. A dedicated single-thread PGlite worker must work from the static production export without cross-origin isolation or custom host headers.
+- orders-v1 seeds deterministic standard 100,000 / explicit compact 25,000 profiles with exactly 5% customer 42. The primary key remains; four whitelisted index configurations replace only known extra indexes in a transaction and are confirmed by the catalog.
+- Baseline and all experiments use one warm-up, three JSON EXPLAIN ANALYZE samples and then a separate ordered SELECT. Keep all samples, show the first median sample, compare normalized ordered results and never fabricate speedups/counters/plans.
+- Win is a pure plan/result predicate with a fresh same-session baseline; no absolute timing threshold. Plans and history retain their index snapshot.
+- Cancellation terminates and rebuilds the worker, with new measurements/baseline before restoring a confirmed index. Main-thread watchdogs, generation/request guards and unmount cleanup prevent stale responses or stranded engines.
+- A bounded aggregate-cell illustration follows actual scan/sort properties, is clearly not a live trace, and supports pause/replay/skip and reduced motion. Text and data remain independently accessible.
+- No automatic release for this feature: work on a feature branch and prepare a PR; PR validation must not deploy Pages.

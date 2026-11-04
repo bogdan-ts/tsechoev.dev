@@ -13,6 +13,7 @@ export const commands = [
     description: "Visited places; --globe for ASCII Earth",
     aliases: ["countries", "travel"],
   },
+  { name: "investigate", description: "Investigate a slow SQL query", aliases: [] },
   { name: "help", description: "List commands", aliases: ["ls"] },
   { name: "history", description: "Command history", aliases: [] },
   { name: "clear", description: "Clear the screen", aliases: [] },
@@ -43,6 +44,11 @@ export function executeCommand(input: string, history: string[] = []): CommandRe
       kind: "error",
       message: `Command not found: ${input.trim()}. Type help for commands.`,
     };
+  if (command.name === "investigate") {
+    return !args.length || (args.length === 1 && args[0] === "orders")
+      ? { kind: "content", command: "investigate" }
+      : { kind: "error", message: "Usage: investigate [orders]" };
+  }
   if (command.name === "atlas") {
     if (!args.length) return { kind: "content", command: "atlas" };
     if (args.length === 1 && args[0] === "--globe")
@@ -69,8 +75,8 @@ export function executeCommand(input: string, history: string[] = []): CommandRe
 export function completeCommand(input: string): string[] {
   if (!input) return [];
   if (/\s/.test(input)) {
-    return ["atlas --globe", "countries --globe", "travel --globe"].filter((command) =>
-      command.startsWith(input.toLowerCase()),
+    return ["investigate orders", "atlas --globe", "countries --globe", "travel --globe"].filter(
+      (command) => command.startsWith(input.toLowerCase()),
     );
   }
   return commands.map((entry) => entry.name).filter((name) => name.startsWith(input.toLowerCase()));
