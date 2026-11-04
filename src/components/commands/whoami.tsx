@@ -4,6 +4,7 @@ import { ExperienceCommand } from "./experience";
 import { SkillsCommand } from "./skills";
 import { OpenSourceCommand } from "./opensource";
 import { EducationCommand } from "./education";
+import { ContactDetails } from "../contact-details";
 import { ContactCommand } from "./contact";
 import { CvCommand } from "./cv";
 
@@ -17,7 +18,7 @@ export function WhoamiCommand({
       </section>
       {contactAtTop && (
         <section className="profile-contact" aria-label="Contact">
-          <ContactCommand compact />
+          <ContactDetails />
         </section>
       )}
       <section aria-label="Experience">

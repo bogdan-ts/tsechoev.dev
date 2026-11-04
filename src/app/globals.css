@@ -834,3 +834,54 @@ h1 {
   gap: 12px 24px;
   font-size: 15px;
 }
+
+.contact-details h2 {
+  margin: 0 0 16px;
+}
+.contact-details dl {
+  margin: 0;
+}
+.contact-detail {
+  display: grid;
+  grid-template-columns: 80px minmax(0, 1fr);
+  gap: 16px;
+  margin: 10px 0;
+  font-size: 15px;
+}
+.contact-detail dt {
+  color: var(--muted);
+}
+.contact-detail dd {
+  margin: 0;
+  display: flex;
+  align-items: baseline;
+  gap: 16px;
+  flex-wrap: wrap;
+}
+.contact-detail a {
+  overflow-wrap: anywhere;
+}
+.contact-detail button {
+  font: inherit;
+  font-size: 12px;
+  border: 0;
+  background: none;
+  color: var(--muted);
+  padding: 4px;
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+.contact-detail button:hover {
+  color: var(--accent);
+}
+.contact-copy-status {
+  font-size: 13px;
+  min-height: 1.7em;
+  margin: 8px 0 0;
+}
+@media (max-width: 600px) {
+  .contact-detail {
+    grid-template-columns: 1fr;
+    gap: 2px;
+  }
+}
