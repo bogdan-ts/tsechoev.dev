@@ -61,7 +61,7 @@ test("simple profile is statically available without JavaScript", async ({ brows
     .click();
   await expect(page.locator("#atlas li")).toHaveCount(19);
   await expect(page.locator("canvas")).toHaveCount(1);
-  await page.getByRole("link", { name: "Whoami", exact: true }).click();
+  await page.getByRole("link", { name: "Who I Am", exact: true }).click();
   await expect(page.getByRole("heading", { name: "Experience", exact: true })).toHaveCount(1);
   await page.getByRole("link", { name: "Terminal", exact: true }).click();
   await expect(page.getByRole("heading", { level: 1 })).toBeVisible();

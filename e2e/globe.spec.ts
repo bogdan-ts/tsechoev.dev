@@ -73,7 +73,7 @@ test("atlas loads the globe automatically and supports pointer dragging", async 
   expect(await canvas.evaluate((element: HTMLCanvasElement) => element.toDataURL())).not.toBe(
     initial,
   );
-  await page.getByRole("link", { name: "Whoami", exact: true }).click();
+  await page.getByRole("link", { name: "Who I Am", exact: true }).click();
   await expect(canvas).toHaveCount(0);
 });
 
