@@ -10,13 +10,7 @@ export function useTerminalScroll(entries: readonly TerminalEntry[]) {
     if (!screen) return;
     const latest = latestEntryRef.current;
     const alignOutput = () => {
-      const padding = Number.parseFloat(getComputedStyle(screen).paddingTop) || 0;
-      screen.scrollTop = latest
-        ? screen.scrollTop +
-          latest.getBoundingClientRect().top -
-          screen.getBoundingClientRect().top -
-          padding
-        : 0;
+      screen.scrollTop = screen.scrollHeight;
     };
     alignOutput();
     if (!latest || typeof ResizeObserver !== "function") return;

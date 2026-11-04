@@ -3,8 +3,8 @@ import { profile } from "../../lib/profile";
 export function AboutCommand() {
   return (
     <>
-      <p className="eyebrow">ABOUT ME</p>
-      <h2 className="name">{profile.name}</h2>
+      <p className="eyebrow about-label">ABOUT ME</p>
+      <h2 className="name profile-name">{profile.name}</h2>
       <p className="role">{profile.role}</p>
       <p className="prose">{profile.summary}</p>
       <p className="muted">
