@@ -15,11 +15,17 @@ export default function AtlasPage() {
         <h1 id="atlas-heading">Atlas</h1>
         <p className="prose muted">{description}</p>
         <GlobeView showHeading={false} />
-        <ul>
-          {countries.map(({ code, name }) => (
-            <li key={code}>{name}</li>
-          ))}
-        </ul>
+        <section className="atlas-places-section" aria-labelledby="visited-heading">
+          <h2 id="visited-heading">Places I’ve visited</h2>
+          <p className="muted">
+            {countries.length} countries and territories, listed alphabetically.
+          </p>
+          <ul className="atlas-places" aria-label="Visited countries and territories">
+            {countries.map(({ code, name }) => (
+              <li key={code}>{name}</li>
+            ))}
+          </ul>
+        </section>
       </section>
     </>
   );

@@ -71,6 +71,8 @@ describe("interactive terminal", () => {
     const { container } = render(<Terminal />);
     await user.click(screen.getByRole("button", { name: /atlas/ }));
     expect(screen.getAllByRole("listitem")).toHaveLength(19);
+    expect(screen.getByText("19 countries and territories visited.")).toBeTruthy();
+    expect(screen.getByRole("list", { name: "Visited countries and territories" })).toBeTruthy();
     expect(screen.getByText("Hong Kong")).toBeTruthy();
     expect(screen.getByText("Macau")).toBeTruthy();
     const input = screen.getByRole("textbox");
@@ -121,5 +123,17 @@ describe("interactive terminal", () => {
     fireEvent.compositionEnd(input);
     fireEvent.submit(form);
     expect(screen.getByText("ABOUT ME")).toBeTruthy();
+  });
+  it("supports readline start/end and deletion of the previous word", async () => {
+    const user = userEvent.setup();
+    render(<Terminal />);
+    const input = screen.getByRole("textbox") as HTMLInputElement;
+    await user.type(input, "hello world");
+    await user.keyboard("{Control>}a{/Control}");
+    expect(input.selectionStart).toBe(0);
+    await user.keyboard("{Control>}e{/Control}");
+    expect(input.selectionStart).toBe(11);
+    await user.keyboard("{Control>}w{/Control}");
+    expect(input.value).toBe("hello ");
   });
 });

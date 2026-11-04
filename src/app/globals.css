@@ -779,3 +779,47 @@ h1 {
 .site-content > .workspace {
   position: relative;
 }
+
+.atlas-places {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 25ch), 1fr));
+  gap: 4px 3ch;
+  max-width: 80ch;
+  list-style: none;
+  padding: 0;
+  margin: 1lh 0;
+}
+.atlas-globe-link button {
+  font: inherit;
+  border: 0;
+  background: none;
+  padding: 0;
+  color: var(--accent);
+  text-decoration: underline;
+  text-underline-offset: 4px;
+}
+.simple-content .atlas-places-section {
+  margin-top: 40px;
+}
+.simple-content .atlas-places-section h2 {
+  margin-bottom: 8px;
+}
+.simple-content .atlas-places-section > p {
+  font-size: 14px;
+  margin-top: 0;
+}
+.simple-content .atlas-places {
+  max-width: 700px;
+  gap: 8px 32px;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+@media (min-width: 900px) {
+  .simple-content .atlas-places {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+}
+@media (max-width: 390px) {
+  .simple-content .atlas-places {
+    grid-template-columns: 1fr;
+  }
+}
