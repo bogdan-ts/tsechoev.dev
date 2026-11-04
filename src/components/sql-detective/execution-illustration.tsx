@@ -1,7 +1,7 @@
 "use client";
 import { useEffect, useState, useSyncExternalStore } from "react";
 import type { Experiment } from "../../lib/sql-detective/types";
-import { facts } from "../../lib/sql-detective/plan-analysis";
+import { planStory } from "../../lib/sql-detective/plan-story";
 const motionSnapshot = () => matchMedia("(prefers-reduced-motion: reduce)").matches;
 const subscribeMotion = (notify: () => void) => {
   const media = matchMedia("(prefers-reduced-motion: reduce)");
@@ -9,55 +9,96 @@ const subscribeMotion = (notify: () => void) => {
   return () => media.removeEventListener("change", notify);
 };
 export function ExecutionIllustration({ run }: { run: Experiment }) {
-  const [step, setStep] = useState(0);
-  const [playing, setPlaying] = useState(true);
-  const detail = facts(run.median);
-  const indexed = detail.scans.some((n) => n["Index Name"]);
-  const stages = [
-    indexed ? "Index → matching range" : "Table blocks → scan",
-    "Matching rows",
-    ...(detail.sorts.length ? ["Sort by date and id"] : []),
-    "Latest 20 orders",
-  ];
+  const stages = planStory(run.median);
+  const [step, setStep] = useState(0),
+    [playing, setPlaying] = useState(true);
   const reduced = useSyncExternalStore(subscribeMotion, motionSnapshot, () => true);
-  const shownStep = reduced ? stages.length - 1 : step;
+  const [inspected, setInspected] = useState<number | null>(null);
+  const shown = inspected ?? (reduced ? stages.length - 1 : step);
+  const active = stages[shown];
   useEffect(() => {
     if (reduced || !playing || step >= stages.length - 1) return;
-    const id = setTimeout(() => setStep((value) => value + 1), 850);
-    return () => clearTimeout(id);
-  }, [playing, step, stages.length, reduced]);
+    const timer = setTimeout(() => setStep((value) => value + 1), 900);
+    return () => clearTimeout(timer);
+  }, [reduced, playing, step, stages.length]);
+  const shownCount =
+    active.count === null
+      ? 0
+      : Math.min(120, Math.max(1, Math.round((active.count / run.session.rows) * 120)));
   return (
-    <section aria-label="Plan illustration">
-      <h3>How this plan works</h3>
-      <p>Illustration based on the actual query plan. Not a live execution trace.</p>
-      <div className="detective-cells" aria-hidden="true">
-        {Array.from({ length: 120 }, (_, i) => (
-          <span key={i} className={shownStep > 0 && i % 20 === 0 ? "accent" : ""}>
-            {shownStep === 0 ? "□" : i % 20 === 0 ? "■" : "·"}
-          </span>
-        ))}
+    <section className="detective-story" aria-label="Plan illustration">
+      <div className="detective-story-heading">
+        <div>
+          <span className="detective-kicker">FOLLOW THE DATA</span>
+          <h3>Where does the work go?</h3>
+        </div>
+        <span className="detective-badge">
+          {stages.some((stage) => stage.title === "Sort") ? "Sort required" : "No separate sort"}
+        </span>
       </div>
-      <p>
-        Cells aggregate many rows; they do not identify physical row visits. Exact plan counters are
-        below.
-      </p>
-      <ol>
-        {stages.map((name, i) => (
-          <li key={name}>
-            <strong>
-              {i <= shownStep ? "✓ " : ""}
-              {name}
-            </strong>
+      <ol className="detective-pipeline" aria-label="Execution stages">
+        {stages.map((stage, i) => (
+          <li key={stage.id}>
+            <button
+              aria-pressed={shown === i}
+              onClick={() => {
+                setInspected(i);
+                setStep(i);
+                setPlaying(false);
+              }}
+            >
+              <span className="detective-stage-number">0{i + 1}</span>
+              <strong>{stage.title}</strong>
+              <span>{stage.count === null ? "Not reported" : stage.count.toLocaleString()}</span>
+            </button>
           </li>
         ))}
       </ol>
-      <div className="detective-actions">
-        <button disabled={reduced} onClick={() => setPlaying(!playing)}>
-          {playing ? "Pause animation" : "Play animation"}
+      <div className="detective-workbench">
+        <div
+          className="detective-blocks"
+          aria-hidden="true"
+          data-playing={playing && !reduced && step < stages.length - 1}
+        >
+          {Array.from({ length: 120 }, (_, i) => (
+            <span
+              key={i}
+              className={i < shownCount ? "is-selected" : ""}
+              style={{ animationDelay: `${i * 8}ms` }}
+            />
+          ))}
+        </div>
+        <div className="detective-stage-detail">
+          <span className="detective-kicker">{active.node["Node Type"]}</span>
+          <strong className="detective-big-count">
+            {active.count === null ? "n/a" : active.count.toLocaleString()}
+          </strong>
+          <span>{active.metric}</span>
+          <p>{active.description}</p>
+        </div>
+      </div>
+      <p className="small muted">
+        120 cells summarize {run.session.rows.toLocaleString()} orders; a highlighted cell
+        represents an aggregate, not an individual row visit. Counts use reported node rows × loops
+        and may reflect rounded averages.
+      </p>
+      <div className="detective-story-controls">
+        <button
+          disabled={reduced}
+          onClick={() => {
+            setInspected(null);
+            if (step >= stages.length - 1) {
+              setStep(0);
+              setPlaying(true);
+            } else setPlaying(!playing);
+          }}
+        >
+          {playing && step < stages.length - 1 ? "Pause animation" : "Play animation"}
         </button>
         <button
           disabled={reduced}
           onClick={() => {
+            setInspected(null);
             setStep(0);
             setPlaying(true);
           }}
@@ -65,15 +106,19 @@ export function ExecutionIllustration({ run }: { run: Experiment }) {
           Replay
         </button>
         <button
-          disabled={reduced}
           onClick={() => {
+            setInspected(null);
             setStep(stages.length - 1);
             setPlaying(false);
           }}
         >
           Skip animation
         </button>
+        <span className="small muted">Click any stage to inspect it.</span>
       </div>
+      <p className="small muted">
+        Illustration based on the actual query plan. Not a live execution trace.
+      </p>
     </section>
   );
 }

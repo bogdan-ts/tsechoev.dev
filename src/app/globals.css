@@ -665,3 +665,521 @@ h1 {
 .detective-lab button:hover:not(:disabled) {
   border-color: var(--accent);
 }
+
+/* SQL Detective: a guided case board, with native keyboard alternatives. */
+.simple-content:has(.detective-lab) {
+  max-width: 1180px;
+}
+.detective-lab {
+  --case-surface: color-mix(in srgb, var(--text) 4%, var(--bg));
+  --case-soft: color-mix(in srgb, var(--accent) 10%, var(--bg));
+}
+.detective-kicker {
+  display: block;
+  color: var(--muted);
+  font-size: 10px;
+  letter-spacing: 0.13em;
+  font-weight: 500;
+}
+.detective-toolbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  margin-bottom: 12px;
+}
+.detective-toolbar button {
+  font-size: 11px;
+  padding: 4px 10px;
+  min-height: 32px;
+}
+.detective-settings {
+  margin: 10px 0 18px;
+  font-size: 12px;
+}
+.detective-journey {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  list-style: none;
+  padding: 0;
+  margin: 24px 0;
+  gap: 1px;
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  overflow: hidden;
+  background: var(--border);
+}
+.detective-journey li {
+  display: grid;
+  grid-template-columns: 28px 1fr;
+  align-items: start;
+  gap: 0 10px;
+  padding: 16px;
+  background: var(--bg);
+  font-size: 12px;
+}
+.detective-journey li > span {
+  grid-row: span 2;
+  color: var(--muted);
+}
+.detective-journey li small {
+  color: var(--muted);
+  font-size: 10px;
+}
+.detective-journey [aria-current="step"] {
+  background: var(--case-soft);
+}
+.detective-journey [aria-current="step"] > span {
+  color: var(--accent);
+}
+.detective-grid {
+  grid-template-columns: minmax(0, 0.78fr) minmax(0, 1.22fr);
+  align-items: start;
+  gap: 24px;
+}
+.detective-grid[hidden] {
+  display: none;
+}
+.detective-query-panel,
+.detective-result-panel {
+  padding: 20px;
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  background: var(--case-surface);
+}
+.detective-lab h2 {
+  font-size: 18px;
+  margin: 6px 0 16px;
+}
+.detective-lab h3 {
+  font-size: 16px;
+  margin: 4px 0 12px;
+}
+.detective-lab pre {
+  background: var(--bg);
+  border-color: var(--border);
+  border-radius: 7px;
+  line-height: 1.8;
+}
+.detective-index-options {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  padding: 0;
+  border: 0;
+  gap: 10px;
+  margin: 18px 0;
+}
+.detective-index-options legend {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip-path: inset(50%);
+}
+.detective-index-options label {
+  display: flex;
+  gap: 8px;
+  align-items: start;
+  padding: 12px;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  cursor: pointer;
+  background: var(--bg);
+  transition: border-color 140ms;
+}
+.detective-index-options label[data-selected="true"] {
+  border-color: var(--accent);
+  background: var(--case-soft);
+}
+.detective-index-options input {
+  accent-color: var(--accent);
+  margin: 5px 0 0;
+  flex-shrink: 0;
+}
+.detective-index-options strong {
+  display: block;
+  font-size: 11px;
+}
+.detective-index-options small {
+  display: block;
+  font-size: 10px;
+  color: var(--muted);
+  line-height: 1.6;
+  margin-top: 5px;
+}
+.detective-lab button {
+  border-radius: 6px;
+  font-size: 12px;
+  transition: border-color 140ms;
+}
+.detective-lab button:hover:not(:disabled) {
+  background: var(--case-soft);
+}
+.detective-lab button.detective-primary {
+  color: var(--bg);
+  background: var(--accent);
+  border-color: var(--accent);
+  font-weight: 600;
+}
+.detective-lab button.detective-primary:hover:not(:disabled) {
+  color: var(--text);
+  background: var(--case-soft);
+}
+.detective-main-actions {
+  position: sticky;
+  bottom: 0;
+  padding: 14px 0 0;
+  background: var(--case-surface);
+}
+.detective-dropzone {
+  display: grid;
+  place-items: center;
+  text-align: center;
+  border: 1px dashed var(--border);
+  border-radius: 8px;
+  padding: 20px 10px;
+  background: var(--bg);
+}
+.detective-dropzone > span {
+  color: var(--accent);
+  font-size: 24px;
+}
+.detective-dropzone strong {
+  font-size: 12px;
+}
+.detective-dropzone small {
+  color: var(--muted);
+  font-size: 10px;
+}
+.detective-view-switch {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px;
+  margin: 18px 0;
+  border-bottom: 1px solid var(--border);
+  padding-bottom: 12px;
+}
+.detective-view-switch button {
+  border-color: transparent;
+  font-size: 11px;
+  min-height: 36px;
+}
+.detective-view-switch [aria-pressed="true"] {
+  background: var(--case-soft);
+  border-color: var(--accent);
+}
+.detective-story {
+  background: var(--bg);
+  padding: 18px;
+  border: 1px solid var(--border);
+  border-radius: 10px;
+}
+.detective-story-heading {
+  display: flex;
+  justify-content: space-between;
+  align-items: start;
+  gap: 12px;
+  margin-bottom: 12px;
+}
+.detective-badge {
+  border: 1px solid var(--border);
+  padding: 4px 8px;
+  border-radius: 20px;
+  color: var(--accent);
+  font-size: 10px;
+  white-space: nowrap;
+}
+.detective-pipeline {
+  list-style: none;
+  display: grid;
+  grid-auto-flow: column;
+  grid-auto-columns: minmax(0, 1fr);
+  gap: 7px;
+  margin: 12px 0 18px;
+  padding: 0;
+}
+.detective-pipeline li {
+  min-width: 0;
+}
+.detective-pipeline button {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+  min-height: 104px;
+  padding: 10px 8px;
+  color: var(--text);
+  background: var(--case-surface);
+}
+.detective-pipeline button[aria-pressed="true"] {
+  border-color: var(--accent);
+  background: var(--case-soft);
+}
+.detective-pipeline strong {
+  font-size: 10px;
+}
+.detective-pipeline button > span:last-child {
+  font-size: 16px;
+  color: var(--accent);
+}
+.detective-stage-number {
+  color: var(--muted);
+  font-size: 9px;
+}
+.detective-workbench {
+  display: grid;
+  grid-template-columns: minmax(0, 0.8fr) minmax(0, 1.2fr);
+  gap: 18px;
+  align-items: center;
+  min-height: 230px;
+}
+.detective-blocks {
+  display: grid;
+  grid-template-columns: repeat(12, minmax(0, 1fr));
+  gap: 4px;
+}
+.detective-blocks span {
+  aspect-ratio: 1;
+  min-width: 0;
+  border: 1px solid var(--border);
+  border-radius: 2px;
+  background: var(--case-surface);
+}
+.detective-blocks .is-selected {
+  border-color: var(--accent);
+  background: var(--accent);
+}
+.detective-blocks[data-playing="true"] .is-selected {
+  animation: detective-pulse 1.1s ease-in-out alternate infinite;
+}
+@keyframes detective-pulse {
+  to {
+    opacity: 0.4;
+    transform: scale(0.8);
+  }
+}
+.detective-stage-detail {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+}
+.detective-big-count {
+  font-size: 36px;
+  line-height: 1.4;
+  color: var(--accent);
+  font-weight: 500;
+}
+.detective-stage-detail > span:not(.detective-kicker) {
+  font-size: 11px;
+}
+.detective-stage-detail p {
+  font-size: 11px;
+  color: var(--muted);
+  line-height: 1.7;
+}
+.detective-story-controls {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  align-items: center;
+  margin-top: 12px;
+}
+.detective-story-controls button {
+  font-size: 10px;
+  padding: 5px 8px;
+  min-height: 32px;
+}
+.detective-story p.small {
+  font-size: 10px;
+}
+.detective-empty {
+  display: grid;
+  place-content: center;
+  text-align: center;
+  min-height: 320px;
+  padding: 28px;
+  color: var(--muted);
+}
+.detective-empty > div {
+  font-size: 40px;
+  color: var(--accent);
+  letter-spacing: 8px;
+  margin-bottom: 24px;
+}
+.detective-empty p {
+  font-size: 12px;
+}
+.detective-solved {
+  margin: 28px 0;
+  border: 1px solid var(--accent);
+  background: var(--case-soft);
+  border-radius: 12px;
+  padding: 24px;
+}
+.detective-comparison {
+  display: flex;
+  align-items: center;
+  gap: 24px;
+  margin: 18px 0;
+}
+.detective-comparison div {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+.detective-comparison small {
+  color: var(--muted);
+  font-size: 11px;
+}
+.detective-comparison strong {
+  font-size: 26px;
+  color: var(--accent);
+}
+@media (max-width: 900px) {
+  .detective-grid {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}
+@media (max-width: 480px) {
+  .detective-query-panel,
+  .detective-result-panel {
+    padding: 14px;
+  }
+  .detective-journey li {
+    padding: 10px 7px;
+    grid-template-columns: 1fr;
+    gap: 5px;
+    font-size: 10px;
+  }
+  .detective-journey li small {
+    display: none;
+  }
+  .detective-story {
+    padding: 12px;
+  }
+  .detective-story-heading {
+    flex-direction: column;
+  }
+  .detective-pipeline {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    grid-auto-flow: row;
+  }
+  .detective-pipeline button {
+    min-height: 90px;
+  }
+  .detective-workbench {
+    grid-template-columns: minmax(0, 1fr);
+  }
+  .detective-blocks {
+    max-width: 250px;
+  }
+  .detective-comparison {
+    gap: 12px;
+  }
+  .detective-comparison strong {
+    font-size: 20px;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .detective-lab *,
+  .detective-lab *::before {
+    animation: none !important;
+    transition: none !important;
+  }
+}
+.detective-case-header {
+  border-bottom: 1px solid var(--border);
+  padding: 22px 0;
+}
+.detective-case-header h1 {
+  font-size: clamp(22px, 3vw, 34px);
+  max-width: 900px;
+  line-height: 1.35;
+  margin: 12px 0;
+}
+.detective-case-header p {
+  max-width: 800px;
+  font-size: 13px;
+  color: var(--muted);
+}
+.detective-case-header p:last-child {
+  margin-bottom: 0;
+}
+.detective-start {
+  min-height: 48px;
+  padding: 12px 20px !important;
+}
+.detective-objective {
+  border-left: 3px solid var(--accent);
+  padding: 8px 16px;
+  margin: 22px 0;
+}
+.detective-objective h2 {
+  margin: 4px 0;
+  font-size: 17px;
+}
+.detective-objective p {
+  margin: 6px 0 0;
+  font-size: 12px;
+  color: var(--muted);
+}
+.detective-run-picker {
+  display: flex;
+  gap: 8px;
+  overflow: auto;
+  padding: 6px 0;
+  margin: 10px 0;
+}
+.detective-run-picker button {
+  display: flex;
+  flex-direction: column;
+  flex: 0 0 auto;
+  gap: 4px;
+  max-width: 220px;
+}
+.detective-run-picker small {
+  font-size: 9px;
+  color: var(--muted);
+}
+.detective-run-picker strong {
+  font-size: 11px;
+}
+.detective-run-picker [aria-pressed="true"] {
+  border-color: var(--accent);
+  background: var(--case-soft);
+}
+.detective-hints {
+  border-top: 1px solid var(--border);
+  padding-top: 16px;
+  margin-top: 20px;
+}
+.detective-hints p {
+  font-size: 12px;
+}
+.detective-hints h2 {
+  font-size: 14px;
+}
+.detective-history {
+  margin: 20px 0;
+  font-size: 12px;
+}
+.detective-history > summary {
+  padding: 12px 0;
+}
+.simple-content:has(.detective-lab[data-started="true"]) .detective-case-header {
+  padding: 8px 0 12px;
+}
+.simple-content:has(.detective-lab[data-started="true"]) .detective-case-header h1 {
+  font-size: 22px;
+  margin: 6px 0;
+}
+.simple-content:has(.detective-lab[data-started="true"]) .detective-case-header p:not(:last-child) {
+  display: none;
+}
+.detective-result-panel h2:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 5px;
+}
+.detective-next-move {
+  margin: 4px 0 10px;
+}

@@ -137,13 +137,13 @@ Raw engine files: pglite.wasm 9,086,480 B; initdb.wasm 298,788 B;
 pglite.data 6,242,272 B, plus the deferred worker JS. Gzip estimates for those
 three files alone: 3,290,364 + 131,377 + 2,131,246 B. A plain uncompressed static
 server transfers more than 15 MB; checking only the WASM would undercount it.
-Measured gzip HTTP payloads from a fresh desktop session totalled **5,706,829 B**
+Initial implementation: measured gzip HTTP payloads from a fresh desktop session totalled **5,706,829 B**
 after Start; another **16,194,282 B raw** corresponds to those exact files, including
 worker runtime and JS chunks. Mobile-emulation samples include some late shared
 prefetch assets and conservatively measured up to **5,749,267 B**. No .gz files or
 custom production host headers were added.
 
-The SQL-page-specific JavaScript difference against a fresh terminal-page load
+Before the game-flow revision, the SQL-page-specific JavaScript difference against a fresh terminal-page load
 was **7,262 B gzip**. Whole initial shell traffic was 184–227 KB gzip including
 framework, fonts, HTML and prefetch traffic; that is not all newly added page UI.
 
@@ -201,7 +201,7 @@ References: [PGlite API](https://pglite.dev/docs/api),
 
 ## Verification record
 
-- `npm run check`: lint, strict typecheck and 62 unit/integration tests pass.
+- `npm run check`: lint, strict typecheck and 65 unit/integration tests pass.
 - The standard-profile real-engine test covers all four configurations and ordered
   result identity. Another test rebuilds compact twice, checks counts/reproducibility,
   and verifies the composite plan. Median ties, zero values, stale generations,
@@ -211,4 +211,31 @@ References: [PGlite API](https://pglite.dev/docs/api),
   unmount/re-entry, no-JavaScript navigation and absence of pre-Start engine requests.
 - Existing Atlas/CV/terminal tests are retained. No real Pages deployment or real
   iPhone/Safari device has been used. Physical low-memory/mobile behavior remains
-  unverified. The final full browser run passed 45 tests; one duplicate desktop touch test was intentionally skipped (the touch flow runs on mobile).
+  unverified. The game-flow full browser run passed 44 tests and skipped one duplicate desktop touch test. Its remaining desktop drag test needed an explicit centered scroll before native drag (both targets must stay visible). After that adjustment, all four desktop SQL tests passed on the rebuilt static export. Together these cover the 45 non-skipped scenarios; the touch flow runs on mobile.
+
+## Game-flow UI revision
+
+The case is presented as three moves: reveal the baseline, try an index, explain
+the changed plan. Index choices appear after the first real run. Cards can be
+dragged onto the query; native radio controls and Apply index are the equivalent
+keyboard/touch path. Applying an index does not run a fake benchmark or relabel
+the previous result. Every new run still uses the same worker protocol.
+
+The board's stages and counters come from `plan-story.ts`. A sequential scan's
+checked-tuples illustration uses reported output + filtered rows, with loops;
+index/bitmap paths report scan output instead of inventing a physical-read count.
+A Sort card exists only when the actual tree contains a sort. Clicking a stage
+pauses playback and exposes that node's explanation and metric. Reduced motion
+starts at the final state but still allows manual node inspection.
+
+A run picker switches the whole board between immutable experiments. Detailed
+plan fields, results and raw JSON are separate inspection views; the full history
+remains available in a disclosure. Victory uses the unchanged pure solution
+predicate, not a timer, quiz, points total or promised acceleration. Reset starts
+a fresh case as before. The Start action is disabled in server HTML until client
+hydration so early clicks cannot disappear before event handlers are installed.
+
+The browser scenario also exercises native card drag/drop on desktop, keyboard/touch
+index selection, clicking the Sort and Index access stages, switching inspection
+views, and manual stage inspection with reduced motion. A server-render test
+asserts that the Start boundary is disabled before hydration.

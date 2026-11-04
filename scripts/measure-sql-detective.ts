@@ -79,6 +79,7 @@ try {
     });
     await page.goto("http://127.0.0.1:3002/simple/sql-detective/");
     await page.waitForLoadState("networkidle");
+    await page.getByText("Dataset settings", { exact: true }).click();
     await page.getByLabel("Dataset").selectOption(profile);
     stage = "engine";
     const started = performance.now();
@@ -94,7 +95,10 @@ try {
     );
     const readyMs = performance.now() - started;
     await page.getByText("Database and dataset", { exact: true }).click();
-    const database = await page.locator("details").first().innerText();
+    const database = await page
+      .getByText("Database and dataset", { exact: true })
+      .locator("..")
+      .innerText();
     report.push({
       profile,
       mobileEmulation: mobile,

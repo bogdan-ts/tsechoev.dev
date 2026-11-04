@@ -1,6 +1,6 @@
 import { test, expect } from "@playwright/test";
 import AxeBuilder from "@axe-core/playwright";
-test("complete a real local PostgreSQL case from static export", async ({ page }) => {
+test("complete a real local PostgreSQL case from static export", async ({ page }, testInfo) => {
   test.setTimeout(120000);
   const engineRequests: string[] = [];
   const requests: string[] = [];
@@ -21,13 +21,30 @@ test("complete a real local PostgreSQL case from static export", async ({ page }
   await expect(
     page.getByText("The plan scans orders sequentially.", { exact: false }),
   ).toBeVisible();
-  await page.getByLabel("Index configuration").selectOption("latest");
-  await page.getByRole("button", { name: "Apply index", exact: true }).click();
+  await page.locator(".detective-pipeline").getByRole("button", { name: /Sort/ }).click();
+  await expect(page.locator(".detective-stage-detail")).toContainText("Rows passed to sort");
+  const card = page.getByRole("radio", { name: /Customer \+ latest orders/ });
+  if (testInfo.project.name === "desktop") {
+    await card.locator("..").evaluate((element) => element.scrollIntoView({ block: "center" }));
+    await card.locator("..").dragTo(page.locator(".detective-dropzone"));
+    await expect(page.getByText("Last confirmed configuration:", { exact: false })).toContainText(
+      "Customer + latest orders",
+    );
+  } else {
+    await card.check();
+    await page.getByRole("button", { name: "Apply index", exact: true }).click();
+  }
   await expect(run).toBeEnabled();
   await run.click();
   await expect(page.getByRole("heading", { name: "Case solved", exact: true })).toBeVisible({
     timeout: 20000,
   });
+  await expect(
+    page.locator(".detective-pipeline").getByRole("button", { name: /Sort/ }),
+  ).toHaveCount(0);
+  await page.getByRole("button", { name: "Plan details", exact: true }).click();
+  await expect(page.locator(".detective-plan")).toContainText("Index Scan");
+  await page.getByRole("button", { name: "Data flow", exact: true }).click();
   expect(engineRequests.length).toBeGreaterThan(0);
   expect(requests.every((url) => url.startsWith("http://127.0.0.1:3000/"))).toBe(true);
   expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth)).toBe(true);
@@ -36,6 +53,11 @@ test("complete a real local PostgreSQL case from static export", async ({ page }
   expect((await new AxeBuilder({ page }).analyze()).violations).toEqual([]);
   await page.emulateMedia({ reducedMotion: "reduce" });
   await expect(page.getByRole("button", { name: "Replay", exact: true })).toBeDisabled();
+  await page
+    .locator(".detective-pipeline")
+    .getByRole("button", { name: /Index access/ })
+    .click();
+  await expect(page.locator(".detective-stage-detail")).toContainText("Rows output by scan");
   await page.locator(".workspace").evaluate((el) => {
     (el as HTMLElement).style.zoom = "2";
   });
