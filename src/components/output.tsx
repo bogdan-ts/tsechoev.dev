@@ -1,3 +1,4 @@
+import Link from "next/link";
 import { memo, type ComponentType } from "react";
 import type { CommandResult, ContentCommand } from "../lib/commands";
 import type { CommandActionProps } from "./command-list";
@@ -14,6 +15,18 @@ import { AtlasCommand } from "./commands/atlas";
 type ContentViewProps = CommandActionProps & { view?: "globe" };
 
 const commandViews: Record<ContentCommand, ComponentType<ContentViewProps>> = {
+  investigate: () => (
+    <section>
+      <h2>SQL Detective</h2>
+      <p>
+        Case 001: The slow orders page. Investigate a real PostgreSQL query running locally in your
+        browser.
+      </p>
+      <Link href="/simple/sql-detective/" prefetch={false}>
+        Open SQL Detective
+      </Link>
+    </section>
+  ),
   whoami: WhoamiCommand,
   experience: ExperienceCommand,
   skills: SkillsCommand,

@@ -61,3 +61,14 @@ describe("terminal command contract", () => {
     expect(new Set(countries.map((country) => country.code)).size).toBe(19);
   });
 });
+
+it("opens SQL Detective through investigate without starting an engine", () => {
+  expect(executeCommand("investigate")).toEqual({ kind: "content", command: "investigate" });
+  expect(executeCommand("investigate orders")).toEqual(executeCommand("investigate"));
+  expect(executeCommand("investigate unknown")).toEqual({
+    kind: "error",
+    message: "Usage: investigate [orders]",
+  });
+  expect(completeCommand("invest")).toEqual(["investigate"]);
+  expect(completeCommand("investigate o")).toEqual(["investigate orders"]);
+});
