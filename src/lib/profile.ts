@@ -194,9 +194,9 @@ export const profile = {
     },
     {
       label: "LINE",
-      href: "https://line.me/R/ti/p/%40tsechoev",
-      text: "@tsechoev",
-      copyText: "@tsechoev",
+      href: null,
+      text: "tsechoev",
+      copyText: "tsechoev",
     },
   ],
   resumeHref: "/bogdan-tsechoev-resume.pdf",

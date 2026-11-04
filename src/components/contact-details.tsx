@@ -19,12 +19,12 @@ export function ContactDetails() {
       <dl>
         {profile.links.map((link) => {
           const { label, href } = link;
-          const value = "copyText" in link ? link.copyText : href.replace(/^mailto:/, "");
+          const value = "copyText" in link ? link.copyText : (href ?? "").replace(/^mailto:/, "");
           return (
             <div className="contact-detail" key={label}>
               <dt>{label}</dt>
               <dd>
-                <a href={href}>{value}</a>
+                {href ? <a href={href}>{value}</a> : <span>{value}</span>}
                 <button
                   type="button"
                   aria-label={`Copy ${label}`}
