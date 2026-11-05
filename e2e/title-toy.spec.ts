@@ -1,12 +1,20 @@
 import { test, expect } from "@playwright/test";
 
-for (const [i, effect] of ["gravity", "typo", "reboot", "dot", "wave", "reverse"].entries()) {
+for (const [i, effect] of [
+  "gravity",
+  "typo",
+  "reboot",
+  "dot",
+  "wave",
+  "reverse",
+  "atoms",
+].entries()) {
   test(`title animation: ${effect}`, async ({ page }) => {
     await page.addInitScript(
       (value) => {
         Math.random = () => value;
       },
-      (i + 0.1) / 6,
+      (i + 0.1) / 7,
     );
     await page.goto("/simple/");
     const title = page.getByRole("button", {
@@ -16,6 +24,7 @@ for (const [i, effect] of ["gravity", "typo", "reboot", "dot", "wave", "reverse"
     const before = await title.boundingBox();
     await title.click();
     await expect(title).toHaveAttribute("data-effect", effect);
+    if (effect === "atoms") await expect(title.locator("canvas")).toBeVisible();
     await title.click();
     await expect(title).toHaveAttribute("data-effect", effect);
     await expect(title).not.toHaveAttribute("data-effect", effect);

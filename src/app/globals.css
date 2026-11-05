@@ -1123,3 +1123,16 @@ html[data-theme="dark"] .site-header a[aria-current] {
   outline: 2px solid currentColor;
   outline-offset: 4px;
 }
+
+.title-toy {
+  position: relative;
+}
+.title-atoms {
+  position: absolute;
+  left: -14px;
+  top: -14px;
+  pointer-events: none;
+}
+.title-toy[data-effect="atoms"][data-reduced="false"] .title-toy-letters {
+  opacity: 0;
+}

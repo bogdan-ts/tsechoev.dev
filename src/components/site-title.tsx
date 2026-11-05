@@ -1,9 +1,10 @@
 "use client";
 
+import { TitleAtoms } from "./title-atoms";
 import { useEffect, useRef, useState, type CSSProperties } from "react";
 
 const title = "tsechoev.dev";
-const effects = ["gravity", "typo", "reboot", "dot", "wave", "reverse"] as const;
+const effects = ["gravity", "typo", "reboot", "dot", "wave", "reverse", "atoms"] as const;
 type Effect = (typeof effects)[number];
 const duration = 1800;
 
@@ -47,7 +48,7 @@ export function SiteTitle() {
           busy.current = false;
           timers.current = [];
         },
-        still ? 1000 : duration,
+        still ? 1000 : next === "atoms" ? 2200 : duration,
       ),
     );
   }
@@ -62,6 +63,7 @@ export function SiteTitle() {
       data-reduced={reduced}
       aria-busy={effect !== null}
     >
+      {effect === "atoms" && !reduced && <TitleAtoms />}
       <span className="title-toy-letters" aria-hidden="true">
         {[...text].map((letter, i) => (
           <span
