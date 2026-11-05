@@ -1,3 +1,4 @@
+import { ThemeToggle } from "./theme-toggle";
 import Link from "next/link";
 
 export function SiteHeader({ version }: { version: "terminal" | "simple" }) {
@@ -11,6 +12,7 @@ export function SiteHeader({ version }: { version: "terminal" | "simple" }) {
         <Link href="/simple/" aria-current={version === "simple" ? "page" : undefined}>
           Simple
         </Link>
+        <ThemeToggle />
       </nav>
     </header>
   );

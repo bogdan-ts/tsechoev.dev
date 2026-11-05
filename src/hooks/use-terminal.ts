@@ -9,6 +9,7 @@ import {
   type KeyboardEvent,
   type MouseEvent,
 } from "react";
+import { readTheme, setTheme, subscribeTheme } from "../lib/theme";
 import { completeCommand } from "../lib/commands";
 import { createTerminalState, terminalReducer } from "../lib/terminal-state";
 import { useTerminalCursor } from "./use-terminal-cursor";
@@ -25,6 +26,12 @@ export function useTerminal() {
   const historyIndex = useRef<number | null>(null);
   const draft = useRef("");
   const completion = useRef<{ matches: string[]; index: number } | null>(null);
+
+  useEffect(() => {
+    const sync = () => dispatch({ type: "set-theme", theme: readTheme() });
+    sync();
+    return subscribeTheme(sync);
+  }, []);
 
   useEffect(() => {
     if (
@@ -50,6 +57,16 @@ export function useTerminal() {
     (command: string) => {
       if (!command.trim()) return;
       dispatch({ type: "run", command });
+      if (/^theme(?:\s+(dark|light))?\s*$/.test(command.trim())) {
+        const requested = command.trim().split(/\s+/)[1];
+        setTheme(
+          requested === "dark" || requested === "light"
+            ? requested
+            : readTheme() === "dark"
+              ? "light"
+              : "dark",
+        );
+      }
       setInput("");
       historyIndex.current = null;
       completion.current = null;

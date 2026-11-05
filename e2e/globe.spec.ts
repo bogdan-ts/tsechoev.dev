@@ -78,6 +78,7 @@ test("atlas loads the globe automatically and supports pointer dragging", async 
 });
 
 test("globe controls keep focus and repaint correctly after a theme change", async ({ page }) => {
+  await page.emulateMedia({ colorScheme: "dark" });
   await page.goto("/");
   const input = page.getByRole("textbox");
   await input.fill("atlas --globe");

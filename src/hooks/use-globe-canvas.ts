@@ -53,6 +53,10 @@ export function useGlobeCanvas(columns: number, motionRef: RefObject<GlobeMotion
     const observer = new MutationObserver(updateTheme);
     if (workspace)
       observer.observe(workspace, { attributes: true, attributeFilter: ["data-theme"] });
+    observer.observe(document.documentElement, {
+      attributes: true,
+      attributeFilter: ["data-theme"],
+    });
     return () => {
       disposed = true;
       observer.disconnect();

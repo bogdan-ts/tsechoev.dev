@@ -117,3 +117,19 @@ test("explicit contacts open normally and copy independently", async ({ page }) 
   await page.getByRole("button", { name: "Copy LinkedIn", exact: true }).click();
   await expect(page.getByRole("status")).toContainText("Copy unavailable");
 });
+
+test("compact theme toggle persists across versions and reload", async ({ page }) => {
+  await page.emulateMedia({ colorScheme: "dark" });
+  await page.goto("/simple/");
+  await page.getByRole("button", { name: "Switch to light theme" }).click();
+  await expect(page.locator("html")).toHaveAttribute("data-theme", "light");
+  await page.reload();
+  await expect(page.locator("html")).toHaveAttribute("data-theme", "light");
+  await page.getByRole("link", { name: "Terminal", exact: true }).click();
+  await expect(page.locator("main")).toHaveAttribute("data-theme", "light");
+  const input = page.getByRole("textbox");
+  await input.fill("theme");
+  await input.press("Enter");
+  await expect(page.locator("html")).toHaveAttribute("data-theme", "dark");
+  await expect(page.locator("main")).toHaveAttribute("data-theme", "dark");
+});
