@@ -133,3 +133,20 @@ test("compact theme toggle persists across versions and reload", async ({ page }
   await expect(page.locator("html")).toHaveAttribute("data-theme", "dark");
   await expect(page.locator("main")).toHaveAttribute("data-theme", "dark");
 });
+
+for (const saved of ["dark", "light"] as const) {
+  test(`saved ${saved} theme applies before hydration against system preference`, async ({
+    page,
+  }) => {
+    await page.emulateMedia({ colorScheme: saved === "dark" ? "light" : "dark" });
+    await page.addInitScript((theme) => localStorage.setItem("portfolio-theme", theme), saved);
+    await page.route("**/*.js", (route) => route.abort());
+    await page.goto("/simple/");
+    await expect(page.locator("html")).toHaveAttribute("data-theme", saved);
+    expect(await page.locator("main").evaluate((el) => getComputedStyle(el).backgroundColor)).toBe(
+      saved === "dark" ? "rgb(20, 22, 20)" : "rgb(250, 251, 245)",
+    );
+    await page.reload();
+    await expect(page.locator("html")).toHaveAttribute("data-theme", saved);
+  });
+}

@@ -15,6 +15,7 @@ export function readTheme(): Theme {
 export function setTheme(theme: Theme) {
   fallbackTheme = theme;
   document.documentElement.dataset.theme = theme;
+  document.documentElement.style.colorScheme = theme;
   try {
     localStorage.setItem("portfolio-theme", theme);
   } catch {}

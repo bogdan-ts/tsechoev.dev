@@ -4,7 +4,9 @@ import { readTheme, setTheme, subscribeTheme } from "../lib/theme";
 export function ThemeToggle() {
   const theme = useSyncExternalStore(subscribeTheme, readTheme, () => "dark" as const);
   useEffect(() => {
-    document.documentElement.dataset.theme = theme;
+    const current = readTheme();
+    document.documentElement.dataset.theme = current;
+    document.documentElement.style.colorScheme = current;
   }, [theme]);
   const label = theme === "dark" ? "Switch to light theme" : "Switch to dark theme";
   return (
