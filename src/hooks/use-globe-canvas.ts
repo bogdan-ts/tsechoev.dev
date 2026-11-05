@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useRef, useState, type RefObject } from "react";
-import { createGlobeRenderer, type GlobeRenderer } from "../lib/globe-canvas";
+import { createGlobeRenderer, type GlobeColors, type GlobeRenderer } from "../lib/globe-canvas";
 import type { GlobeMotion } from "../lib/globe-motion";
 
 export function useGlobeCanvas(columns: number, motionRef: RefObject<GlobeMotion>) {
@@ -20,15 +20,17 @@ export function useGlobeCanvas(columns: number, motionRef: RefObject<GlobeMotion
     if (!canvas || !renderer) return;
     let disposed = false;
     const workspace = canvas.closest(".workspace");
-    let colors = { land: "#e5e8df", visited: "#b3d88e", water: "#68899f" };
+    let colors: GlobeColors = { land: "#e5e8df", visited: "#b3d88e", water: "#68899f" };
     const draw = () =>
       renderer.draw(columns, motionRef.current.orientation, colors, motionRef.current.sky);
     const updateTheme = () => {
       const style = getComputedStyle(canvas);
+      const light = style.getPropertyValue("--globe-theme").trim() === "light";
       colors = {
-        land: style.getPropertyValue("--text").trim() || "#e5e8df",
-        visited: style.getPropertyValue("--accent").trim() || "#b3d88e",
-        water: workspace?.getAttribute("data-theme") === "light" ? "#3d5e74" : "#68899f",
+        light,
+        land: style.getPropertyValue("--globe-land").trim() || "#e5e8df",
+        visited: style.getPropertyValue("--globe-visited").trim() || "#b3d88e",
+        water: style.getPropertyValue("--globe-water").trim() || "#68899f",
       };
       renderer.refreshFont();
       draw();
@@ -39,6 +41,8 @@ export function useGlobeCanvas(columns: number, motionRef: RefObject<GlobeMotion
     };
     redrawRef.current = draw;
     updateTheme();
+    const scheme = matchMedia("(prefers-color-scheme: light)");
+    scheme.addEventListener("change", updateTheme);
     void document.fonts?.ready.then(() => {
       if (!disposed) {
         renderer.refreshFont();
@@ -52,6 +56,7 @@ export function useGlobeCanvas(columns: number, motionRef: RefObject<GlobeMotion
     return () => {
       disposed = true;
       observer.disconnect();
+      scheme.removeEventListener("change", updateTheme);
       canvas.removeEventListener("contextlost", contextLost);
       redrawRef.current = () => {};
     };

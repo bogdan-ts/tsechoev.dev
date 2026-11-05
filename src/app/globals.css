@@ -885,3 +885,24 @@ h1 {
     gap: 2px;
   }
 }
+
+.workspace {
+  --globe-theme: dark;
+  --globe-land: #e5e8df;
+  --globe-visited: #b3d88e;
+  --globe-water: #68899f;
+}
+.workspace[data-theme="light"] {
+  --globe-theme: light;
+  --globe-land: #252e23;
+  --globe-visited: #276000;
+  --globe-water: #305875;
+}
+@media (prefers-color-scheme: light) {
+  .simple-page.workspace {
+    --globe-theme: light;
+    --globe-land: #252e23;
+    --globe-visited: #276000;
+    --globe-water: #305875;
+  }
+}
