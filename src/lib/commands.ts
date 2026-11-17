@@ -13,6 +13,8 @@ export const commands = [
     description: "Visited places; --globe for ASCII Earth",
     aliases: ["countries", "travel"],
   },
+  { name: "play", description: "Listen to my intro: play intro", aliases: [] },
+  { name: "stop", description: "Stop audio playback", aliases: [] },
   { name: "help", description: "List commands", aliases: ["ls"] },
   { name: "history", description: "Command history", aliases: [] },
   { name: "clear", description: "Clear the screen", aliases: [] },
@@ -21,8 +23,12 @@ export const commands = [
 ] as const satisfies readonly CommandDefinition[];
 
 type CommandName = (typeof commands)[number]["name"];
-export type ContentCommand = Exclude<CommandName, "history" | "clear" | "theme" | "pwd">;
+export type ContentCommand = Exclude<
+  CommandName,
+  "history" | "clear" | "theme" | "pwd" | "play" | "stop"
+>;
 export type CommandResult =
+  | { kind: "audio"; action: "intro" | "hire" | "stop" }
   | { kind: "content"; command: Exclude<ContentCommand, "atlas"> }
   | { kind: "content"; command: "atlas"; view?: "globe" }
   | { kind: "error"; message: string }
@@ -35,6 +41,7 @@ export function executeCommand(input: string, history: string[] = []): CommandRe
   const normalized = input.trim().toLowerCase();
   if (!normalized) return null;
   const [name, ...args] = normalized.split(/\s+/);
+  if (name === "sudo" && args.join(" ") === "hire me") return { kind: "audio", action: "hire" };
   const command = commands.find(
     (entry: CommandDefinition) => entry.name === name || entry.aliases.includes(name),
   );
@@ -43,6 +50,11 @@ export function executeCommand(input: string, history: string[] = []): CommandRe
       kind: "error",
       message: `Command not found: ${input.trim()}. Type help for commands.`,
     };
+  if (command.name === "play") {
+    if (!args.length || (args.length === 1 && args[0] === "intro"))
+      return { kind: "audio", action: "intro" };
+    return { kind: "error", message: "Usage: play intro" };
+  }
   if (command.name === "atlas") {
     if (!args.length) return { kind: "content", command: "atlas" };
     if (args.length === 1 && args[0] === "--globe")
@@ -60,6 +72,7 @@ export function executeCommand(input: string, history: string[] = []): CommandRe
       kind: "error",
       message: `${command.name} does not take arguments. Type help for available commands.`,
     };
+  if (command.name === "stop") return { kind: "audio", action: "stop" };
   if (command.name === "clear") return { kind: "clear" };
   if (command.name === "history") return { kind: "history", entries: [...history] };
   if (command.name === "pwd") return { kind: "text", message: "/home/visitor/bogdan" };
@@ -69,8 +82,8 @@ export function executeCommand(input: string, history: string[] = []): CommandRe
 export function completeCommand(input: string): string[] {
   if (!input) return [];
   if (/\s/.test(input)) {
-    return ["atlas --globe", "countries --globe", "travel --globe"].filter((command) =>
-      command.startsWith(input.toLowerCase()),
+    return ["play intro", "atlas --globe", "countries --globe", "travel --globe"].filter(
+      (command) => command.startsWith(input.toLowerCase()),
     );
   }
   return commands.map((entry) => entry.name).filter((name) => name.startsWith(input.toLowerCase()));

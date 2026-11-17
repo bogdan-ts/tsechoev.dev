@@ -63,3 +63,23 @@ pole crossings, rim roll and all four arrow keys. Inertia decays along the drag
 axis; illumination stays camera-fixed. New tests cover orientation normalization,
 opposite vectors, frame-independent multi-axis motion, vertical mouse/touch input
 and arrow positioning.
+
+## Prerecorded audio — November 17, 2026
+
+Added the approved 48-second intro and robot Easter egg as bundled MP3 files.
+The supplied generation credential was not stored in files or committed.
+
+Verification: `npm run check` passed (55 tests), `npm run build` produced the
+static export, and Playwright passed 35 browser cases with one existing
+desktop-only touch case skipped. Both desktop and 375px mobile exercised real
+MP3 playback, pause/resume, track switching, route cleanup, and missing-file
+recovery. A regression test covers a pending play promise rejected by an
+intentional pause. No ElevenLabs API calls occur in the browser.
+
+An independent bounded finish review returned **ship** after inspecting the
+implementation, tests and four current desktop/mobile screenshots. The review
+found no material audio-feature issues and confirmed preservation of the
+existing visual system; it did not independently rerun browser tests.
+
+The existing Next.js version emits a security-upgrade recommendation during
+builds. Dependency upgrades were not included in this audio feature.

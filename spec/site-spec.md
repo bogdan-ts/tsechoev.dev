@@ -151,3 +151,28 @@ per resolution so animation frames only rotate and sample the geographic masks.
 ## Atlas page naming
 
 The simple-mode globe page is named Atlas in navigation, its heading and metadata. The canonical URL is `/simple/atlas/` and the primary terminal command is `atlas [--globe]`. Keep legacy `/simple/travel/` as an immediate static redirect and `travel` as an undocumented compatibility alias; `countries` also remains an alias. Only the canonical route belongs in the sitemap.
+
+## Prerecorded audio introduction
+
+- Simple profile offers Listen to my intro, pause/resume, a readable transcript,
+  and an AI-generated voice / ElevenLabs disclosure. No autoplay.
+- Terminal supports `play intro` (and `play`), `stop`, and hidden `sudo hire me`.
+  The Easter egg speaks the approved robot line and shows normal contact links.
+- One active audio element per mounted surface; switching tracks stops the old
+  track. Repeated play restarts, pause resumes from the same position. Clear,
+  Ctrl+L, Ctrl+C and unmount stop playback. History never replays old audio.
+- Audio is fetched only after explicit interaction, from same-origin static
+  `/audio/intro.mp3` and `/audio/hire.mp3`. No runtime synthesis or API key.
+- Playback errors leave contacts usable and offer a retry, not false success.
+- Approved generated MP3 files ship with the static export; never publish without
+  both recordings. Secrets are not part of the repository or build.
+
+### Audio presentation refinement
+
+Keep the Simple player inside the About section, directly below the role and
+before the summary, not as a separate profile-grid item. Use a compact borderless
+play/pause row with one small icon, a stable recording label and duration. Show
+Stop as an icon only during playback; keep its accessible name. A quiet
+Transcript toggle reveals approved text and the AI voice credit. Preserve
+44px touch targets, keyboard focus, lazy audio and retry behavior. Terminal
+shares the compact controls; no oversized two-button panel or extra label.

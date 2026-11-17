@@ -14,7 +14,7 @@ export function WhoamiCommand({
   return (
     <div className="full-profile">
       <section aria-label="About">
-        <AboutCommand />
+        <AboutCommand audioIntro={contactAtTop} />
       </section>
       {contactAtTop && (
         <section className="profile-contact" aria-label="Contact">
