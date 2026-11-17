@@ -1,3 +1,4 @@
+import { hireTranscript } from "../lib/audio";
 import { memo, type ComponentType } from "react";
 import type { CommandResult, ContentCommand } from "../lib/commands";
 import type { CommandActionProps } from "./command-list";
@@ -38,6 +39,20 @@ function OutputView({ result, onCommand }: OutputProps) {
         />
       );
     }
+    case "audio":
+      return result.action === "hire" ? (
+        <>
+          <p>{hireTranscript}</p>
+          <p className="muted">AI-generated robot voice · ElevenLabs</p>
+          <ContactCommand />
+        </>
+      ) : (
+        <p>
+          {result.action === "stop"
+            ? "Audio stopped."
+            : "Audio intro requested. Use the audio controls to pause or stop. AI-generated voice · ElevenLabs."}
+        </p>
+      );
     case "error":
       return <p className="error">{result.message}</p>;
     case "text":

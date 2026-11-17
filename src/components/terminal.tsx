@@ -1,5 +1,6 @@
 "use client";
 
+import { AudioControls } from "./audio-controls";
 import { useTerminal } from "../hooks/use-terminal";
 import { Output } from "./output";
 import { PromptPrefix } from "./prompt-prefix";
@@ -7,6 +8,7 @@ import { Welcome } from "./welcome";
 
 export function Terminal() {
   const {
+    audio,
     input,
     entries,
     cursor,
@@ -98,6 +100,7 @@ export function Terminal() {
               </p>
             )}
           </div>
+          <AudioControls player={audio} />
           <p className="sr-only" role="status" aria-live="polite">
             {status}
           </p>

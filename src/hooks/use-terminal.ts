@@ -9,12 +9,15 @@ import {
   type KeyboardEvent,
   type MouseEvent,
 } from "react";
-import { completeCommand } from "../lib/commands";
+import { usePortfolioAudio } from "./use-portfolio-audio";
+import { completeCommand, executeCommand } from "../lib/commands";
 import { createTerminalState, terminalReducer } from "../lib/terminal-state";
 import { useTerminalCursor } from "./use-terminal-cursor";
 import { useTerminalScroll } from "./use-terminal-scroll";
 
 export function useTerminal() {
+  const audio = usePortfolioAudio();
+  const { play: playAudio, stop: stopAudio } = audio;
   const [state, dispatch] = useReducer(terminalReducer, undefined, createTerminalState);
   const { entries, history, showWelcome, theme, status } = state;
   const [input, setInput] = useState("");
@@ -42,6 +45,7 @@ export function useTerminal() {
   }
 
   function clear() {
+    stopAudio();
     dispatch({ type: "clear" });
     resetCompletion();
   }
@@ -49,6 +53,12 @@ export function useTerminal() {
   const run = useCallback(
     (command: string) => {
       if (!command.trim()) return;
+      const result = executeCommand(command);
+      if (result?.kind === "audio") {
+        if (result.action === "stop") stopAudio();
+        else void playAudio(result.action);
+      }
+      if (result?.kind === "clear") stopAudio();
       dispatch({ type: "run", command });
       setInput("");
       historyIndex.current = null;
@@ -56,7 +66,7 @@ export function useTerminal() {
       setSuggestions([]);
       inputRef.current?.focus({ preventScroll: true });
     },
-    [inputRef],
+    [inputRef, playAudio, stopAudio],
   );
 
   function submit(event: FormEvent<HTMLFormElement>) {
@@ -95,6 +105,7 @@ export function useTerminal() {
       historyIndex.current = null;
       const cursorOffset = event.currentTarget.selectionStart ?? input.length;
       if (key === "c") {
+        stopAudio();
         dispatch({ type: "cancel", input });
         setInput("");
       } else if (key === "u") {
@@ -171,6 +182,7 @@ export function useTerminal() {
   }
 
   return {
+    audio,
     input,
     entries,
     showWelcome,

@@ -35,7 +35,7 @@ and [code review](docs/code-review.md).
 ## Commands and controls
 
 `whoami`, `experience`, `skills`, `opensource`, `education`, `contact`, `cv`,
-`atlas [--globe]`, `help`, `history`, `clear`, `theme [dark|light]`, `pwd`.
+`atlas [--globe]`, `play intro`, `stop`, `help`, `history`, `clear`, `theme [dark|light]`, `pwd`.
 
 Aliases: `about`, `oss`, `resume`, `countries`, `ls`.
 
@@ -150,3 +150,18 @@ There are no comet timers or additional network assets.
 
 The canonical globe page is `/simple/atlas/`. The old `/simple/travel/` URL
 redirects there without JavaScript; `travel` remains a compatibility command alias.
+
+## Prerecorded audio
+
+Simple has a short spoken introduction with a transcript; Terminal supports
+`play intro`, `stop`, and the hidden `sudo hire me` Easter egg. Audio is only
+requested after interaction. Clear, Ctrl+L, Ctrl+C and route unmount stop playback.
+The player handles loading, pause/resume, completion and retryable errors without
+replaying historical command output. Voices are disclosed as AI-generated.
+
+Approved recordings ship as `public/audio/intro.mp3`
+(voice `7EzWGsX10sAS4c9m9cPf`) and `public/audio/hire.mp3`
+(voice `weA4Q36twV5kwSaTEL0Q`). Approved scripts live in `src/lib/audio.ts`.
+Generated once with ElevenLabs using `eleven_multilingual_v2`, they are served as
+ordinary static assets. Never store API credentials in this repo.
+There are no ElevenLabs runtime calls, SDKs or browser credentials.

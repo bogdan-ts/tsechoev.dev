@@ -834,3 +834,57 @@ h1 {
   gap: 12px 24px;
   font-size: 15px;
 }
+
+/* Audio controls inherit the portfolio's existing terminal palette. */
+.intro-audio {
+  margin: 16px 0 24px;
+}
+.audio-controls {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 8px 16px;
+}
+.terminal-body > .audio-controls {
+  padding: 8px var(--terminal-padding);
+  flex-shrink: 0;
+}
+.intro-audio button,
+.audio-controls button {
+  background: transparent;
+  color: var(--accent);
+  border: 1px solid var(--border);
+  padding: 8px 12px;
+  min-height: 44px;
+  border-radius: 4px;
+}
+.intro-audio button:hover,
+.audio-controls button:hover {
+  border-color: var(--accent);
+}
+.audio-controls button:disabled {
+  color: var(--muted);
+  cursor: wait;
+}
+.audio-credit {
+  display: block;
+  font-size: 11px;
+  margin-top: 8px;
+}
+.audio-transcript {
+  margin-top: 8px;
+  max-width: 72ch;
+}
+.audio-transcript summary {
+  cursor: pointer;
+  color: var(--accent);
+  width: fit-content;
+  padding: 6px 0;
+}
+.audio-transcript summary:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 4px;
+}
+.audio-controls .error {
+  flex-basis: 100%;
+}
