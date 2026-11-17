@@ -622,10 +622,6 @@ h1 {
 .simple-shell {
   background: #141614;
 }
-.simple-shell .site-header {
-  border-bottom: 0;
-  padding: 20px 28px;
-}
 .simple-page.workspace {
   font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
   font-size: 17px;
@@ -715,24 +711,14 @@ h1 {
     --accent: #3b6421;
     --border: #cbd2c3;
   }
-  .simple-shell,
-  .simple-shell .site-header {
+  .simple-shell {
     background: #fafbf5;
     color: #58634f;
-  }
-  .simple-shell .site-header a {
-    color: #58634f;
-  }
-  .simple-shell .site-header a[aria-current] {
-    color: #3b6421;
   }
 }
 @media (max-width: 650px) {
   .simple-content {
     padding: 24px 20px 56px;
-  }
-  .simple-shell .site-header {
-    padding: 16px 20px;
   }
   .simple-page.workspace {
     font-size: 16px;

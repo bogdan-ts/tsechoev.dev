@@ -176,3 +176,12 @@ Stop as an icon only during playback; keep its accessible name. A quiet
 Transcript toggle reveals approved text and the AI voice credit. Preserve
 44px touch targets, keyboard focus, lazy audio and retry behavior. Terminal
 shares the compact controls; no oversized two-button panel or extra label.
+
+## Shared header geometry
+
+Terminal and every Simple route use the same SiteHeader geometry, including
+height, padding, bottom border, title position, navigation position and theme
+toggle size. Simple must not override header spacing or remove its border.
+Switching versions or opening Atlas must not move the header at desktop or
+mobile widths, in either saved theme. Keep Terminal's current header as the
+reference; document typography below it remains unchanged.
