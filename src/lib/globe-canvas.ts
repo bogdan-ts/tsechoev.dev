@@ -1,8 +1,9 @@
+import { globeOpacity } from "./globe-theme";
 import type { Quaternion } from "./globe-orientation";
 import { renderGlobe, type GlobeRun } from "./globe";
 import { paintComet, type CometSky } from "./globe-comets";
 
-export type GlobeColors = { land: string; visited: string; water: string };
+export type GlobeColors = { land: string; visited: string; water: string; light?: boolean };
 export type GlobeRenderer = {
   draw: (columns: number, orientation: Quaternion, colors: GlobeColors, sky: CometSky) => void;
   refreshFont: () => void;
@@ -88,7 +89,7 @@ export function createGlobeRenderer(canvas: HTMLCanvasElement): GlobeRenderer | 
       for (const run of row) {
         if (run.kind !== "space") {
           const image = sprite(run, colors[run.kind], ratio);
-          context.globalAlpha = 0.16 + run.brightness * 0.84;
+          context.globalAlpha = globeOpacity(run.brightness, colors.light === true);
           if (image)
             context.drawImage(
               image,

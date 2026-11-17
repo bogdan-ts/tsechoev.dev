@@ -11,19 +11,25 @@ export function ContactCommand({ compact = false }: CommandActionProps & { compa
         </p>
       )}
       <div className={compact ? "profile-contact-links" : "contact-links"}>
-        {profile.links.map(({ label, href, text }) => (
-          <a href={href} key={label}>
-            {compact ? (
-              label
-            ) : (
-              <>
-                <span>{label}</span>
-                {text}
-                <span aria-hidden="true">↗</span>
-              </>
-            )}
-          </a>
-        ))}
+        {profile.links.map(({ label, href, text }) =>
+          href ? (
+            <a href={href} key={label}>
+              {compact ? (
+                label
+              ) : (
+                <>
+                  <span>{label}</span>
+                  {text}
+                  <span aria-hidden="true">↗</span>
+                </>
+              )}
+            </a>
+          ) : (
+            <div className="contact-id" key={label}>
+              <span className="muted">{label}</span> <span>{text}</span>
+            </div>
+          ),
+        )}
       </div>
     </>
   );

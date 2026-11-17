@@ -11,6 +11,7 @@ import {
 } from "react";
 import { usePortfolioAudio } from "./use-portfolio-audio";
 import { completeCommand, executeCommand } from "../lib/commands";
+import { readTheme, setTheme, subscribeTheme } from "../lib/theme";
 import { createTerminalState, terminalReducer } from "../lib/terminal-state";
 import { useTerminalCursor } from "./use-terminal-cursor";
 import { useTerminalScroll } from "./use-terminal-scroll";
@@ -28,6 +29,12 @@ export function useTerminal() {
   const historyIndex = useRef<number | null>(null);
   const draft = useRef("");
   const completion = useRef<{ matches: string[]; index: number } | null>(null);
+
+  useEffect(() => {
+    const sync = () => dispatch({ type: "set-theme", theme: readTheme() });
+    sync();
+    return subscribeTheme(sync);
+  }, []);
 
   useEffect(() => {
     if (
@@ -60,6 +67,16 @@ export function useTerminal() {
       }
       if (result?.kind === "clear") stopAudio();
       dispatch({ type: "run", command });
+      if (/^theme(?:\s+(dark|light))?\s*$/.test(command.trim())) {
+        const requested = command.trim().split(/\s+/)[1];
+        setTheme(
+          requested === "dark" || requested === "light"
+            ? requested
+            : readTheme() === "dark"
+              ? "light"
+              : "dark",
+        );
+      }
       setInput("");
       historyIndex.current = null;
       completion.current = null;

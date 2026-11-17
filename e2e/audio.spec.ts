@@ -94,5 +94,5 @@ test("missing audio is recoverable without hiding the profile", async ({ page })
     "Could not play audio",
   );
   await expect(page.getByRole("button", { name: "Retry audio" })).toBeVisible();
-  await expect(page.getByRole("link", { name: "Email", exact: true })).toBeVisible();
+  await expect(page.locator('a[href="mailto:bogdan.tsechoev@gmail.com"]')).toBeVisible();
 });

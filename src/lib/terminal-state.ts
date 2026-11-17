@@ -10,6 +10,7 @@ export type TerminalState = {
   status: string;
 };
 type TerminalAction =
+  | { type: "set-theme"; theme: "dark" | "light" }
   | { type: "run"; command: string }
   | { type: "announce"; message: string }
   | { type: "clear" }
@@ -34,6 +35,8 @@ function clear(state: TerminalState): TerminalState {
 
 export function terminalReducer(state: TerminalState, action: TerminalAction): TerminalState {
   switch (action.type) {
+    case "set-theme":
+      return { ...state, theme: action.theme };
     case "announce":
       return { ...state, status: action.message };
     case "clear":
