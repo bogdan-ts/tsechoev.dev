@@ -1,4 +1,3 @@
-import { IntroAudio } from "../intro-audio";
 import type { CommandActionProps } from "../command-list";
 import { AboutCommand } from "./about";
 import { ExperienceCommand } from "./experience";
@@ -14,9 +13,8 @@ export function WhoamiCommand({
   return (
     <div className="full-profile">
       <section aria-label="About">
-        <AboutCommand />
+        <AboutCommand audioIntro={contactAtTop} />
       </section>
-      {contactAtTop && <IntroAudio />}
       {contactAtTop && (
         <section className="profile-contact" aria-label="Contact">
           <ContactCommand compact />

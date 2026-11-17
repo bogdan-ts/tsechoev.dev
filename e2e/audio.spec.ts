@@ -27,11 +27,17 @@ test("intro is lazy, playable, resumable and stops on navigation", async ({ page
   await page.goto("/simple/");
   await expect(page.getByRole("button", { name: "Listen to my intro" })).toBeVisible();
   expect(audioRequests).toHaveLength(0);
-  await page.getByText("Read transcript", { exact: true }).click();
+  const introRow = page.locator(".intro-audio-row");
+  expect(await introRow.evaluate((element) => element.scrollWidth <= element.clientWidth)).toBe(
+    true,
+  );
+  const idleHeight = await introRow.evaluate((element) => element.getBoundingClientRect().height);
+  expect(idleHeight).toBeLessThanOrEqual(44);
+  await page.getByRole("button", { name: "Read transcript" }).click();
   await expect(
     page.getByText("If you’d like to work together, feel free to get in touch.", { exact: true }),
   ).toBeVisible();
-  await page.getByText("Read transcript", { exact: true }).click();
+  await page.getByRole("button", { name: "Read transcript" }).click();
   await page.getByRole("button", { name: "Listen to my intro" }).click();
   await expect(page.getByRole("button", { name: "Pause audio" })).toBeVisible();
   expect(audioRequests.some((url) => url.endsWith("/audio/intro.mp3"))).toBe(true);

@@ -105,3 +105,14 @@ it("keeps an intentional pause when an outstanding play request rejects", async 
   expect(screen.getByRole("button", { name: "Resume audio" })).toBeTruthy();
   expect(screen.queryByRole("alert")).toBeNull();
 });
+
+it("keeps a compact idle player and an accessible transcript disclosure", () => {
+  render(<IntroAudio />);
+  expect(screen.getByText("0:52")).toBeTruthy();
+  expect(screen.queryByRole("button", { name: "Stop audio" })).toBeNull();
+  const transcript = screen.getByRole("button", { name: "Read transcript" });
+  expect(transcript.getAttribute("aria-expanded")).toBe("false");
+  fireEvent.click(transcript);
+  expect(transcript.getAttribute("aria-expanded")).toBe("true");
+  expect(screen.getByText("AI-generated voice · ElevenLabs")).toBeTruthy();
+});

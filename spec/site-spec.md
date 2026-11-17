@@ -166,3 +166,13 @@ The simple-mode globe page is named Atlas in navigation, its heading and metadat
 - Playback errors leave contacts usable and offer a retry, not false success.
 - Approved generated MP3 files ship with the static export; never publish without
   both recordings. Secrets are not part of the repository or build.
+
+### Audio presentation refinement
+
+Keep the Simple player inside the About section, directly below the role and
+before the summary, not as a separate profile-grid item. Use a compact borderless
+play/pause row with one small icon, a stable recording label and duration. Show
+Stop as an icon only during playback; keep its accessible name. A quiet
+Transcript toggle reveals approved text and the AI voice credit. Preserve
+44px touch targets, keyboard focus, lazy audio and retry behavior. Terminal
+shares the compact controls; no oversized two-button panel or extra label.

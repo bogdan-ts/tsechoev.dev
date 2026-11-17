@@ -153,7 +153,8 @@ redirects there without JavaScript; `travel` remains a compatibility command ali
 
 ## Prerecorded audio
 
-Simple has a short spoken introduction with a transcript; Terminal supports
+Simple has a compact audio row below the role, with play/pause, duration and a
+transcript toggle. Terminal supports
 `play intro`, `stop`, and the hidden `sudo hire me` Easter egg. Audio is only
 requested after interaction. Clear, Ctrl+L, Ctrl+C and route unmount stop playback.
 The player handles loading, pause/resume, completion and retryable errors without

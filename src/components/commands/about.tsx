@@ -1,11 +1,13 @@
+import { IntroAudio } from "../intro-audio";
 import { profile } from "../../lib/profile";
 
-export function AboutCommand() {
+export function AboutCommand({ audioIntro = false }: { audioIntro?: boolean }) {
   return (
     <>
       <p className="eyebrow about-label">ABOUT ME</p>
       <h2 className="name profile-name">{profile.name}</h2>
       <p className="role">{profile.role}</p>
+      {audioIntro && <IntroAudio />}
       <p className="prose">{profile.summary}</p>
       <p className="muted">
         {profile.location} <span className="separator">/</span> {profile.timezone}

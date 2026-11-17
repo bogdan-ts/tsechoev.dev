@@ -835,56 +835,111 @@ h1 {
   font-size: 15px;
 }
 
-/* Audio controls inherit the portfolio's existing terminal palette. */
+/* Compact audio actions share the profile's typography and terminal palette. */
 .intro-audio {
-  margin: 16px 0 24px;
+  margin: 8px 0 20px;
+  max-width: 420px;
+}
+.intro-audio-row {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
 }
 .audio-controls {
   display: flex;
   align-items: center;
   flex-wrap: wrap;
-  gap: 8px 16px;
+  column-gap: 12px;
+  font-size: 14px;
+  min-width: 0;
 }
 .terminal-body > .audio-controls {
-  padding: 8px var(--terminal-padding);
+  padding: 4px var(--terminal-padding);
   flex-shrink: 0;
 }
-.intro-audio button,
-.audio-controls button {
+.audio-play,
+.audio-stop,
+.audio-transcript-toggle {
+  border: 0;
   background: transparent;
-  color: var(--accent);
-  border: 1px solid var(--border);
-  padding: 8px 12px;
+  padding: 0;
   min-height: 44px;
-  border-radius: 4px;
+  color: var(--accent);
+  display: inline-flex;
+  align-items: center;
 }
-.intro-audio button:hover,
-.audio-controls button:hover {
+.audio-play {
+  gap: 10px;
+  text-align: left;
+}
+.audio-play-icon {
+  width: 28px;
+  height: 28px;
+  border: 1px solid var(--border);
+  border-radius: 50%;
+  display: grid;
+  place-items: center;
+  flex-shrink: 0;
+}
+.audio-play:hover .audio-play-icon {
   border-color: var(--accent);
 }
-.audio-controls button:disabled {
-  color: var(--muted);
-  cursor: wait;
+.audio-play:hover > span:last-child,
+.audio-transcript-toggle:hover {
+  text-decoration: underline;
+  text-underline-offset: 4px;
 }
-.audio-credit {
-  display: block;
-  font-size: 11px;
-  margin-top: 8px;
+.audio-play:disabled {
+  cursor: wait;
+  color: var(--muted);
+}
+.audio-duration {
+  font:
+    12px/1 var(--font-martian-mono),
+    monospace;
+  font-variant-numeric: tabular-nums;
+}
+.audio-stop {
+  width: 44px;
+  justify-content: center;
+  color: var(--muted);
+}
+.audio-stop:hover {
+  color: var(--accent);
+}
+.audio-transcript-toggle {
+  gap: 4px;
+  font-size: 12px;
+  color: var(--muted);
+  margin-left: auto;
+  flex-shrink: 0;
 }
 .audio-transcript {
-  margin-top: 8px;
-  max-width: 72ch;
+  margin-top: 12px;
+  max-width: 64ch;
+  font-size: 14px;
 }
-.audio-transcript summary {
-  cursor: pointer;
-  color: var(--accent);
-  width: fit-content;
-  padding: 6px 0;
+.audio-transcript .audio-credit {
+  font-size: 12px;
+  margin-top: 0;
 }
-.audio-transcript summary:focus-visible {
-  outline: 2px solid var(--accent);
-  outline-offset: 4px;
-}
-.audio-controls .error {
+.audio-error {
   flex-basis: 100%;
+  padding: 4px 0 8px;
+  font-size: 12px;
+}
+@media (max-width: 420px) {
+  .intro-audio-row {
+    gap: 8px;
+  }
+  .audio-controls {
+    column-gap: 8px;
+    font-size: 13px;
+  }
+  .audio-play {
+    gap: 8px;
+  }
+  .audio-transcript-toggle {
+    font-size: 11px;
+  }
 }
