@@ -160,7 +160,7 @@ The player handles loading, pause/resume, completion and retryable errors withou
 replaying historical command output. Voices are disclosed as AI-generated.
 
 Approved recordings ship as `public/audio/intro.mp3`
-(voice `7EzWGsX10sAS4c9m9cPf`) and `public/audio/hire.mp3`
+(voice `JzWc4a3twFzkLcv2RM00`) and `public/audio/hire.mp3`
 (voice `weA4Q36twV5kwSaTEL0Q`). Approved scripts live in `src/lib/audio.ts`.
 Generated once with ElevenLabs using `eleven_multilingual_v2`, they are served as
 ordinary static assets. Never store API credentials in this repo.
